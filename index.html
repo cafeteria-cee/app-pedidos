@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Comandas - Restauración</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 10px; }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .header h1 { font-size: 28px; }
+        .header p { font-size: 14px; opacity: 0.9; margin-top: 5px; }
+        
+        .role-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .role-btn {
+            padding: 12px 24px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .role-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .role-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* CLIENTE */
+        .cliente-view {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .menu-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .menu-section h2 {
+            margin-bottom: 15px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        
+        .item-info h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .item-info p {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .item-price {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 50px;
+        }
+        
+        .item-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.2s;
+        }
+        
+        .qty-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .qty-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        /* CARRITO */
+        .carrito-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .carrito-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .mesa-selector {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .mesa-selector h3 {
+            margin-bottom: 10px;
+            color: #667eea;
+            font-size: 14px;
+        }
+        
+        .mesas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 8px;
+        }
+        
+        .mesa-btn {
+            padding: 12px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .mesa-btn:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+        
+        .mesa-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .mesa-info {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .carrito-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .carrito-item:last-child {
+            border-bottom: none;
+        }
+        
+        .carrito-item-qty {
+            color: #667eea;
+            font-weight: bold;
+            min-width: 30px;
+        }
+        
+        .carrito-item-remove {
+            cursor: pointer;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        .carrito-vacío {
+            text-align: center;
+            color: #999;
+            padding: 20px 0;
+            font-style: italic;
+        }
+        
+        .carrito-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #667eea;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn-pedir {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .btn-pedir:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-pedir:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* KITCHEN */
+        .kitchen-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-card.success {
+            border-left-color: #27ae60;
+        }
+        
+        .stat-card.success .stat-value {
+            color: #27ae60;
+        }
+        
+        .stat-card.warning {
+            border-left-color: #e67e22;
+        }
+        
+        .stat-card.warning .stat-value {
+            color: #e67e22;
+        }
+        
+        .stat-card.danger {
+            border-left-color: #e74c3c;
+        }
+        
+        .stat-card.danger .stat-value {
+            color: #e74c3c;
+        }
+        
+        .orden-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-left: 5px solid #667eea;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .orden-card.completada {
+            border-left-color: #27ae60;
+            background: #f0f8f5;
+        }
+        
+        .orden-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .orden-numero {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .orden-mesa {
+            font-size: 14px;
+            color: #999;
+            margin-top: 2px;
+        }
+        
+        .orden-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .orden-status.pendiente {
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+        
+        .orden-status.en-preparacion {
+            background: #fff5e5;
+            color: #e67e22;
+        }
+        
+        .orden-status.lista {
+            background: #e8f8f5;
+            color: #27ae60;
+        }
+        
+        .orden-items {
+            margin-bottom: 15px;
+        }
+        
+        .orden-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 14px;
+        }
+        
+        .orden-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-cantidad {
+            font-weight: bold;
+            color: #667eea;
+            min-width: 30px;
+        }
+        
+        .orden-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-action:hover {
+            background: #f5f5f5;
+        }
+        
+        .btn-completar {
+            background: #27ae60;
+            color: white;
+            border: none;
+        }
+        
+        .btn-completar:hover {
+            background: #229954;
+        }
+        
+        .btn-cancelar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+        }
+        
+        .btn-cancelar:hover {
+            background: #c0392b;
+        }
+        
+        .btn-print {
+            background: #3498db;
+            color: white;
+            border: none;
+        }
+        
+        .btn-print:hover {
+            background: #2980b9;
+        }
+        
+        .tiempo-transcurrido {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* HISTORIAL */
+        .historial-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .historial-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .historial-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .historial-item:last-child {
+            border-bottom: none;
+        }
+        
+        .historial-numero {
+            font-weight: bold;
+            color: #667eea;
+            min-width: 50px;
+        }
+        
+        .historial-total {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .historial-empty {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+        
+        .btn-limpiar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            font-weight: bold;
+        }
+        
+        .btn-limpiar:hover {
+            background: #c0392b;
+        }
+        
+        .hidden { display: none !important; }
+        
+        @media (max-width: 768px) {
+            .cliente-view {
+                grid-template-columns: 1fr;
+            }
+            
+            .carrito-section {
+                position: static;
+            }
+            
+            .kitchen-view {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🍽️ App de Comandas</h1>
+                <p id="version">Restauración - Modo Educativo COMPLETO</p>
+            </div>
+            <div id="stats" style="text-align: right;">
+                <p>Órdenes: <strong id="activeOrders">0</strong></p>
+                <p>Completadas: <strong id="completedOrders">0</strong></p>
+            </div>
+        </div>
+        
+        <div class="role-selector">
+            <button class="role-btn active" onclick="cambiarRol('cliente')">📱 Tablet do Cliente</button>
+            <button class="role-btn" onclick="cambiarRol('kitchen')">👨‍🍳 Barra/Cociña</button>
+            <button class="role-btn" onclick="cambiarRol('historial')">📋 Historial</button>
+        </div>
+        
+        <!-- VISTA CLIENTE -->
+        <div id="clienteView" class="cliente-view">
+            <div>
+                <div class="mesa-selector">
+                    <h3>📍 Selecciona a mesa:</h3>
+                    <div class="mesas-grid" id="mesasGrid"></div>
+                </div>
+                
+                <div class="menu-section">
+                    <h2>🥘 Platos Principais</h2>
+                    <div id="platosPrincipales"></div>
+                </div>
+                
+                <div class="menu-section">
+                    <h2>🍲 Sopa</h2>
+                    <div id="sopas"></div>
+                </div>
+                
+                <div class="menu-section">
+                    <h2>🍷 Bebidas</h2>
+                    <div id="bebidas"></div>
+                </div>
+            </div>
+            
+            <div class="carrito-section">
+                <h2>🛒 Comanda</h2>
+                <div id="mesaInfo" class="mesa-info hidden">Mesa: <span id="mesaNumero">-</span></div>
+                <div id="carritoItems" class="carrito-vacío">Ningunha selección</div>
+                <div id="carritoTotal" class="carrito-total hidden">
+                    <span>Total:</span>
+                    <span id="totalPrice">€0.00</span>
+                </div>
+                <button class="btn-pedir" id="btnPedir" onclick="enviarComanda()" disabled>Enviar Comanda</button>
+            </div>
+        </div>
+        
+        <!-- VISTA BARRA/COCIÑA -->
+        <div id="kitchenView" class="kitchen-view hidden">
+            <div class="stats-grid">
+                <div class="stat-card success">
+                    <h3>✅ Completadas hoxe</h3>
+                    <div class="stat-value" id="completadas">0</div>
+                </div>
+                <div class="stat-card warning">
+                    <h3>👨‍🍳 En preparación</h3>
+                    <div class="stat-value" id="enPreparacion">0</div>
+                </div>
+                <div class="stat-card danger">
+                    <h3>⏳ Pendentes</h3>
+                    <div class="stat-value" id="pendentes">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>💰 Ingresos totais</h3>
+                    <div class="stat-value" id="ingresosTotais">€0.00</div>
+                </div>
+            </div>
+            <div id="ordenesContainer" style="grid-column: 1 / -1;"></div>
+        </div>
+        
+        <!-- VISTA HISTORIAL -->
+        <div id="historialView" class="hidden">
+            <div class="historial-section">
+                <h2>📋 Historial de Comandas</h2>
+                <div id="historialItems" class="historial-empty">Sen comandas completadas aínda</div>
+                <button class="btn-limpiar" onclick="limpiarHistorial()">🗑️ Limpiar Historial</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
