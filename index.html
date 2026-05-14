@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Comandas - Restauración Pro</title>
+    <title>App Cafetería - Sistema de Comandas</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -15,7 +15,7 @@
         .container { max-width: 1400px; margin: 0 auto; padding: 10px; }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%);
             color: white;
             padding: 20px;
             border-radius: 8px;
@@ -52,7 +52,7 @@
         }
         
         .login-view h2 {
-            color: #667eea;
+            color: #8B6914;
             margin-bottom: 30px;
             text-align: center;
         }
@@ -65,7 +65,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #667eea;
+            color: #8B6914;
         }
         
         .login-view input, .login-view select {
@@ -76,16 +76,10 @@
             font-size: 16px;
         }
         
-        .login-view input:focus, .login-view select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
         .login-view button {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%);
             color: white;
             border: none;
             border-radius: 6px;
@@ -93,11 +87,6 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 20px;
-        }
-        
-        .login-view button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
         
         .admin-grid {
@@ -115,9 +104,9 @@
         }
         
         .admin-section h2 {
-            color: #667eea;
+            color: #8B6914;
             margin-bottom: 15px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #D4AF37;
             padding-bottom: 10px;
         }
         
@@ -129,7 +118,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            color: #667eea;
+            color: #8B6914;
             font-size: 14px;
         }
         
@@ -143,7 +132,7 @@
         
         .btn {
             padding: 10px 15px;
-            background: #667eea;
+            background: #8B6914;
             color: white;
             border: none;
             border-radius: 4px;
@@ -153,7 +142,8 @@
         }
         
         .btn:hover {
-            background: #764ba2;
+            background: #D4AF37;
+            color: #8B6914;
         }
         
         .btn-small {
@@ -202,8 +192,8 @@
         
         .menu-section h2 {
             margin-bottom: 15px;
-            color: #667eea;
-            border-bottom: 2px solid #667eea;
+            color: #8B6914;
+            border-bottom: 2px solid #D4AF37;
             padding-bottom: 10px;
         }
         
@@ -230,7 +220,7 @@
         
         .item-price {
             font-weight: 600;
-            color: #667eea;
+            color: #8B6914;
             min-width: 50px;
         }
         
@@ -248,11 +238,11 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            color: #667eea;
+            color: #8B6914;
         }
         
         .qty-btn:hover {
-            background: #667eea;
+            background: #8B6914;
             color: white;
         }
         
@@ -275,20 +265,10 @@
         }
         
         .carrito-section h2 {
-            color: #667eea;
+            color: #8B6914;
             margin-bottom: 15px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid #D4AF37;
             padding-bottom: 10px;
-        }
-        
-        .mesa-info {
-            background: #e8f4f8;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #667eea;
-            text-align: center;
         }
         
         .carrito-item {
@@ -302,10 +282,10 @@
         .carrito-total {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 2px solid #667eea;
+            border-top: 2px solid #8B6914;
             font-size: 18px;
             font-weight: bold;
-            color: #667eea;
+            color: #8B6914;
             display: flex;
             justify-content: space-between;
         }
@@ -313,7 +293,7 @@
         .btn-pedir {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%);
             color: white;
             border: none;
             border-radius: 6px;
@@ -325,7 +305,7 @@
         
         .btn-pedir:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(139, 105, 20, 0.4);
         }
         
         .btn-pedir:disabled {
@@ -351,7 +331,7 @@
             background: white;
             padding: 20px;
             border-radius: 8px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #8B6914;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
@@ -365,7 +345,7 @@
         .stat-value {
             font-size: 28px;
             font-weight: bold;
-            color: #667eea;
+            color: #8B6914;
         }
         
         .orden-card {
@@ -373,7 +353,7 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-left: 5px solid #667eea;
+            border-left: 5px solid #8B6914;
         }
         
         .orden-header {
@@ -388,7 +368,7 @@
         .orden-numero {
             font-size: 24px;
             font-weight: bold;
-            color: #667eea;
+            color: #8B6914;
         }
         
         .orden-camarero {
@@ -428,28 +408,6 @@
             font-size: 14px;
         }
         
-        .orden-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-action {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .btn-completar {
-            background: #27ae60;
-            color: white;
-            border: none;
-        }
-        
         .hidden { display: none !important; }
         
         @media (max-width: 768px) {
@@ -469,7 +427,7 @@
 </head>
 <body>
     <div id="loginView" class="login-view">
-        <h2>🍽️ App de Comandas</h2>
+        <h2>☕ App Cafetería</h2>
         <div class="form-group">
             <label>Rol:</label>
             <select id="rolLogin">
@@ -501,7 +459,7 @@
         <div class="container">
             <div class="header">
                 <div>
-                    <h1>🍽️ App de Comandas</h1>
+                    <h1>☕ App Cafetería</h1>
                     <p id="currentRole"></p>
                 </div>
                 <div class="user-info">
@@ -510,38 +468,37 @@
                 </div>
             </div>
 
+            <!-- ADMIN -->
             <div id="adminView" class="hidden">
                 <div class="admin-grid">
                     <div class="admin-section">
-                        <h2>⚙️ Xestión de Mesas</h2>
+                        <h2>📂 Xestión de Grupos</h2>
                         <div class="form-group">
-                            <label>Número de Mesas:</label>
-                            <input type="number" id="numMesas" min="1" max="20" value="12">
+                            <label>Nome do Grupo:</label>
+                            <input type="text" id="nomeGrupo" placeholder="Ej: Bebidas Frías">
                         </div>
-                        <button class="btn" onclick="actualizarMesas()">Actualizar Mesas</button>
-                        <div class="item-list" id="mesasListAdmin"></div>
+                        <button class="btn" onclick="engadirGrupo()">Engadir Grupo</button>
+                        <div class="item-list" id="gruposList"></div>
                     </div>
 
                     <div class="admin-section">
-                        <h2>📋 Xestión de Menú</h2>
+                        <h2>📋 Xestión de Itens</h2>
                         <div class="form-group">
-                            <label>Sección:</label>
-                            <select id="seccionMenu">
-                                <option value="platosPrincipales">Platos Principais</option>
-                                <option value="sopas">Sopas</option>
-                                <option value="bebidas">Bebidas</option>
+                            <label>Grupo:</label>
+                            <select id="grupoSelect">
+                                <option value="">Selecciona grupo...</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Nome do Prato:</label>
-                            <input type="text" id="nomePrato" placeholder="Nome">
+                            <label>Nome do Item:</label>
+                            <input type="text" id="nomeItem" placeholder="Ej: Café Expreso">
                         </div>
                         <div class="form-group">
                             <label>Precio (€):</label>
-                            <input type="number" id="precioPrato" placeholder="Precio" step="0.01">
+                            <input type="number" id="precioItem" placeholder="Precio" step="0.01">
                         </div>
-                        <button class="btn" onclick="engadirPrato()">Engadir Prato</button>
-                        <div class="item-list" id="menuListAdmin"></div>
+                        <button class="btn" onclick="engadirItem()">Engadir Item</button>
+                        <div class="item-list" id="itemsListAdmin"></div>
                     </div>
 
                     <div class="admin-section">
@@ -560,39 +517,20 @@
 
                     <div class="admin-section">
                         <h2>📊 Estadísticas</h2>
-                        <p><strong>Mesas:</strong> <span id="totalMesas">12</span></p>
+                        <p><strong>Grupos:</strong> <span id="totalGrupos">0</span></p>
+                        <p><strong>Items:</strong> <span id="totalItems">0</span></p>
                         <p><strong>Camareros:</strong> <span id="totalCamareros">0</span></p>
-                        <p><strong>Items no Menú:</strong> <span id="totalItems">0</span></p>
                         <p><strong>Comandas Hoje:</strong> <span id="totalComandas">0</span></p>
                     </div>
                 </div>
             </div>
 
+            <!-- CAMARERO -->
             <div id="camareroView" class="camarero-view hidden">
-                <div>
-                    <div class="menu-section">
-                        <h2>🥘 Platos Principais</h2>
-                        <div id="platosPrincipalesMenu"></div>
-                    </div>
-                    <div class="menu-section">
-                        <h2>🍲 Sopas</h2>
-                        <div id="sopasMenu"></div>
-                    </div>
-                    <div class="menu-section">
-                        <h2>🍷 Bebidas</h2>
-                        <div id="bebidasMenu"></div>
-                    </div>
-                </div>
+                <div id="menuContainer"></div>
 
                 <div class="carrito-section">
                     <h2>🛒 Comanda</h2>
-                    <div id="mesaSelInfo" class="mesa-info hidden">Mesa: <span id="mesaNumInfo">-</span></div>
-                    <div class="form-group">
-                        <label>Selecciona Mesa:</label>
-                        <select id="mesaSelect" onchange="seleccionarMesa(this.value)">
-                            <option value="">Escolle mesa...</option>
-                        </select>
-                    </div>
                     <div id="carritoItems" style="min-height: 100px; color: #999; text-align: center; padding: 20px 0; font-style: italic;">Ningunha selección</div>
                     <div id="carritoTotal" class="carrito-total hidden">
                         <span>Total:</span>
@@ -602,6 +540,7 @@
                 </div>
             </div>
 
+            <!-- BARRA -->
             <div id="barraView" class="hidden">
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -626,29 +565,27 @@
         let currentUser = null;
         let currentRole = null;
         let config = {
-            numMesas: 12,
+            grupos: [
+                { id: '1', nome: 'Bebidas Frías' },
+                { id: '2', nome: 'Bebidas Quentes' },
+                { id: '3', nome: 'Oferta Salgada' },
+                { id: '4', nome: 'Oferta Doce' }
+            ],
+            items: [
+                { id: '1', grupoId: '1', nombre: 'Zumo de Laranxa', precio: 2.50 },
+                { id: '2', grupoId: '1', nombre: 'Batido de Fresas', precio: 3.00 },
+                { id: '3', grupoId: '2', nombre: 'Café Expreso', precio: 1.50 },
+                { id: '4', grupoId: '2', nombre: 'Café con Leite', precio: 2.00 },
+                { id: '5', grupoId: '3', nombre: 'Bocadillo de Xaxún', precio: 5.00 },
+                { id: '6', grupoId: '4', nombre: 'Croissant', precio: 2.50 }
+            ],
             camareros: [
                 { nome: 'demo', pass: 'demo' }
             ],
             adminPass: 'admin'
         };
-        let menu = {
-            platosPrincipales: [
-                { id: 'pp1', nombre: 'Mariscada', precio: 18.50 },
-                { id: 'pp2', nombre: 'Carne á Retina', precio: 16.00 },
-                { id: 'pp3', nombre: 'Pulpo á Gallega', precio: 15.50 }
-            ],
-            sopas: [
-                { id: 's1', nombre: 'Sopa de Pedra', precio: 6.50 },
-                { id: 's2', nombre: 'Caldo Gallego', precio: 5.50 }
-            ],
-            bebidas: [
-                { id: 'b1', nombre: 'Agua (50cl)', precio: 1.50 },
-                { id: 'b2', nombre: 'Viño (copa)', precio: 3.50 }
-            ]
-        };
+        
         let carrito = {};
-        let mesaSeleccionada = null;
         let ordenes = [];
         let numeroOrden = 1;
 
@@ -706,7 +643,6 @@
             currentUser = null;
             currentRole = null;
             carrito = {};
-            mesaSeleccionada = null;
 
             document.getElementById('loginView').classList.remove('hidden');
             document.getElementById('appView').classList.add('hidden');
@@ -716,58 +652,82 @@
         }
 
         function renderAdminView() {
-            renderMesasAdmin();
-            renderMenuAdmin();
+            renderGrupos();
+            renderItemsAdmin();
             renderCamarosAdmin();
             updateStats();
         }
 
-        function renderMesasAdmin() {
-            const html = Array.from({length: config.numMesas}, (_, i) => i + 1)
-                .map(m => `<div class="item-row">Mesa ${m}</div>`).join('');
-            document.getElementById('mesasListAdmin').innerHTML = html;
-        }
-
-        function actualizarMesas() {
-            const num = parseInt(document.getElementById('numMesas').value);
-            if (num > 0 && num <= 20) {
-                config.numMesas = num;
-                renderMesasAdmin();
-            }
-        }
-
-        function engadirPrato() {
-            const seccion = document.getElementById('seccionMenu').value;
-            const nome = document.getElementById('nomePrato').value;
-            const precio = parseFloat(document.getElementById('precioPrato').value);
-
-            if (nome && precio > 0) {
-                menu[seccion].push({
+        function engadirGrupo() {
+            const nome = document.getElementById('nomeGrupo').value;
+            if (nome) {
+                config.grupos.push({
                     id: Date.now().toString(),
-                    nombre: nome,
-                    precio: precio
+                    nome: nome
                 });
-                document.getElementById('nomePrato').value = '';
-                document.getElementById('precioPrato').value = '';
-                renderMenuAdmin();
+                document.getElementById('nomeGrupo').value = '';
+                renderGrupos();
+                renderGruposSelect();
                 updateStats();
             }
         }
 
-        function renderMenuAdmin() {
-            let html = '';
-            for (let seccion in menu) {
-                html += `<strong>${seccion}:</strong><br>`;
-                html += menu[seccion].map(item => 
-                    `<div class="item-row">${item.nombre} - €${item.precio.toFixed(2)} <button class="btn-small" onclick="eliminarPrato('${seccion}', '${item.id}')">X</button></div>`
-                ).join('');
-            }
-            document.getElementById('menuListAdmin').innerHTML = html;
+        function renderGrupos() {
+            const html = config.grupos.map(g => 
+                `<div class="item-row">${g.nome} <button class="btn-small" onclick="eliminarGrupo('${g.id}')">X</button></div>`
+            ).join('');
+            document.getElementById('gruposList').innerHTML = html;
         }
 
-        function eliminarPrato(seccion, id) {
-            menu[seccion] = menu[seccion].filter(p => p.id !== id);
-            renderMenuAdmin();
+        function renderGruposSelect() {
+            const html = '<option value="">Selecciona grupo...</option>' + 
+                config.grupos.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
+            document.getElementById('grupoSelect').innerHTML = html;
+        }
+
+        function eliminarGrupo(id) {
+            config.grupos = config.grupos.filter(g => g.id !== id);
+            config.items = config.items.filter(i => i.grupoId !== id);
+            renderGrupos();
+            renderGruposSelect();
+            renderItemsAdmin();
+            updateStats();
+        }
+
+        function engadirItem() {
+            const grupoId = document.getElementById('grupoSelect').value;
+            const nombre = document.getElementById('nomeItem').value;
+            const precio = parseFloat(document.getElementById('precioItem').value);
+
+            if (grupoId && nombre && precio > 0) {
+                config.items.push({
+                    id: Date.now().toString(),
+                    grupoId: grupoId,
+                    nombre: nombre,
+                    precio: precio
+                });
+                document.getElementById('nomeItem').value = '';
+                document.getElementById('precioItem').value = '';
+                renderItemsAdmin();
+                updateStats();
+            }
+        }
+
+        function renderItemsAdmin() {
+            let html = '';
+            config.grupos.forEach(grupo => {
+                html += `<strong>${grupo.nome}:</strong><br>`;
+                const itemsDelGrupo = config.items.filter(i => i.grupoId === grupo.id);
+                html += itemsDelGrupo.map(item => 
+                    `<div class="item-row">${item.nombre} - €${item.precio.toFixed(2)} <button class="btn-small" onclick="eliminarItem('${item.id}')">X</button></div>`
+                ).join('');
+            });
+            document.getElementById('itemsListAdmin').innerHTML = html;
+        }
+
+        function eliminarItem(id) {
+            config.items = config.items.filter(i => i.id !== id);
+            renderItemsAdmin();
             updateStats();
         }
 
@@ -798,43 +758,45 @@
         }
 
         function updateStats() {
-            document.getElementById('totalMesas').textContent = config.numMesas;
+            document.getElementById('totalGrupos').textContent = config.grupos.length;
+            document.getElementById('totalItems').textContent = config.items.length;
             document.getElementById('totalCamareros').textContent = config.camareros.length;
-            let totalItems = Object.values(menu).reduce((sum, arr) => sum + arr.length, 0);
-            document.getElementById('totalItems').textContent = totalItems;
             document.getElementById('totalComandas').textContent = ordenes.length;
         }
 
         function renderCamareroView() {
             renderMenu();
-            renderMesasSelect();
         }
 
         function renderMenu() {
-            for (let seccion in menu) {
-                const container = document.getElementById(seccion === 'platosPrincipales' ? 'platosPrincipalesMenu' : 
-                                                        seccion === 'sopas' ? 'sopasMenu' : 'bebidasMenu');
-                container.innerHTML = menu[seccion].map(item => `
-                    <div class="menu-item">
-                        <div class="item-info">
-                            <h3>${item.nombre}</h3>
-                            <p>€${item.precio.toFixed(2)}</p>
+            const container = document.getElementById('menuContainer');
+            let html = '';
+            
+            config.grupos.forEach(grupo => {
+                const itemsDelGrupo = config.items.filter(i => i.grupoId === grupo.id);
+                if (itemsDelGrupo.length > 0) {
+                    html += `<div class="menu-section">
+                        <h2>${grupo.nome}</h2>`;
+                    
+                    html += itemsDelGrupo.map(item => `
+                        <div class="menu-item">
+                            <div class="item-info">
+                                <h3>${item.nombre}</h3>
+                                <p>€${item.precio.toFixed(2)}</p>
+                            </div>
+                            <div class="item-controls">
+                                <button class="qty-btn" onclick="cambiarCantidad('${item.id}', -1)">−</button>
+                                <input type="number" class="qty-input" id="qty-${item.id}" value="0" min="0">
+                                <button class="qty-btn" onclick="cambiarCantidad('${item.id}', 1)">+</button>
+                            </div>
                         </div>
-                        <div class="item-controls">
-                            <button class="qty-btn" onclick="cambiarCantidad('${item.id}', -1)">−</button>
-                            <input type="number" class="qty-input" id="qty-${item.id}" value="0" min="0">
-                            <button class="qty-btn" onclick="cambiarCantidad('${item.id}', 1)">+</button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function renderMesasSelect() {
-            const html = '<option value="">Escolle mesa...</option>' + 
-                Array.from({length: config.numMesas}, (_, i) => i + 1)
-                .map(m => `<option value="${m}">Mesa ${m}</option>`).join('');
-            document.getElementById('mesaSelect').innerHTML = html;
+                    `).join('');
+                    
+                    html += '</div>';
+                }
+            });
+            
+            container.innerHTML = html;
         }
 
         function cambiarCantidad(itemId, delta) {
@@ -845,31 +807,20 @@
             actualizarCarrito();
         }
 
-        function seleccionarMesa(mesa) {
-            mesaSeleccionada = parseInt(mesa) || null;
-            document.getElementById('mesaSelInfo').classList.toggle('hidden', !mesaSeleccionada);
-            if (mesaSeleccionada) {
-                document.getElementById('mesaNumInfo').textContent = mesaSeleccionada;
-            }
-            actualizarCarrito();
-        }
-
         function actualizarCarrito() {
             carrito = {};
             let total = 0;
 
-            for (let seccion in menu) {
-                menu[seccion].forEach(item => {
-                    const input = document.querySelector(`#qty-${item.id}`);
-                    if (input) {
-                        const cant = parseInt(input.value) || 0;
-                        if (cant > 0) {
-                            carrito[item.id] = { ...item, cantidad: cant };
-                            total += item.precio * cant;
-                        }
+            config.items.forEach(item => {
+                const input = document.querySelector(`#qty-${item.id}`);
+                if (input) {
+                    const cant = parseInt(input.value) || 0;
+                    if (cant > 0) {
+                        carrito[item.id] = { ...item, cantidad: cant };
+                        total += item.precio * cant;
                     }
-                });
-            }
+                }
+            });
 
             const items = Object.values(carrito);
             const container = document.getElementById('carritoItems');
@@ -888,16 +839,15 @@
                 `).join('');
                 document.getElementById('totalPrice').textContent = total.toFixed(2) + '€';
                 totalContainer.classList.remove('hidden');
-                document.getElementById('btnPedir').disabled = !mesaSeleccionada;
+                document.getElementById('btnPedir').disabled = false;
             }
         }
 
         function enviarComanda() {
-            if (Object.keys(carrito).length === 0 || !mesaSeleccionada) return;
+            if (Object.keys(carrito).length === 0) return;
 
             const orden = {
                 numero: numeroOrden++,
-                mesa: mesaSeleccionada,
                 camarero: currentUser,
                 items: Object.values(carrito),
                 timestamp: Date.now(),
@@ -907,11 +857,8 @@
 
             ordenes.push(orden);
             carrito = {};
-            mesaSeleccionada = null;
 
             document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
-            document.getElementById('mesaSelect').value = '';
-            document.getElementById('mesaSelInfo').classList.add('hidden');
             actualizarCarrito();
 
             alert('✅ Comanda ' + orden.numero + ' enviada!');
@@ -933,7 +880,7 @@
 
             const container = document.getElementById('ordenesContainer');
             if (ordenes.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #667eea;">⏳ Esperando comandas...</div>';
+                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #8B6914;">⏳ Esperando comandas...</div>';
                 return;
             }
 
@@ -942,7 +889,7 @@
                     <div class="orden-header">
                         <div>
                             <div class="orden-numero">Comanda #${orden.numero}</div>
-                            <div class="orden-camarero">🪑 Mesa ${orden.mesa} | ${orden.camarero}</div>
+                            <div class="orden-camarero">${orden.camarero}</div>
                         </div>
                         <div class="orden-status ${orden.status}" onclick="cambiarStatus(${orden.numero})">
                             ${orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : '✅ Lista'}
