@@ -271,6 +271,26 @@
             padding-bottom: 10px;
         }
         
+        .mesa-info-box {
+            background: #e8f4f8;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8B6914;
+        }
+
+        .mesa-info-box h3 {
+            color: #8B6914;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .mesa-info-box p {
+            color: #333;
+            font-weight: bold;
+            margin: 4px 0;
+        }
+        
         .carrito-item {
             display: flex;
             justify-content: space-between;
@@ -370,10 +390,11 @@
             font-weight: bold;
             color: #8B6914;
         }
-        
-        .orden-camarero {
-            font-size: 14px;
-            color: #999;
+
+        .orden-detalles {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
         }
         
         .orden-status {
@@ -531,6 +552,33 @@
 
                 <div class="carrito-section">
                     <h2>🛒 Comanda</h2>
+                    
+                    <div class="form-group">
+                        <label>Ubicación:</label>
+                        <select id="ubicacionSelect" onchange="actualizarMesas()">
+                            <option value="">Selecciona ubicación...</option>
+                            <option value="comedor">Comedor</option>
+                            <option value="terraza">Terraza</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mesa:</label>
+                        <select id="mesaSelect" onchange="atualizarUbicacion()">
+                            <option value="">Selecciona mesa...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Número de Comensal:</label>
+                        <input type="number" id="nComensal" placeholder="Ej: 1, 2, 3..." min="1" max="10">
+                    </div>
+
+                    <div id="mesaInfoBox" class="mesa-info-box hidden">
+                        <h3>📍 Detalles da Comanda</h3>
+                        <p id="mesaInfoText"></p>
+                    </div>
+                    
                     <div id="carritoItems" style="min-height: 100px; color: #999; text-align: center; padding: 20px 0; font-style: italic;">Ningunha selección</div>
                     <div id="carritoTotal" class="carrito-total hidden">
                         <span>Total:</span>
@@ -588,6 +636,8 @@
         let carrito = {};
         let ordenes = [];
         let numeroOrden = 1;
+        let ubicacionSeleccionada = null;
+        let mesaSeleccionada = null;
 
         document.getElementById('rolLogin').addEventListener('change', function() {
             document.getElementById('camareroLogin').classList.toggle('hidden', this.value !== 'camarero');
@@ -643,6 +693,8 @@
             currentUser = null;
             currentRole = null;
             carrito = {};
+            ubicacionSeleccionada = null;
+            mesaSeleccionada = null;
 
             document.getElementById('loginView').classList.remove('hidden');
             document.getElementById('appView').classList.add('hidden');
@@ -799,6 +851,28 @@
             container.innerHTML = html;
         }
 
+        function actualizarMesas() {
+            const ubicacion = document.getElementById('ubicacionSelect').value;
+            ubicacionSeleccionada = ubicacion;
+            
+            let mesasCount = 0;
+            if (ubicacion === 'comedor') mesasCount = 5;
+            else if (ubicacion === 'terraza') mesasCount = 4;
+            
+            const html = '<option value="">Selecciona mesa...</option>' + 
+                Array.from({length: mesasCount}, (_, i) => i + 1)
+                .map(m => `<option value="${m}">Mesa ${m}</option>`).join('');
+            
+            document.getElementById('mesaSelect').innerHTML = html;
+            document.getElementById('mesaSelect').value = '';
+            actualizarCarrito();
+        }
+
+        function atualizarUbicacion() {
+            mesaSeleccionada = document.getElementById('mesaSelect').value;
+            actualizarCarrito();
+        }
+
         function cambiarCantidad(itemId, delta) {
             const input = document.querySelector(`#qty-${itemId}`);
             const cantidadActual = parseInt(input.value) || 0;
@@ -825,6 +899,17 @@
             const items = Object.values(carrito);
             const container = document.getElementById('carritoItems');
             const totalContainer = document.getElementById('carritoTotal');
+            const mesaInfoBox = document.getElementById('mesaInfoBox');
+            const mesaInfoText = document.getElementById('mesaInfoText');
+
+            // Mostrar info de mesa seleccionada
+            if (ubicacionSeleccionada && mesaSeleccionada) {
+                const comensal = document.getElementById('nComensal').value || '-';
+                mesaInfoText.textContent = `${ubicacionSeleccionada.toUpperCase()} | Mesa ${mesaSeleccionada} | Comensal: ${comensal}`;
+                mesaInfoBox.classList.remove('hidden');
+            } else {
+                mesaInfoBox.classList.add('hidden');
+            }
 
             if (items.length === 0) {
                 container.innerHTML = '<div style="min-height: 100px; color: #999; text-align: center; padding: 20px 0; font-style: italic;">Ningunha selección</div>';
@@ -839,16 +924,19 @@
                 `).join('');
                 document.getElementById('totalPrice').textContent = total.toFixed(2) + '€';
                 totalContainer.classList.remove('hidden');
-                document.getElementById('btnPedir').disabled = false;
+                document.getElementById('btnPedir').disabled = !ubicacionSeleccionada || !mesaSeleccionada;
             }
         }
 
         function enviarComanda() {
-            if (Object.keys(carrito).length === 0) return;
+            if (Object.keys(carrito).length === 0 || !ubicacionSeleccionada || !mesaSeleccionada) return;
 
             const orden = {
                 numero: numeroOrden++,
                 camarero: currentUser,
+                ubicacion: ubicacionSeleccionada,
+                mesa: mesaSeleccionada,
+                comensal: document.getElementById('nComensal').value || '-',
                 items: Object.values(carrito),
                 timestamp: Date.now(),
                 status: 'pendente',
@@ -859,6 +947,11 @@
             carrito = {};
 
             document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
+            document.getElementById('ubicacionSelect').value = '';
+            document.getElementById('mesaSelect').value = '';
+            document.getElementById('nComensal').value = '';
+            ubicacionSeleccionada = null;
+            mesaSeleccionada = null;
             actualizarCarrito();
 
             alert('✅ Comanda ' + orden.numero + ' enviada!');
@@ -889,7 +982,11 @@
                     <div class="orden-header">
                         <div>
                             <div class="orden-numero">Comanda #${orden.numero}</div>
-                            <div class="orden-camarero">${orden.camarero}</div>
+                            <div class="orden-detalles">
+                                <div>📍 ${orden.ubicacion.toUpperCase()} - Mesa ${orden.mesa}</div>
+                                <div>👤 Comensal: ${orden.comensal}</div>
+                                <div>👨‍💼 ${orden.camarero}</div>
+                            </div>
                         </div>
                         <div class="orden-status ${orden.status}" onclick="cambiarStatus(${orden.numero})">
                             ${orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : '✅ Lista'}
