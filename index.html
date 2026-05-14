@@ -167,3 +167,810 @@
         }
         
         .item-list {
+            background: #f9f9f9;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .item-row:last-child {
+            border-bottom: none;
+        }
+        
+        .camarero-view {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .menu-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .menu-section h2 {
+            margin-bottom: 15px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        
+        .item-info h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .item-info p {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .item-price {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 50px;
+        }
+        
+        .item-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .qty-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .qty-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .carrito-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .carrito-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .mesa-info {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .carrito-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .carrito-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #667eea;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn-pedir {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .btn-pedir:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-pedir:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .kitchen-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .orden-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-left: 5px solid #667eea;
+        }
+        
+        .orden-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .orden-numero {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .orden-camarero {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .orden-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+        
+        .orden-status.en-preparacion {
+            background: #fff5e5;
+            color: #e67e22;
+        }
+        
+        .orden-status.lista {
+            background: #e8f8f5;
+            color: #27ae60;
+        }
+        
+        .orden-items {
+            margin-bottom: 15px;
+        }
+        
+        .orden-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 14px;
+        }
+        
+        .orden-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .btn-completar {
+            background: #27ae60;
+            color: white;
+            border: none;
+        }
+        
+        .hidden { display: none !important; }
+        
+        @media (max-width: 768px) {
+            .camarero-view {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kitchen-view {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loginView" class="login-view">
+        <h2>🍽️ App de Comandas</h2>
+        <div class="form-group">
+            <label>Rol:</label>
+            <select id="rolLogin">
+                <option value="admin">Admin</option>
+                <option value="camarero">Camarero</option>
+                <option value="barra">Barra/Cociña</option>
+            </select>
+        </div>
+        <div id="camareroLogin" class="hidden">
+            <div class="form-group">
+                <label>Nome:</label>
+                <input type="text" id="nomeCamarero" placeholder="Nome do camarero">
+            </div>
+            <div class="form-group">
+                <label>Contrasenal:</label>
+                <input type="password" id="passsCamarero" placeholder="Contrasenal">
+            </div>
+        </div>
+        <div id="adminLogin" class="hidden">
+            <div class="form-group">
+                <label>Contrasenal Admin:</label>
+                <input type="password" id="passAdmin" placeholder="Contrasenal">
+            </div>
+        </div>
+        <button class="btn" onclick="login()" style="width: 100%; padding: 12px; font-size: 16px;">Entrar</button>
+    </div>
+
+    <div id="appView" class="hidden">
+        <div class="container">
+            <div class="header">
+                <div>
+                    <h1>🍽️ App de Comandas</h1>
+                    <p id="currentRole"></p>
+                </div>
+                <div class="user-info">
+                    <p id="userInfo"></p>
+                    <button class="logout-btn" onclick="logout()">Sair</button>
+                </div>
+            </div>
+
+            <div id="adminView" class="hidden">
+                <div class="admin-grid">
+                    <div class="admin-section">
+                        <h2>⚙️ Xestión de Mesas</h2>
+                        <div class="form-group">
+                            <label>Número de Mesas:</label>
+                            <input type="number" id="numMesas" min="1" max="20" value="12">
+                        </div>
+                        <button class="btn" onclick="actualizarMesas()">Actualizar Mesas</button>
+                        <div class="item-list" id="mesasListAdmin"></div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h2>📋 Xestión de Menú</h2>
+                        <div class="form-group">
+                            <label>Sección:</label>
+                            <select id="seccionMenu">
+                                <option value="platosPrincipales">Platos Principais</option>
+                                <option value="sopas">Sopas</option>
+                                <option value="bebidas">Bebidas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nome do Prato:</label>
+                            <input type="text" id="nomePrato" placeholder="Nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio (€):</label>
+                            <input type="number" id="precioPrato" placeholder="Precio" step="0.01">
+                        </div>
+                        <button class="btn" onclick="engadirPrato()">Engadir Prato</button>
+                        <div class="item-list" id="menuListAdmin"></div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h2>👥 Xestión de Camareros</h2>
+                        <div class="form-group">
+                            <label>Nome:</label>
+                            <input type="text" id="nomeCamareroAdmin" placeholder="Nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Contrasenal:</label>
+                            <input type="password" id="passCamareroAdmin" placeholder="Contrasenal">
+                        </div>
+                        <button class="btn" onclick="engadirCamarero()">Engadir Camarero</button>
+                        <div class="item-list" id="camarosList"></div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h2>📊 Estadísticas</h2>
+                        <p><strong>Mesas:</strong> <span id="totalMesas">12</span></p>
+                        <p><strong>Camareros:</strong> <span id="totalCamareros">0</span></p>
+                        <p><strong>Items no Menú:</strong> <span id="totalItems">0</span></p>
+                        <p><strong>Comandas Hoje:</strong> <span id="totalComandas">0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="camareroView" class="camarero-view hidden">
+                <div>
+                    <div class="menu-section">
+                        <h2>🥘 Platos Principais</h2>
+                        <div id="platosPrincipalesMenu"></div>
+                    </div>
+                    <div class="menu-section">
+                        <h2>🍲 Sopas</h2>
+                        <div id="sopasMenu"></div>
+                    </div>
+                    <div class="menu-section">
+                        <h2>🍷 Bebidas</h2>
+                        <div id="bebidasMenu"></div>
+                    </div>
+                </div>
+
+                <div class="carrito-section">
+                    <h2>🛒 Comanda</h2>
+                    <div id="mesaSelInfo" class="mesa-info hidden">Mesa: <span id="mesaNumInfo">-</span></div>
+                    <div class="form-group">
+                        <label>Selecciona Mesa:</label>
+                        <select id="mesaSelect" onchange="seleccionarMesa(this.value)">
+                            <option value="">Escolle mesa...</option>
+                        </select>
+                    </div>
+                    <div id="carritoItems" style="min-height: 100px; color: #999; text-align: center; padding: 20px 0; font-style: italic;">Ningunha selección</div>
+                    <div id="carritoTotal" class="carrito-total hidden">
+                        <span>Total:</span>
+                        <span id="totalPrice">€0.00</span>
+                    </div>
+                    <button class="btn-pedir" id="btnPedir" onclick="enviarComanda()" disabled>Enviar Comanda</button>
+                </div>
+            </div>
+
+            <div id="barraView" class="hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Pendentes</h3>
+                        <div class="stat-value" id="pendentes">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>En Preparación</h3>
+                        <div class="stat-value" id="enPreparacion">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completadas</h3>
+                        <div class="stat-value" id="completadas">0</div>
+                    </div>
+                </div>
+                <div id="ordenesContainer" class="kitchen-view"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentRole = null;
+        let config = {
+            numMesas: 12,
+            camareros: [
+                { nome: 'demo', pass: 'demo' }
+            ],
+            adminPass: 'admin'
+        };
+        let menu = {
+            platosPrincipales: [
+                { id: 'pp1', nombre: 'Mariscada', precio: 18.50 },
+                { id: 'pp2', nombre: 'Carne á Retina', precio: 16.00 },
+                { id: 'pp3', nombre: 'Pulpo á Gallega', precio: 15.50 }
+            ],
+            sopas: [
+                { id: 's1', nombre: 'Sopa de Pedra', precio: 6.50 },
+                { id: 's2', nombre: 'Caldo Gallego', precio: 5.50 }
+            ],
+            bebidas: [
+                { id: 'b1', nombre: 'Agua (50cl)', precio: 1.50 },
+                { id: 'b2', nombre: 'Viño (copa)', precio: 3.50 }
+            ]
+        };
+        let carrito = {};
+        let mesaSeleccionada = null;
+        let ordenes = [];
+        let numeroOrden = 1;
+
+        document.getElementById('rolLogin').addEventListener('change', function() {
+            document.getElementById('camareroLogin').classList.toggle('hidden', this.value !== 'camarero');
+            document.getElementById('adminLogin').classList.toggle('hidden', this.value !== 'admin');
+        });
+
+        function login() {
+            const rol = document.getElementById('rolLogin').value;
+            const loginView = document.getElementById('loginView');
+            const appView = document.getElementById('appView');
+
+            if (rol === 'admin') {
+                const pass = document.getElementById('passAdmin').value;
+                if (pass !== config.adminPass) {
+                    alert('Contrasenal incorrecta');
+                    return;
+                }
+                currentUser = 'Admin';
+            } else if (rol === 'camarero') {
+                const nome = document.getElementById('nomeCamarero').value;
+                const pass = document.getElementById('passsCamarero').value;
+                const camarero = config.camareros.find(c => c.nome === nome && c.pass === pass);
+                if (!camarero) {
+                    alert('Nome ou contrasenal incorrectos');
+                    return;
+                }
+                currentUser = nome;
+            } else if (rol === 'barra') {
+                currentUser = 'Barra';
+            }
+
+            currentRole = rol;
+            document.getElementById('currentRole').textContent = rol === 'admin' ? '⚙️ Admin' : rol === 'camarero' ? '👨‍💼 Camarero' : '👨‍🍳 Barra/Cociña';
+            document.getElementById('userInfo').textContent = `Usuario: ${currentUser}`;
+
+            loginView.classList.add('hidden');
+            appView.classList.remove('hidden');
+
+            document.getElementById('adminView').classList.toggle('hidden', rol !== 'admin');
+            document.getElementById('camareroView').classList.toggle('hidden', rol !== 'camarero');
+            document.getElementById('barraView').classList.toggle('hidden', rol !== 'barra');
+
+            if (rol === 'admin') {
+                renderAdminView();
+            } else if (rol === 'camarero') {
+                renderCamareroView();
+            } else if (rol === 'barra') {
+                renderBarraView();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            currentRole = null;
+            carrito = {};
+            mesaSeleccionada = null;
+
+            document.getElementById('loginView').classList.remove('hidden');
+            document.getElementById('appView').classList.add('hidden');
+            document.getElementById('nomeCamarero').value = '';
+            document.getElementById('passsCamarero').value = '';
+            document.getElementById('passAdmin').value = '';
+        }
+
+        function renderAdminView() {
+            renderMesasAdmin();
+            renderMenuAdmin();
+            renderCamarosAdmin();
+            updateStats();
+        }
+
+        function renderMesasAdmin() {
+            const html = Array.from({length: config.numMesas}, (_, i) => i + 1)
+                .map(m => `<div class="item-row">Mesa ${m}</div>`).join('');
+            document.getElementById('mesasListAdmin').innerHTML = html;
+        }
+
+        function actualizarMesas() {
+            const num = parseInt(document.getElementById('numMesas').value);
+            if (num > 0 && num <= 20) {
+                config.numMesas = num;
+                renderMesasAdmin();
+            }
+        }
+
+        function engadirPrato() {
+            const seccion = document.getElementById('seccionMenu').value;
+            const nome = document.getElementById('nomePrato').value;
+            const precio = parseFloat(document.getElementById('precioPrato').value);
+
+            if (nome && precio > 0) {
+                menu[seccion].push({
+                    id: Date.now().toString(),
+                    nombre: nome,
+                    precio: precio
+                });
+                document.getElementById('nomePrato').value = '';
+                document.getElementById('precioPrato').value = '';
+                renderMenuAdmin();
+                updateStats();
+            }
+        }
+
+        function renderMenuAdmin() {
+            let html = '';
+            for (let seccion in menu) {
+                html += `<strong>${seccion}:</strong><br>`;
+                html += menu[seccion].map(item => 
+                    `<div class="item-row">${item.nombre} - €${item.precio.toFixed(2)} <button class="btn-small" onclick="eliminarPrato('${seccion}', '${item.id}')">X</button></div>`
+                ).join('');
+            }
+            document.getElementById('menuListAdmin').innerHTML = html;
+        }
+
+        function eliminarPrato(seccion, id) {
+            menu[seccion] = menu[seccion].filter(p => p.id !== id);
+            renderMenuAdmin();
+            updateStats();
+        }
+
+        function engadirCamarero() {
+            const nome = document.getElementById('nomeCamareroAdmin').value;
+            const pass = document.getElementById('passCamareroAdmin').value;
+
+            if (nome && pass) {
+                config.camareros.push({ nome, pass });
+                document.getElementById('nomeCamareroAdmin').value = '';
+                document.getElementById('passCamareroAdmin').value = '';
+                renderCamarosAdmin();
+                updateStats();
+            }
+        }
+
+        function renderCamarosAdmin() {
+            const html = config.camareros.map(c => 
+                `<div class="item-row">${c.nome} <button class="btn-small" onclick="eliminarCamarero('${c.nome}')">X</button></div>`
+            ).join('');
+            document.getElementById('camarosList').innerHTML = html;
+        }
+
+        function eliminarCamarero(nome) {
+            config.camareros = config.camareros.filter(c => c.nome !== nome);
+            renderCamarosAdmin();
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalMesas').textContent = config.numMesas;
+            document.getElementById('totalCamareros').textContent = config.camareros.length;
+            let totalItems = Object.values(menu).reduce((sum, arr) => sum + arr.length, 0);
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalComandas').textContent = ordenes.length;
+        }
+
+        function renderCamareroView() {
+            renderMenu();
+            renderMesasSelect();
+        }
+
+        function renderMenu() {
+            for (let seccion in menu) {
+                const container = document.getElementById(seccion === 'platosPrincipales' ? 'platosPrincipalesMenu' : 
+                                                        seccion === 'sopas' ? 'sopasMenu' : 'bebidasMenu');
+                container.innerHTML = menu[seccion].map(item => `
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <h3>${item.nombre}</h3>
+                            <p>€${item.precio.toFixed(2)}</p>
+                        </div>
+                        <div class="item-controls">
+                            <button class="qty-btn" onclick="cambiarCantidad('${item.id}', -1)">−</button>
+                            <input type="number" class="qty-input" id="qty-${item.id}" value="0" min="0">
+                            <button class="qty-btn" onclick="cambiarCantidad('${item.id}', 1)">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function renderMesasSelect() {
+            const html = '<option value="">Escolle mesa...</option>' + 
+                Array.from({length: config.numMesas}, (_, i) => i + 1)
+                .map(m => `<option value="${m}">Mesa ${m}</option>`).join('');
+            document.getElementById('mesaSelect').innerHTML = html;
+        }
+
+        function cambiarCantidad(itemId, delta) {
+            const input = document.querySelector(`#qty-${itemId}`);
+            const cantidadActual = parseInt(input.value) || 0;
+            const nueva = Math.max(0, cantidadActual + delta);
+            input.value = nueva;
+            actualizarCarrito();
+        }
+
+        function seleccionarMesa(mesa) {
+            mesaSeleccionada = parseInt(mesa) || null;
+            document.getElementById('mesaSelInfo').classList.toggle('hidden', !mesaSeleccionada);
+            if (mesaSeleccionada) {
+                document.getElementById('mesaNumInfo').textContent = mesaSeleccionada;
+            }
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            carrito = {};
+            let total = 0;
+
+            for (let seccion in menu) {
+                menu[seccion].forEach(item => {
+                    const input = document.querySelector(`#qty-${item.id}`);
+                    if (input) {
+                        const cant = parseInt(input.value) || 0;
+                        if (cant > 0) {
+                            carrito[item.id] = { ...item, cantidad: cant };
+                            total += item.precio * cant;
+                        }
+                    }
+                });
+            }
+
+            const items = Object.values(carrito);
+            const container = document.getElementById('carritoItems');
+            const totalContainer = document.getElementById('carritoTotal');
+
+            if (items.length === 0) {
+                container.innerHTML = '<div style="min-height: 100px; color: #999; text-align: center; padding: 20px 0; font-style: italic;">Ningunha selección</div>';
+                totalContainer.classList.add('hidden');
+                document.getElementById('btnPedir').disabled = true;
+            } else {
+                container.innerHTML = items.map(item => `
+                    <div class="carrito-item">
+                        <span>${item.cantidad}x ${item.nombre}</span>
+                        <strong>€${(item.precio * item.cantidad).toFixed(2)}</strong>
+                    </div>
+                `).join('');
+                document.getElementById('totalPrice').textContent = total.toFixed(2) + '€';
+                totalContainer.classList.remove('hidden');
+                document.getElementById('btnPedir').disabled = !mesaSeleccionada;
+            }
+        }
+
+        function enviarComanda() {
+            if (Object.keys(carrito).length === 0 || !mesaSeleccionada) return;
+
+            const orden = {
+                numero: numeroOrden++,
+                mesa: mesaSeleccionada,
+                camarero: currentUser,
+                items: Object.values(carrito),
+                timestamp: Date.now(),
+                status: 'pendente',
+                total: Object.values(carrito).reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
+            };
+
+            ordenes.push(orden);
+            carrito = {};
+            mesaSeleccionada = null;
+
+            document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
+            document.getElementById('mesaSelect').value = '';
+            document.getElementById('mesaSelInfo').classList.add('hidden');
+            actualizarCarrito();
+
+            alert('✅ Comanda ' + orden.numero + ' enviada!');
+        }
+
+        function renderBarraView() {
+            actualizarBarraView();
+            setInterval(actualizarBarraView, 1000);
+        }
+
+        function actualizarBarraView() {
+            const pendentes = ordenes.filter(o => o.status === 'pendente').length;
+            const enPrep = ordenes.filter(o => o.status === 'en-preparacion').length;
+            const compl = ordenes.filter(o => o.status === 'lista').length;
+
+            document.getElementById('pendentes').textContent = pendentes;
+            document.getElementById('enPreparacion').textContent = enPrep;
+            document.getElementById('completadas').textContent = compl;
+
+            const container = document.getElementById('ordenesContainer');
+            if (ordenes.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #667eea;">⏳ Esperando comandas...</div>';
+                return;
+            }
+
+            container.innerHTML = ordenes.map(orden => `
+                <div class="orden-card">
+                    <div class="orden-header">
+                        <div>
+                            <div class="orden-numero">Comanda #${orden.numero}</div>
+                            <div class="orden-camarero">🪑 Mesa ${orden.mesa} | ${orden.camarero}</div>
+                        </div>
+                        <div class="orden-status ${orden.status}" onclick="cambiarStatus(${orden.numero})">
+                            ${orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : '✅ Lista'}
+                        </div>
+                    </div>
+                    <div class="orden-items">
+                        ${orden.items.map(item => `
+                            <div class="orden-item">
+                                <span>${item.cantidad}x ${item.nombre}</span>
+                                <span>€${(item.precio * item.cantidad).toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="text-align: right; padding: 10px 0; border-top: 1px dashed #eee; font-weight: bold; color: #27ae60;">
+                        Total: €${orden.total.toFixed(2)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function cambiarStatus(numeroOrden) {
+            const orden = ordenes.find(o => o.numero === numeroOrden);
+            if (!orden) return;
+            
+            const estados = ['pendente', 'en-preparacion', 'lista'];
+            const indiceActual = estados.indexOf(orden.status);
+            orden.status = estados[(indiceActual + 1) % estados.length];
+        }
+    </script>
+</body>
+</html>
