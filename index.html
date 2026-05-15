@@ -12,19 +12,17 @@
         .header h1 { font-size: 24px; }
         .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
         .hidden { display: none !important; }
+        .btn { padding: 9px 14px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn:hover { background: #D4AF37; color: #8B6914; }
+        .btn-red { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
 
         /* LOGIN */
         .login-view { max-width: 400px; margin: 80px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .login-view h2 { color: #8B6914; margin-bottom: 25px; text-align: center; font-size: 22px; }
+        .login-view h2 { color: #8B6914; margin-bottom: 25px; text-align: center; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #8B6914; font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
         .btn-login { width: 100%; padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-
-        /* BOTÓNS XERAIS */
-        .btn { padding: 9px 14px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px; }
-        .btn:hover { background: #D4AF37; color: #8B6914; }
-        .btn-red { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
 
         /* ADMIN */
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -33,26 +31,17 @@
         .item-list { background: #f9f9f9; border-radius: 4px; padding: 8px; max-height: 250px; overflow-y: auto; margin-top: 8px; }
         .item-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px solid #eee; font-size: 13px; }
 
-        /* VISTA MESAS */
+        /* MESAS */
         .mesas-view { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .zona-mesas { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .zona-titulo { font-size: 18px; font-weight: bold; color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; margin-bottom: 15px; }
         .mesas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-
-        /* ICONO MESA */
-        .mesa-icon {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 15px 10px; border-radius: 10px; cursor: pointer;
-            border: 2px solid #ddd; background: white; transition: all 0.2s;
-            position: relative;
-        }
+        .mesa-icon { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 10px; border-radius: 10px; cursor: pointer; border: 2px solid #ddd; background: white; transition: all 0.2s; position: relative; }
         .mesa-icon:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
         .mesa-icon .icon { font-size: 32px; margin-bottom: 5px; }
-        .mesa-icon .nome { font-size: 13px; font-weight: bold; color: #333; }
+        .mesa-icon .nome { font-size: 13px; font-weight: bold; }
         .mesa-icon .status-text { font-size: 10px; margin-top: 3px; font-weight: 600; }
         .mesa-icon .badge { position: absolute; top: -6px; right: -6px; background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-
-        /* ESTADOS DAS MESAS */
         .mesa-libre { border-color: #27ae60; background: #f0fff4; }
         .mesa-libre .status-text { color: #27ae60; }
         .mesa-ocupada { border-color: #f39c12; background: #fffbf0; }
@@ -64,62 +53,67 @@
         @keyframes glow-blue { 0%,100% { box-shadow: 0 0 5px rgba(52,152,219,0.3); } 50% { box-shadow: 0 0 15px rgba(52,152,219,0.7); } }
         @keyframes glow-red { 0%,100% { box-shadow: 0 0 5px rgba(231,76,60,0.3); } 50% { box-shadow: 0 0 15px rgba(231,76,60,0.7); } }
 
-        /* MODAL XERAL */
+        /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; }
         .modal-overlay.show { display: flex; }
-        .modal-box { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); width: 95%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
-        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-box { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); width: 95%; max-width: 700px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .modal-header h3 { font-size: 18px; }
         .modal-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .modal-body { padding: 20px; }
-        #modalComensais { z-index: 99999 !important; background: rgba(0,0,0,0.8); }
-        #modalComensais .modal-box { max-width: 380px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); }
+        .modal-body { padding: 0; overflow-y: auto; flex: 1; }
 
-        /* MODAL COMANDA NOVA */
-        .menu-grupo { margin-bottom: 15px; }
-        .menu-grupo h4 { color: #8B6914; font-size: 14px; border-bottom: 1px solid #D4AF37; padding-bottom: 5px; margin-bottom: 8px; }
-        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f9f9f9; border-radius: 5px; margin-bottom: 6px; }
-        .item-info { flex: 1; }
-        .item-info h5 { font-size: 14px; margin-bottom: 2px; }
-        .item-info span { font-size: 12px; color: #8B6914; font-weight: bold; }
-        .item-controls { display: flex; gap: 6px; align-items: center; }
-        .qty-btn { width: 28px; height: 28px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; color: #8B6914; font-size: 14px; }
-        .qty-btn:hover { background: #8B6914; color: white; }
-        .qty-input { width: 35px; text-align: center; border: 1px solid #ddd; padding: 3px; border-radius: 4px; font-size: 13px; }
+        /* LAYOUT COMANDA: MENÚ + PANEL COMENSAL */
+        .comanda-layout { display: grid; grid-template-columns: 1fr 200px; height: 100%; }
+        .comanda-menu { padding: 15px; overflow-y: auto; max-height: 70vh; border-right: 2px solid #f0f0f0; }
+        .comanda-panel { padding: 15px; background: #fafafa; display: flex; flex-direction: column; }
+        .comanda-panel h4 { color: #8B6914; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #D4AF37; padding-bottom: 6px; }
 
-        /* RESUMEN CARRITO */
-        .carrito-mini { background: #f9f9f9; border-radius: 6px; padding: 12px; margin: 15px 0; border: 1px solid #D4AF37; }
-        .carrito-mini h4 { color: #8B6914; margin-bottom: 8px; font-size: 14px; }
-        .carrito-mini-item { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; border-bottom: 1px dashed #eee; }
-        .carrito-total-mini { display: flex; justify-content: space-between; font-weight: bold; color: #8B6914; margin-top: 8px; font-size: 15px; }
-        .btn-enviar { width: 100%; padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 10px; }
+        /* PANEL COMENSAL - aparece cando clicas + */
+        .panel-comensal-activo { background: #fff8e1; border: 2px solid #D4AF37; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+        .panel-comensal-activo .produto-nome { font-size: 12px; font-weight: bold; color: #8B6914; margin-bottom: 8px; }
+        .nums-comensais { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 8px; }
+        .btn-num { padding: 8px 0; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: bold; color: #333; }
+        .btn-num.sel { background: #8B6914; color: white; border-color: #8B6914; }
+        .btn-num:hover { border-color: #8B6914; }
+        .btn-confirmar-comensal { width: 100%; padding: 8px; background: #8B6914; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .btn-confirmar-comensal:hover { background: #D4AF37; color: #8B6914; }
+
+        /* RESUMO CARRITO NO PANEL */
+        .resumo-carrito { flex: 1; overflow-y: auto; }
+        .resumo-item { font-size: 12px; padding: 5px 0; border-bottom: 1px dashed #eee; }
+        .resumo-item .ritem-nome { font-weight: bold; color: #333; }
+        .resumo-item .ritem-comensais { color: #8B6914; }
+        .resumo-total { margin-top: 8px; padding-top: 8px; border-top: 2px solid #8B6914; font-weight: bold; color: #8B6914; display: flex; justify-content: space-between; font-size: 14px; }
+        .btn-enviar { width: 100%; padding: 10px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
         .btn-enviar:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* MODAL ESTADO MESA */
-        .comanda-card { background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 12px; overflow: hidden; }
-        .comanda-card-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #f0f0f0; border-bottom: 1px solid #ddd; }
-        .status-pill { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        /* GRUPOS MENÚ */
+        .menu-grupo h4 { color: #8B6914; font-size: 13px; border-bottom: 1px solid #D4AF37; padding-bottom: 4px; margin: 12px 0 6px; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f9f9f9; border-radius: 5px; margin-bottom: 5px; }
+        .item-info h5 { font-size: 13px; margin-bottom: 2px; }
+        .item-info span { font-size: 11px; color: #8B6914; font-weight: bold; }
+        .item-controls { display: flex; gap: 5px; align-items: center; }
+        .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; color: #8B6914; font-size: 14px; }
+        .qty-btn:hover { background: #8B6914; color: white; }
+        .qty-show { width: 30px; text-align: center; font-weight: bold; font-size: 14px; color: #333; }
+
+        /* ESTADO MESA MODAL */
+        .comanda-card { background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; overflow: hidden; }
+        .comanda-card-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f0f0f0; }
+        .status-pill { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
         .pill-pendente { background: #ffe5e5; color: #c0392b; }
         .pill-preparando { background: #fff5e5; color: #e67e22; }
         .pill-lista { background: #e3f2fd; color: #1565c0; }
         .tabla-mini { width: 100%; font-size: 12px; border-collapse: collapse; }
         .tabla-mini th { background: #e8e8e8; padding: 5px 8px; text-align: left; color: #8B6914; }
         .tabla-mini td { padding: 5px 8px; border-bottom: 1px solid #eee; }
-        .btn-pago { width: 100%; padding: 12px; background: #e74c3c; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 10px; }
-        .btn-pago:hover { background: #c0392b; }
-
-        /* MODAL COMENSAIS */
-        .modal-comensais-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px 0; }
-        .btn-comensal-sel { padding: 12px 0; border: 2px solid #ddd; background: white; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .btn-comensal-sel.sel { background: #8B6914; color: white; border-color: #8B6914; }
-        .btn-comensal-sel:hover { border-color: #8B6914; }
+        .btn-pago { width: 100%; padding: 11px; background: #e74c3c; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .btn-cobrado { width: 100%; padding: 11px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 8px; }
 
         /* HISTORIAL */
         .historial-section { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 20px; }
-        .historial-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 15px; }
-        .historial-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
-        .historial-item:last-child { border-bottom: none; }
-        .historial-mesa { font-weight: bold; color: #8B6914; }
+        .historial-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 12px; }
+        .historial-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
         .historial-total { font-weight: bold; color: #27ae60; font-size: 15px; }
 
         /* BARRA */
@@ -141,7 +135,7 @@
         .status-en-preparacion { background: #fff5e5; color: #e67e22; }
         .status-lista { background: #e3f2fd; color: #1565c0; }
 
-        @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } .mesas-view { grid-template-columns: 1fr; } .stats-bar { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } .mesas-view { grid-template-columns: 1fr; } .stats-bar { grid-template-columns: 1fr; } .comanda-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -149,8 +143,7 @@
 <!-- LOGIN -->
 <div id="loginView" class="login-view">
     <h2>☕ App Cafetería</h2>
-    <div class="form-group">
-        <label>Rol:</label>
+    <div class="form-group"><label>Rol:</label>
         <select id="rolLogin">
             <option value="admin">Admin</option>
             <option value="camarero">Camarero</option>
@@ -167,26 +160,7 @@
     <button class="btn-login" onclick="login()">Entrar</button>
 </div>
 
-<!-- MODAL COMENSAIS -->
-<div id="modalComensais" class="modal-overlay">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3>¿Para que comensais?</h3>
-            <button class="modal-close" onclick="cancelarModalComensais()">✕</button>
-        </div>
-        <div class="modal-body">
-            <p id="modalComensaisProducto" style="color:#666;margin-bottom:10px;"></p>
-            <div class="modal-comensais-grid" id="comensaisGrid"></div>
-            <p style="font-size:12px;color:#999;margin-bottom:15px;">Clica os números dos comensais para este produto</p>
-            <div style="display:flex;gap:10px;">
-                <button class="btn-enviar" onclick="confirmarComensais()">✅ Confirmar</button>
-                <button onclick="cancelarModalComensais()" style="flex:1;padding:12px;border:1px solid #ddd;background:white;border-radius:6px;cursor:pointer;font-weight:bold;">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL MESA (COMANDA NOVA / VER ESTADO) -->
+<!-- MODAL MESA -->
 <div id="modalMesa" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-header">
@@ -201,10 +175,7 @@
 <div id="appView" class="hidden">
     <div class="container">
         <div class="header">
-            <div>
-                <h1>☕ App Cafetería</h1>
-                <span id="currentRoleLabel" style="opacity:0.85;font-size:14px;"></span>
-            </div>
+            <div><h1>☕ App Cafetería</h1><span id="currentRoleLabel" style="opacity:0.85;font-size:14px;"></span></div>
             <div style="display:flex;align-items:center;gap:15px;">
                 <span id="userLabel" style="font-size:14px;"></span>
                 <button class="logout-btn" onclick="logout()">Sair</button>
@@ -216,23 +187,23 @@
             <div class="admin-grid">
                 <div class="admin-section">
                     <h2>📂 Grupos do Menú</h2>
-                    <div class="form-group"><input type="text" id="nomeGrupo" placeholder="Nome do grupo (ex: Bebidas Frías)"></div>
-                    <button class="btn" onclick="engadirGrupo()">+ Engadir Grupo</button>
+                    <div class="form-group"><input type="text" id="nomeGrupo" placeholder="Nome do grupo"></div>
+                    <button class="btn" onclick="engadirGrupo()">+ Engadir</button>
                     <div class="item-list" id="gruposList"></div>
                 </div>
                 <div class="admin-section">
-                    <h2>🍽️ Items do Menú</h2>
-                    <div class="form-group"><select id="grupoSelect"><option value="">Selecciona grupo...</option></select></div>
+                    <h2>🍽️ Items</h2>
+                    <div class="form-group"><select id="grupoSelect"><option value="">Grupo...</option></select></div>
                     <div class="form-group"><input type="text" id="nomeItem" placeholder="Nome do item"></div>
                     <div class="form-group"><input type="number" id="precioItem" placeholder="Precio €" step="0.01"></div>
-                    <button class="btn" onclick="engadirItem()">+ Engadir Item</button>
+                    <button class="btn" onclick="engadirItem()">+ Engadir</button>
                     <div class="item-list" id="itemsListAdmin"></div>
                 </div>
                 <div class="admin-section">
                     <h2>👥 Camareros</h2>
                     <div class="form-group"><input type="text" id="nomeCamareroAdmin" placeholder="Nome"></div>
                     <div class="form-group"><input type="password" id="passCamareroAdmin" placeholder="Contrasenal"></div>
-                    <button class="btn" onclick="engadirCamarero()">+ Engadir Camarero</button>
+                    <button class="btn" onclick="engadirCamarero()">+ Engadir</button>
                     <div class="item-list" id="camarosList"></div>
                 </div>
                 <div class="admin-section">
@@ -240,12 +211,12 @@
                     <p style="margin-bottom:8px;"><strong>Grupos:</strong> <span id="stGrupos">0</span></p>
                     <p style="margin-bottom:8px;"><strong>Items:</strong> <span id="stItems">0</span></p>
                     <p style="margin-bottom:8px;"><strong>Camareros:</strong> <span id="stCamareros">0</span></p>
-                    <p><strong>Comandas hoxe:</strong> <span id="stComandas">0</span></p>
+                    <p><strong>Comandas:</strong> <span id="stComandas">0</span></p>
                 </div>
             </div>
         </div>
 
-        <!-- CAMARERO: VISTA DE MESAS -->
+        <!-- CAMARERO -->
         <div id="camareroView" class="hidden">
             <div class="mesas-view">
                 <div class="zona-mesas">
@@ -257,15 +228,13 @@
                     <div class="mesas-grid" id="mesasTerraza"></div>
                 </div>
             </div>
-
-            <!-- HISTORIAL -->
             <div class="historial-section">
                 <h2>📜 Historial de Pagos</h2>
                 <div id="historialContainer" style="color:#999;text-align:center;padding:20px;font-style:italic;">Sen rexistros</div>
             </div>
         </div>
 
-        <!-- BARRA/COCIÑA -->
+        <!-- BARRA -->
         <div id="barraView" class="hidden">
             <div class="stats-bar">
                 <div class="stat-card"><h3>Pendentes</h3><div class="stat-value" id="stPendentes">0</div></div>
@@ -278,11 +247,11 @@
 </div>
 
 <script>
-// ─── ESTADO GLOBAL ───────────────────────────────────────────────
 let currentUser = null, currentRole = null;
-let itemEnEdicion = null;
 let mesaEnModal = null;
 let carritoModal = {};
+let itemPendenteComensal = null; // item esperando asignación de comensal
+let comensaisSelActual = [];
 
 let config = {
     grupos: [
@@ -301,20 +270,14 @@ let config = {
     ],
     camareros: [{ nome: 'demo', pass: 'demo' }],
     adminPass: 'admin',
-    zonas: {
-        comedor: 5,
-        terraza: 4
-    }
+    zonas: { comedor: 5, terraza: 4 }
 };
 
-// Estado das mesas: libre, ocupada, lista, pago
-let estadoMesas = {};
-// Comandas activas por mesa: { 'comedor-1': [orden, orden, ...] }
 let comandasPorMesa = {};
 let historial = [];
 let numeroOrden = 1;
 
-// ─── LOGIN ────────────────────────────────────────────────────────
+// LOGIN
 document.getElementById('rolLogin').addEventListener('change', function() {
     document.getElementById('camareroLogin').classList.toggle('hidden', this.value !== 'camarero');
     document.getElementById('adminLogin').classList.toggle('hidden', this.value !== 'admin');
@@ -330,9 +293,8 @@ function login() {
         const pass = document.getElementById('passCamarero').value;
         if (!config.camareros.find(c => c.nome === nome && c.pass === pass)) { alert('Credenciais incorrectas'); return; }
         currentUser = nome;
-    } else {
-        currentUser = 'Barra';
-    }
+    } else { currentUser = 'Barra'; }
+
     currentRole = rol;
     document.getElementById('currentRoleLabel').textContent = rol === 'admin' ? '⚙️ Admin' : rol === 'camarero' ? '👨‍💼 Camarero' : '👨‍🍳 Barra/Cociña';
     document.getElementById('userLabel').textContent = `Usuario: ${currentUser}`;
@@ -355,10 +317,8 @@ function logout() {
     document.getElementById('passCamarero').value = '';
 }
 
-// ─── ADMIN ────────────────────────────────────────────────────────
-function renderAdmin() {
-    renderGruposAdmin(); renderItemsAdmin(); renderCamarosAdmin(); renderStatsAdmin();
-}
+// ADMIN
+function renderAdmin() { renderGruposAdmin(); renderItemsAdmin(); renderCamarosAdmin(); renderStatsAdmin(); }
 
 function engadirGrupo() {
     const nome = document.getElementById('nomeGrupo').value.trim();
@@ -367,24 +327,19 @@ function engadirGrupo() {
     document.getElementById('nomeGrupo').value = '';
     renderGruposAdmin(); renderGruposSelect(); renderStatsAdmin();
 }
-
 function renderGruposAdmin() {
     document.getElementById('gruposList').innerHTML = config.grupos.map(g =>
-        `<div class="item-row">${g.nome} <button class="btn-red" onclick="eliminarGrupo('${g.id}')">X</button></div>`
-    ).join('');
+        `<div class="item-row">${g.nome} <button class="btn-red" onclick="eliminarGrupo('${g.id}')">X</button></div>`).join('');
 }
-
 function renderGruposSelect() {
-    document.getElementById('grupoSelect').innerHTML = '<option value="">Selecciona grupo...</option>' +
+    document.getElementById('grupoSelect').innerHTML = '<option value="">Grupo...</option>' +
         config.grupos.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
 }
-
 function eliminarGrupo(id) {
     config.grupos = config.grupos.filter(g => g.id !== id);
     config.items = config.items.filter(i => i.grupoId !== id);
     renderGruposAdmin(); renderGruposSelect(); renderItemsAdmin(); renderStatsAdmin();
 }
-
 function engadirItem() {
     const grupoId = document.getElementById('grupoSelect').value;
     const nombre = document.getElementById('nomeItem').value.trim();
@@ -395,7 +350,6 @@ function engadirItem() {
     document.getElementById('precioItem').value = '';
     renderItemsAdmin(); renderStatsAdmin();
 }
-
 function renderItemsAdmin() {
     let html = '';
     config.grupos.forEach(g => {
@@ -407,12 +361,7 @@ function renderItemsAdmin() {
     });
     document.getElementById('itemsListAdmin').innerHTML = html || '<p style="color:#999;padding:5px;">Sen items</p>';
 }
-
-function eliminarItem(id) {
-    config.items = config.items.filter(i => i.id !== id);
-    renderItemsAdmin(); renderStatsAdmin();
-}
-
+function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); renderItemsAdmin(); renderStatsAdmin(); }
 function engadirCamarero() {
     const nome = document.getElementById('nomeCamareroAdmin').value.trim();
     const pass = document.getElementById('passCamareroAdmin').value;
@@ -422,18 +371,14 @@ function engadirCamarero() {
     document.getElementById('passCamareroAdmin').value = '';
     renderCamarosAdmin(); renderStatsAdmin();
 }
-
 function renderCamarosAdmin() {
     document.getElementById('camarosList').innerHTML = config.camareros.map(c =>
-        `<div class="item-row">${c.nome} <button class="btn-red" onclick="eliminarCamarero('${c.nome}')">X</button></div>`
-    ).join('');
+        `<div class="item-row">${c.nome} <button class="btn-red" onclick="eliminarCamarero('${c.nome}')">X</button></div>`).join('');
 }
-
 function eliminarCamarero(nome) {
     config.camareros = config.camareros.filter(c => c.nome !== nome);
     renderCamarosAdmin(); renderStatsAdmin();
 }
-
 function renderStatsAdmin() {
     document.getElementById('stGrupos').textContent = config.grupos.length;
     document.getElementById('stItems').textContent = config.items.length;
@@ -441,24 +386,20 @@ function renderStatsAdmin() {
     document.getElementById('stComandas').textContent = Object.values(comandasPorMesa).flat().length;
 }
 
-// ─── MESAS ────────────────────────────────────────────────────────
+// MESAS
 function getMesaKey(zona, num) { return `${zona}-${num}`; }
-
 function getEstadoMesa(zona, num) {
-    const key = getMesaKey(zona, num);
-    const comandas = comandasPorMesa[key] || [];
-    if (comandas.length === 0) return 'libre';
+    const comandas = comandasPorMesa[getMesaKey(zona, num)] || [];
+    if (!comandas.length) return 'libre';
     if (comandas.some(o => o.status === 'pago')) return 'pago';
-    if (comandas.some(o => o.status === 'lista')) return 'lista';
+    if (comandas.every(o => o.status === 'lista')) return 'lista';
     return 'ocupada';
 }
-
 function renderMesas() {
     renderZona('comedor', config.zonas.comedor, 'mesasComedor');
     renderZona('terraza', config.zonas.terraza, 'mesasTerraza');
     renderHistorial();
 }
-
 function renderZona(zona, total, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -466,152 +407,165 @@ function renderZona(zona, total, containerId) {
     for (let i = 1; i <= total; i++) {
         const estado = getEstadoMesa(zona, i);
         const key = getMesaKey(zona, i);
-        const comandas = comandasPorMesa[key] || [];
-        const numComandas = comandas.length;
-        let icono = estado === 'libre' ? '🪑' : estado === 'ocupada' ? '🍽️' : estado === 'lista' ? '✅' : '💳';
-        let textoEstado = estado === 'libre' ? 'Libre' : estado === 'ocupada' ? 'Ocupada' : estado === 'lista' ? 'Lista!' : 'Pagar';
-        let clase = `mesa-icon mesa-${estado}`;
-        html += `
-            <div class="${clase}" onclick="abrirModalMesa('${zona}', ${i})">
-                ${numComandas > 0 ? `<div class="badge">${numComandas}</div>` : ''}
-                <div class="icon">${icono}</div>
-                <div class="nome">Mesa ${i}</div>
-                <div class="status-text">${textoEstado}</div>
-            </div>`;
+        const numComandas = (comandasPorMesa[key] || []).length;
+        const icono = estado === 'libre' ? '🪑' : estado === 'ocupada' ? '🍽️' : estado === 'lista' ? '✅' : '💳';
+        const texto = estado === 'libre' ? 'Libre' : estado === 'ocupada' ? 'Ocupada' : estado === 'lista' ? 'Lista!' : 'Pagar';
+        html += `<div class="mesa-icon mesa-${estado}" onclick="abrirModalMesa('${zona}', ${i})">
+            ${numComandas > 0 ? `<div class="badge">${numComandas}</div>` : ''}
+            <div class="icon">${icono}</div>
+            <div class="nome">Mesa ${i}</div>
+            <div class="status-text">${texto}</div>
+        </div>`;
     }
     container.innerHTML = html;
 }
 
-// ─── MODAL MESA ───────────────────────────────────────────────────
+// MODAL MESA
 function abrirModalMesa(zona, num) {
     mesaEnModal = { zona, num };
     carritoModal = {};
-    const key = getMesaKey(zona, num);
-    const estado = getEstadoMesa(zona, num);
+    itemPendenteComensal = null;
+    comensaisSelActual = [];
     const nomeZona = zona === 'comedor' ? 'Comedor' : 'Terraza';
     document.getElementById('modalMesaTitulo').textContent = `${nomeZona} — Mesa ${num}`;
-
-    if (estado === 'libre') {
-        renderModalNovaComanda();
-    } else {
-        renderModalEstadoMesa(key, estado);
-    }
+    const estado = getEstadoMesa(zona, num);
+    if (estado === 'libre') renderModalNovaComanda();
+    else renderModalEstadoMesa(getMesaKey(zona, num), estado);
     document.getElementById('modalMesa').classList.add('show');
 }
 
 function cerrarModalMesa() {
     document.getElementById('modalMesa').classList.remove('show');
-    mesaEnModal = null;
-    carritoModal = {};
+    mesaEnModal = null; carritoModal = {}; itemPendenteComensal = null; comensaisSelActual = [];
 }
 
+// ── NOVA COMANDA con panel lateral de comensais ──
 function renderModalNovaComanda() {
-    let html = '<h4 style="color:#8B6914;margin-bottom:12px;">🛒 Nova Comanda</h4>';
+    let menuHtml = '<h4 style="color:#8B6914;margin-bottom:10px;">🛒 Nova Comanda</h4>';
     config.grupos.forEach(grupo => {
         const items = config.items.filter(i => i.grupoId === grupo.id);
         if (!items.length) return;
-        html += `<div class="menu-grupo"><h4>${grupo.nome}</h4>`;
-        html += items.map(item => `
-            <div class="menu-item">
-                <div class="item-info"><h5>${item.nombre}</h5><span>€${item.precio.toFixed(2)}</span></div>
-                <div class="item-controls">
-                    <button class="qty-btn" onclick="cambiarCantModal('${item.id}','${item.nombre}', -1)">−</button>
-                    <input type="number" class="qty-input" id="mq-${item.id}" value="0" min="0" readonly>
-                    <button class="qty-btn" onclick="cambiarCantModal('${item.id}','${item.nombre}', 1)">+</button>
-                </div>
-            </div>`).join('');
-        html += '</div>';
+        menuHtml += `<div class="menu-grupo"><h4>${grupo.nome}</h4>`;
+        items.forEach(item => {
+            menuHtml += `
+                <div class="menu-item" id="mitem-${item.id}">
+                    <div class="item-info"><h5>${item.nombre}</h5><span>€${item.precio.toFixed(2)}</span></div>
+                    <div class="item-controls">
+                        <button class="qty-btn" onclick="cambiarCantModal('${item.id}', -1)">−</button>
+                        <span class="qty-show" id="mq-${item.id}">0</span>
+                        <button class="qty-btn" onclick="cambiarCantModal('${item.id}', 1)">+</button>
+                    </div>
+                </div>`;
+        });
+        menuHtml += '</div>';
     });
-    html += `<div id="carritoMiniContainer"></div>
-             <button class="btn-enviar" id="btnEnviarComanda" onclick="enviarComandaMesa()" disabled>📤 Enviar Comanda</button>`;
+
+    const html = `
+        <div class="comanda-layout">
+            <div class="comanda-menu">${menuHtml}</div>
+            <div class="comanda-panel">
+                <h4>👤 Comensal</h4>
+                <div id="panelComensalActivo" style="color:#999;font-size:12px;font-style:italic;margin-bottom:10px;">Clica + nun produto</div>
+                <h4 style="margin-top:10px;">🛒 Resumo</h4>
+                <div class="resumo-carrito" id="resumoCarrito"><p style="color:#999;font-size:12px;">Sen items</p></div>
+                <div id="totalCarrito"></div>
+                <button class="btn-enviar" id="btnEnviarComanda" onclick="enviarComandaMesa()" disabled>📤 Enviar</button>
+            </div>
+        </div>`;
     document.getElementById('modalMesaBody').innerHTML = html;
 }
 
-function renderModalEstadoMesa(key, estado) {
-    const comandas = comandasPorMesa[key] || [];
-    const total = comandas.reduce((s, o) => s + o.total, 0);
-    let html = '';
-
-    if (estado === 'pago') {
-        html += `<div style="background:#fff5f5;border:2px solid #e74c3c;border-radius:8px;padding:15px;margin-bottom:15px;text-align:center;">
-            <div style="font-size:24px;margin-bottom:5px;">💳</div>
-            <div style="font-weight:bold;color:#e74c3c;font-size:18px;">TOTAL A PAGAR</div>
-            <div style="font-size:28px;font-weight:bold;color:#27ae60;margin:8px 0;">€${total.toFixed(2)}</div>
-        </div>`;
-    }
-
-    html += '<h4 style="color:#8B6914;margin-bottom:10px;">Comandas da mesa:</h4>';
-
-    comandas.forEach(orden => {
-        const statusLabel = orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : orden.status === 'lista' ? '✅ Lista!' : orden.status;
-        const pillClass = orden.status === 'pendente' ? 'pill-pendente' : orden.status === 'en-preparacion' ? 'pill-preparando' : 'pill-lista';
-        html += `<div class="comanda-card">
-            <div class="comanda-card-header">
-                <span style="font-weight:bold;font-size:14px;">Comanda #${orden.numero}</span>
-                <span class="status-pill ${pillClass}">${statusLabel}</span>
-            </div>
-            <div style="padding:10px;">
-                <table class="tabla-mini">
-                    <thead><tr><th>Racións</th><th>Producto</th><th>Comensal</th></tr></thead>
-                    <tbody>
-                        ${orden.items.map(i => `<tr><td style="text-align:center;font-weight:bold;">${i.cantidad}</td><td>${i.nombre}</td><td>${(i.comensais||[]).join(', ')||'-'}</td></tr>`).join('')}
-                    </tbody>
-                </table>
-                <div style="text-align:right;padding-top:6px;font-weight:bold;color:#27ae60;">€${orden.total.toFixed(2)}</div>
-            </div>
-        </div>`;
-    });
-
-    // Botón de nova comanda (sempre dispoñible)
-    html += `<button onclick="renderModalNovaComanda()" style="width:100%;padding:10px;background:#f0f0f0;border:1px dashed #8B6914;border-radius:6px;cursor:pointer;color:#8B6914;font-weight:bold;margin-bottom:10px;">+ Engadir nova comanda a esta mesa</button>`;
-
-    if (estado !== 'libre') {
-        html += `<button class="btn-pago" onclick="pedirPago('${key}')">💳 Pedir o Pago — €${total.toFixed(2)}</button>`;
-    }
-
-    if (estado === 'pago') {
-        html += `<button onclick="cobrarMesa('${key}')" style="width:100%;padding:12px;background:#27ae60;color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:15px;margin-top:8px;">✅ Cobrado! Pechar Mesa</button>`;
-    }
-
-    document.getElementById('modalMesaBody').innerHTML = html;
-}
-
-function cambiarCantModal(itemId, itemNombre, delta) {
-    const input = document.querySelector(`#mq-${itemId}`);
-    const actual = parseInt(input.value) || 0;
+function cambiarCantModal(itemId, delta) {
+    const item = config.items.find(i => i.id === itemId);
+    const actual = carritoModal[itemId] ? carritoModal[itemId].cantidad : 0;
     const nova = Math.max(0, actual + delta);
 
     if (nova > actual) {
-        // Abrir modal comensais
-        const numComensais = nova - actual;
-        itemEnEdicion = { itemId, itemNombre, actual, nova, input };
-        abrirModalComensais(itemNombre, numComensais);
+        // Engadir unidade - pedir comensal no panel lateral
+        itemPendenteComensal = { itemId, itemNombre: item.nombre, nova };
+        comensaisSelActual = [];
+        renderPanelComensal();
     } else {
-        input.value = nova;
+        // Quitar unidade
         if (carritoModal[itemId]) {
             carritoModal[itemId].cantidad = nova;
             carritoModal[itemId].comensais = carritoModal[itemId].comensais.slice(0, nova);
             if (nova === 0) delete carritoModal[itemId];
         }
-        renderCarritoMini();
+        document.getElementById(`mq-${itemId}`).textContent = nova;
+        renderResumoCarrito();
     }
 }
 
-function renderCarritoMini() {
-    const container = document.getElementById('carritoMiniContainer');
-    if (!container) return;
+function renderPanelComensal() {
+    const panel = document.getElementById('panelComensalActivo');
+    if (!panel || !itemPendenteComensal) return;
+
+    let html = `<div class="panel-comensal-activo">
+        <div class="produto-nome">+ ${itemPendenteComensal.itemNombre}</div>
+        <div class="nums-comensais">`;
+    for (let i = 1; i <= 10; i++) {
+        const sel = comensaisSelActual.includes(i) ? 'sel' : '';
+        html += `<button class="btn-num ${sel}" onclick="toggleNumComensal(${i})">${i}</button>`;
+    }
+    html += `</div>
+        <button class="btn-confirmar-comensal" onclick="confirmarComensalPanel()">✅ Confirmar</button>
+    </div>`;
+    panel.innerHTML = html;
+}
+
+function toggleNumComensal(n) {
+    if (comensaisSelActual.includes(n)) {
+        comensaisSelActual = comensaisSelActual.filter(c => c !== n);
+    } else {
+        comensaisSelActual.push(n);
+    }
+    renderPanelComensal();
+}
+
+function confirmarComensalPanel() {
+    if (!comensaisSelActual.length) { alert('Selecciona polo menos un comensal'); return; }
+    const { itemId, nova } = itemPendenteComensal;
+    const item = config.items.find(i => i.id === itemId);
+
+    if (!carritoModal[itemId]) {
+        carritoModal[itemId] = { ...item, cantidad: 0, comensais: [] };
+    }
+    carritoModal[itemId].cantidad = nova;
+    carritoModal[itemId].comensais.push(...comensaisSelActual);
+
+    document.getElementById(`mq-${itemId}`).textContent = nova;
+    itemPendenteComensal = null;
+    comensaisSelActual = [];
+
+    // Limpar panel
+    const panel = document.getElementById('panelComensalActivo');
+    if (panel) panel.innerHTML = '<span style="color:#999;font-size:12px;font-style:italic;">Clica + nun produto</span>';
+
+    renderResumoCarrito();
+}
+
+function renderResumoCarrito() {
     const items = Object.values(carritoModal).filter(i => i.cantidad > 0);
+    const resumo = document.getElementById('resumoCarrito');
+    const totalEl = document.getElementById('totalCarrito');
     const btn = document.getElementById('btnEnviarComanda');
+    if (!resumo) return;
+
     if (!items.length) {
-        container.innerHTML = '';
+        resumo.innerHTML = '<p style="color:#999;font-size:12px;">Sen items</p>';
+        if (totalEl) totalEl.innerHTML = '';
         if (btn) btn.disabled = true;
         return;
     }
+
     const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    let html = '<div class="carrito-mini"><h4>🛒 Resumo</h4>';
-    html += items.map(i => `<div class="carrito-mini-item"><span>${i.cantidad}x ${i.nombre} <small style="color:#8B6914;">[${(i.comensais||[]).join(',')}]</small></span><strong>€${(i.precio*i.cantidad).toFixed(2)}</strong></div>`).join('');
-    html += `<div class="carrito-total-mini"><span>Total:</span><span>€${total.toFixed(2)}</span></div></div>`;
-    container.innerHTML = html;
+    resumo.innerHTML = items.map(i => `
+        <div class="resumo-item">
+            <div class="ritem-nome">${i.cantidad}x ${i.nombre}</div>
+            <div class="ritem-comensais">👤 ${(i.comensais || []).join(', ')}</div>
+        </div>`).join('');
+    if (totalEl) totalEl.innerHTML = `<div class="resumo-total"><span>Total:</span><span>€${total.toFixed(2)}</span></div>`;
     if (btn) btn.disabled = false;
 }
 
@@ -639,9 +593,64 @@ function enviarComandaMesa() {
     renderMesas();
 }
 
+// ESTADO MESA
+function renderModalEstadoMesa(key, estado) {
+    const comandas = comandasPorMesa[key] || [];
+    const total = comandas.reduce((s, o) => s + o.total, 0);
+    let html = '<div style="padding:15px;">';
+
+    if (estado === 'pago') {
+        html += `<div style="background:#fff5f5;border:2px solid #e74c3c;border-radius:8px;padding:15px;margin-bottom:15px;text-align:center;">
+            <div style="font-size:22px;margin-bottom:5px;">💳</div>
+            <div style="font-weight:bold;color:#e74c3c;font-size:16px;">TOTAL A PAGAR</div>
+            <div style="font-size:26px;font-weight:bold;color:#27ae60;margin:8px 0;">€${total.toFixed(2)}</div>
+        </div>`;
+    }
+
+    html += '<h4 style="color:#8B6914;margin-bottom:10px;">Comandas desta mesa:</h4>';
+    comandas.forEach(orden => {
+        const pillClass = orden.status === 'pendente' ? 'pill-pendente' : orden.status === 'en-preparacion' ? 'pill-preparando' : 'pill-lista';
+        const statusLabel = orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : '✅ Lista!';
+        html += `<div class="comanda-card">
+            <div class="comanda-card-header">
+                <span style="font-weight:bold;font-size:13px;">Comanda #${orden.numero}</span>
+                <span class="status-pill ${pillClass}">${statusLabel}</span>
+            </div>
+            <div style="padding:8px;">
+                <table class="tabla-mini">
+                    <thead><tr><th>Rac.</th><th>Producto</th><th>Comensal</th></tr></thead>
+                    <tbody>
+                        ${orden.items.map(i => `<tr><td style="text-align:center;font-weight:bold;">${i.cantidad}</td><td>${i.nombre}</td><td>${(i.comensais||[]).join(', ')||'-'}</td></tr>`).join('')}
+                    </tbody>
+                </table>
+                <div style="text-align:right;padding-top:5px;font-weight:bold;color:#27ae60;font-size:13px;">€${orden.total.toFixed(2)}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button onclick="abrirNovaComandaEnMesa('${key}')" style="width:100%;padding:9px;background:#f0f0f0;border:1px dashed #8B6914;border-radius:6px;cursor:pointer;color:#8B6914;font-weight:bold;margin-bottom:10px;">+ Engadir nova comanda</button>`;
+
+    if (estado !== 'libre') {
+        html += `<button class="btn-pago" onclick="pedirPago('${key}')">💳 Pedir o Pago — €${total.toFixed(2)}</button>`;
+    }
+    if (estado === 'pago') {
+        html += `<button class="btn-cobrado" onclick="cobrarMesa('${key}')">✅ Cobrado! Pechar Mesa</button>`;
+    }
+
+    html += '</div>';
+    document.getElementById('modalMesaBody').innerHTML = html;
+}
+
+function abrirNovaComandaEnMesa(key) {
+    carritoModal = {};
+    itemPendenteComensal = null;
+    comensaisSelActual = [];
+    renderModalNovaComanda();
+}
+
 function pedirPago(key) {
     const comandas = comandasPorMesa[key] || [];
-    comandas.forEach(o => { if (o.status !== 'servida') o.status = 'pago'; });
+    comandas.forEach(o => { if (!['servida','pago'].includes(o.status)) o.status = 'pago'; });
     renderModalEstadoMesa(key, 'pago');
     renderMesas();
 }
@@ -653,14 +662,7 @@ function cobrarMesa(key) {
     const zona = parts[0], mesa = parts[1];
     const fecha = new Date().toLocaleDateString('gl-ES');
     const hora = new Date().toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit' });
-
-    historial.unshift({
-        key, zona, mesa, total,
-        numComandas: comandas.length,
-        camarero: currentUser,
-        fecha, hora
-    });
-
+    historial.unshift({ key, zona, mesa, total, numComandas: comandas.length, camarero: currentUser, fecha, hora });
     delete comandasPorMesa[key];
     cerrarModalMesa();
     renderMesas();
@@ -675,103 +677,45 @@ function renderHistorial() {
     container.innerHTML = historial.map(h => `
         <div class="historial-item">
             <div>
-                <span class="historial-mesa">${h.zona === 'comedor' ? '🏠' : '☀️'} ${h.zona.charAt(0).toUpperCase()+h.zona.slice(1)} Mesa ${h.mesa}</span>
+                <span style="font-weight:bold;color:#8B6914;">${h.zona === 'comedor' ? '🏠' : '☀️'} ${h.zona.charAt(0).toUpperCase()+h.zona.slice(1)} Mesa ${h.mesa}</span>
                 <span style="color:#999;font-size:12px;margin-left:10px;">${h.fecha} ${h.hora} — ${h.camarero}</span>
             </div>
             <span class="historial-total">€${h.total.toFixed(2)}</span>
         </div>`).join('');
 }
 
-// ─── MODAL COMENSAIS ──────────────────────────────────────────────
-let comensaisSelModal = [];
-
-function abrirModalComensais(itemNombre, numRaciones) {
-    comensaisSelModal = [];
-    document.getElementById('modalComensaisProducto').textContent = `${numRaciones}x ${itemNombre} — Selecciona ${numRaciones} comensal(is)`;
-    // Botóns 1-10
-    let html = '';
-    for (let i = 1; i <= 10; i++) {
-        html += `<button class="btn-comensal-sel" id="bc-${i}" onclick="toggleComensal(${i})">${i}</button>`;
-    }
-    document.getElementById('comensaisGrid').innerHTML = html;
-    document.getElementById('modalComensais').classList.add('show');
-}
-
-function toggleComensal(n) {
-    const btn = document.getElementById(`bc-${n}`);
-    if (comensaisSelModal.includes(n)) {
-        comensaisSelModal = comensaisSelModal.filter(c => c !== n);
-        btn.classList.remove('sel');
-    } else {
-        comensaisSelModal.push(n);
-        btn.classList.add('sel');
-    }
-}
-
-function confirmarComensais() {
-    if (!comensaisSelModal.length) { alert('Selecciona polo menos un comensal'); return; }
-    const { itemId, itemNombre, nova, input } = itemEnEdicion;
-    input.value = nova;
-    const item = config.items.find(i => i.id === itemId);
-    if (!carritoModal[itemId]) {
-        carritoModal[itemId] = { ...item, cantidad: 0, comensais: [] };
-    }
-    carritoModal[itemId].cantidad = nova;
-    carritoModal[itemId].comensais.push(...comensaisSelModal);
-    cancelarModalComensais();
-    renderCarritoMini();
-}
-
-function cancelarModalComensais() {
-    document.getElementById('modalComensais').classList.remove('show');
-    comensaisSelModal = [];
-    itemEnEdicion = null;
-}
-
-// ─── BARRA/COCIÑA ─────────────────────────────────────────────────
+// BARRA
 function renderBarra() {
-    const todasComandas = Object.values(comandasPorMesa).flat().filter(o => !['pago','servida'].includes(o.status));
-    const pendentes = todasComandas.filter(o => o.status === 'pendente').length;
-    const enPrep = todasComandas.filter(o => o.status === 'en-preparacion').length;
-    const listas = todasComandas.filter(o => o.status === 'lista').length;
-
-    document.getElementById('stPendentes').textContent = pendentes;
-    document.getElementById('stPreparacion').textContent = enPrep;
-    document.getElementById('stListas').textContent = listas;
+    const todas = Object.values(comandasPorMesa).flat().filter(o => !['pago','servida'].includes(o.status));
+    document.getElementById('stPendentes').textContent = todas.filter(o => o.status === 'pendente').length;
+    document.getElementById('stPreparacion').textContent = todas.filter(o => o.status === 'en-preparacion').length;
+    document.getElementById('stListas').textContent = todas.filter(o => o.status === 'lista').length;
 
     const container = document.getElementById('ordenesContainer');
-    if (!todasComandas.length) {
+    if (!todas.length) {
         container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#8B6914;">⏳ Esperando comandas...</div>';
         return;
     }
-
-    container.innerHTML = todasComandas.map(orden => {
+    container.innerHTML = todas.map(orden => {
         const fecha = new Date(orden.timestamp).toLocaleDateString('gl-ES');
         const nomeZona = orden.zona === 'comedor' ? 'COMEDOR' : 'TERRAZA';
         const statusLabel = orden.status === 'pendente' ? '⏳ PENDENTE' : orden.status === 'en-preparacion' ? '👨‍🍳 PREPARANDO' : '✅ LISTA';
         const statusClass = orden.status === 'pendente' ? 'status-pendente' : orden.status === 'en-preparacion' ? 'status-en-preparacion' : 'status-lista';
-        return `
-            <div class="orden-card">
-                <div class="orden-head">
-                    <div>${nomeZona}</div>
-                    <div>${fecha}</div>
-                    <div>🪑 Mesa ${orden.mesa}</div>
-                </div>
-                <div class="orden-body">
-                    <div class="orden-badge">Comanda #${orden.numero}</div>
-                    <table class="tabla-orden">
-                        <thead><tr><th style="width:15%;text-align:center;">Racións</th><th style="width:55%;">Producto</th><th>Comensal</th></tr></thead>
-                        <tbody>
-                            ${orden.items.map(i => `<tr><td style="text-align:center;font-weight:bold;">${i.cantidad}</td><td>${i.nombre}</td><td>${(i.comensais||[]).join(', ')||'-'}</td></tr>`).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="orden-foot">
-                    <span style="font-size:13px;">👨‍💼 ${orden.camarero}</span>
-                    <span class="status-badge ${statusClass}" onclick="cambiarStatusBarra(${orden.numero})">${statusLabel}</span>
-                    <span style="font-weight:bold;color:#27ae60;">€${orden.total.toFixed(2)}</span>
-                </div>
-            </div>`;
+        return `<div class="orden-card">
+            <div class="orden-head"><div>${nomeZona}</div><div>${fecha}</div><div>🪑 Mesa ${orden.mesa}</div></div>
+            <div class="orden-body">
+                <div class="orden-badge">Comanda #${orden.numero}</div>
+                <table class="tabla-orden">
+                    <thead><tr><th style="width:15%;text-align:center;">Rac.</th><th style="width:55%;">Producto</th><th>Comensal</th></tr></thead>
+                    <tbody>${orden.items.map(i => `<tr><td style="text-align:center;font-weight:bold;">${i.cantidad}</td><td>${i.nombre}</td><td>${(i.comensais||[]).join(', ')||'-'}</td></tr>`).join('')}</tbody>
+                </table>
+            </div>
+            <div class="orden-foot">
+                <span style="font-size:13px;">👨‍💼 ${orden.camarero}</span>
+                <span class="status-badge ${statusClass}" onclick="cambiarStatusBarra(${orden.numero})">${statusLabel}</span>
+                <span style="font-weight:bold;color:#27ae60;">€${orden.total.toFixed(2)}</span>
+            </div>
+        </div>`;
     }).join('');
 }
 
@@ -779,9 +723,8 @@ function cambiarStatusBarra(num) {
     const estados = ['pendente', 'en-preparacion', 'lista'];
     for (const comandas of Object.values(comandasPorMesa)) {
         const o = comandas.find(c => c.numero === num);
-        if (o) {
-            const idx = estados.indexOf(o.status);
-            if (idx >= 0) o.status = estados[(idx + 1) % estados.length];
+        if (o && estados.includes(o.status)) {
+            o.status = estados[(estados.indexOf(o.status) + 1) % estados.length];
             break;
         }
     }
