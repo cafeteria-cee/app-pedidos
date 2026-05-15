@@ -304,7 +304,7 @@ function login() {
     document.getElementById('camareroView').classList.toggle('hidden', rol !== 'camarero');
     document.getElementById('barraView').classList.toggle('hidden', rol !== 'barra');
     if (rol === 'admin') renderAdmin();
-    else if (rol === 'camarero') { renderMesas(); setInterval(renderMesas, 2000); }
+    else if (rol === 'camarero') { try { renderMesas(); setInterval(renderMesas, 2000); } catch(e) { alert('ERRO: ' + e.message); } }
     else { renderBarra(); setInterval(renderBarra, 1500); }
 }
 
