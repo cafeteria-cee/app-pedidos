@@ -35,12 +35,6 @@
         .qty-input { width: 40px; text-align: center; border: 1px solid #ddd; padding: 4px; border-radius: 4px; }
         .carrito-section { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 20px; height: fit-content; }
         .carrito-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; margin-bottom: 15px; }
-        .comensais-input-group { display: flex; gap: 5px; margin-bottom: 10px; }
-        .comensais-input-group input { flex: 1; }
-        .btn-add-comensal { padding: 8px 12px; background: #D4AF37; color: #8B6914; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .comensais-list { background: #f0f0f0; padding: 8px; border-radius: 4px; margin-bottom: 10px; }
-        .comensais-badge { display: inline-block; background: #8B6914; color: white; padding: 3px 8px; border-radius: 3px; margin-right: 4px; margin-bottom: 4px; }
-        .comensais-badge button { background: #e74c3c; color: white; border: none; padding: 0 4px; margin-left: 4px; border-radius: 2px; cursor: pointer; font-size: 11px; }
         .carrito-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
         .carrito-total { margin-top: 15px; padding-top: 15px; border-top: 2px solid #8B6914; font-weight: bold; color: #8B6914; display: flex; justify-content: space-between; }
         .btn-pedir { width: 100%; padding: 15px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px; }
@@ -69,8 +63,22 @@
         .orden-status-badge.en-preparacion { background: #fff5e5; color: #e67e22; }
         .orden-status-badge.lista { background: #e8f8f5; color: #27ae60; }
         .orden-total { font-weight: bold; color: #27ae60; }
+        
+        /* MODAL PARA COMENSAIS */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-width: 400px; width: 90%; }
+        .modal-content h2 { color: #8B6914; margin-bottom: 20px; text-align: center; }
+        .modal-content p { color: #666; margin-bottom: 15px; text-align: center; font-size: 16px; }
+        .comensais-input-modal { margin-bottom: 15px; }
+        .comensais-input-modal input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        .modal-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .modal-buttons button { padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .btn-confirm { background: #8B6914; color: white; }
+        .btn-cancel { background: #ddd; color: #666; }
+        
         .hidden { display: none !important; }
-        @media (max-width: 768px) { .camarero-view { grid-template-columns: 1fr; } .admin-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .camarero-view { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -101,6 +109,21 @@
             </div>
         </div>
         <button class="btn" onclick="login()" style="width: 100%; padding: 12px; font-size: 16px;">Entrar</button>
+    </div>
+
+    <!-- MODAL PARA COMENSAIS -->
+    <div id="modalComensais" class="modal">
+        <div class="modal-content">
+            <h2>¿Para que comensais?</h2>
+            <p id="modalProducto"></p>
+            <div class="comensais-input-modal">
+                <input type="text" id="inputComensaisModal" placeholder="Ej: 1,2,3 ou solo 1">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-confirm" onclick="confirmarComensais()">Confirmar</button>
+                <button class="btn-cancel" onclick="cancelarModal()">Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <div id="appView" class="hidden">
@@ -173,14 +196,6 @@
                         <label>Mesa:</label>
                         <select id="mesaSelect"></select>
                     </div>
-                    <div class="form-group">
-                        <label>Comensais:</label>
-                        <div class="comensais-input-group">
-                            <input type="number" id="inputComensal" placeholder="Nº comensal" min="1" max="10">
-                            <button class="btn-add-comensal" onclick="engadirComensal()">+ Engadir</button>
-                        </div>
-                        <div class="comensais-list" id="comensaisList"><span style="color: #999;">Ningunha seleción</span></div>
-                    </div>
                     <div id="carritoItems" style="min-height: 100px; color: #999; text-align: center; padding: 20px 0; font-style: italic;">Ningunha selección</div>
                     <div id="carritoTotal" class="carrito-total hidden">
                         <span>Total:</span>
@@ -202,7 +217,9 @@
     </div>
 
     <script>
-        let currentUser = null, currentRole = null, comensaisSeleccionados = [];
+        let currentUser = null, currentRole = null;
+        let itemEnEdicion = null;
+        
         let config = {
             grupos: [
                 { id: '1', nome: 'Bebidas Frías' },
@@ -265,7 +282,6 @@
             currentUser = null;
             currentRole = null;
             carrito = {};
-            comensaisSeleccionados = [];
             document.getElementById('loginView').classList.remove('hidden');
             document.getElementById('appView').classList.add('hidden');
         }
@@ -368,8 +384,6 @@
 
         function renderCamareroView() {
             renderMenu();
-            comensaisSeleccionados = [];
-            renderComensaisList();
         }
 
         function renderMenu() {
@@ -383,9 +397,9 @@
                         <div class="menu-item">
                             <div class="item-info"><h3>${item.nombre}</h3><p>€${item.precio.toFixed(2)}</p></div>
                             <div class="item-controls">
-                                <button class="qty-btn" onclick="cambiarCantidad('${item.id}', -1)">−</button>
-                                <input type="number" class="qty-input" id="qty-${item.id}" value="0" min="0">
-                                <button class="qty-btn" onclick="cambiarCantidad('${item.id}', 1)">+</button>
+                                <button class="qty-btn" onclick="abrirModalComensais('${item.id}', '${item.nombre}', -1)">−</button>
+                                <input type="number" class="qty-input" id="qty-${item.id}" value="0" min="0" onchange="actualizarCarrito()">
+                                <button class="qty-btn" onclick="abrirModalComensais('${item.id}', '${item.nombre}', 1)">+</button>
                             </div>
                         </div>
                     `).join('');
@@ -395,40 +409,59 @@
             container.innerHTML = html;
         }
 
-        function engadirComensal() {
-            const input = document.getElementById('inputComensal');
-            const comensal = parseInt(input.value);
-            if (comensal && comensal > 0 && comensal <= 10) {
-                if (!comensaisSeleccionados.includes(comensal)) {
-                    comensaisSeleccionados.push(comensal);
-                    comensaisSeleccionados.sort((a, b) => a - b);
-                    input.value = '';
-                    renderComensaisList();
-                }
-            }
-        }
-
-        function renderComensaisList() {
-            const container = document.getElementById('comensaisList');
-            if (comensaisSeleccionados.length === 0) {
-                container.innerHTML = '<span style="color: #999;">Ningunha seleción</span>';
-                return;
-            }
-            const html = comensaisSeleccionados.map(c => `<span class="comensais-badge">${c} <button onclick="eliminarComensal(${c})">✕</button></span>`).join('');
-            container.innerHTML = html;
-        }
-
-        function eliminarComensal(comensal) {
-            comensaisSeleccionados = comensaisSeleccionados.filter(c => c !== comensal);
-            renderComensaisList();
-        }
-
-        function cambiarCantidad(itemId, delta) {
+        function abrirModalComensais(itemId, itemNombre, delta) {
             const input = document.querySelector(`#qty-${itemId}`);
             const cantidadActual = parseInt(input.value) || 0;
             const nueva = Math.max(0, cantidadActual + delta);
+            
+            if (nueva === 0) {
+                input.value = 0;
+                actualizarCarrito();
+                return;
+            }
+
+            if (nueva > cantidadActual) {
+                // Engadindo unidades - preguntar por comensais
+                itemEnEdicion = { itemId, itemNombre, cantidadActual, nueva, input };
+                document.getElementById('modalProducto').textContent = `${nueva - cantidadActual} ${itemNombre}`;
+                document.getElementById('inputComensaisModal').value = '';
+                document.getElementById('inputComensaisModal').focus();
+                document.getElementById('modalComensais').classList.add('show');
+            } else {
+                // Quitando unidades
+                input.value = nueva;
+                actualizarCarrito();
+            }
+        }
+
+        function confirmarComensais() {
+            const comensaisStr = document.getElementById('inputComensaisModal').value.trim();
+            if (!comensaisStr) {
+                alert('Por favor engade os comensais');
+                return;
+            }
+
+            const { itemId, cantidadActual, nueva, input } = itemEnEdicion;
+            
+            // Guardar comensais en carrito
+            if (!carrito[itemId]) {
+                carrito[itemId] = { ...config.items.find(i => i.id === itemId), cantidad: 0, comensais: [] };
+            }
+
+            // Engadir comensais
+            const nuevosComensais = comensaisStr.split(',').map(c => parseInt(c.trim())).filter(c => c > 0);
+            carrito[itemId].comensais = carrito[itemId].comensais || [];
+            carrito[itemId].comensais.push(...nuevosComensais);
+            carrito[itemId].cantidad = nueva;
             input.value = nueva;
+            
+            cancelarModal();
             actualizarCarrito();
+        }
+
+        function cancelarModal() {
+            document.getElementById('modalComensais').classList.remove('show');
+            itemEnEdicion = null;
         }
 
         function actualizarMesas() {
@@ -440,20 +473,13 @@
         }
 
         function actualizarCarrito() {
-            carrito = {};
             let total = 0;
-            config.items.forEach(item => {
-                const input = document.querySelector(`#qty-${item.id}`);
-                if (input) {
-                    const cant = parseInt(input.value) || 0;
-                    if (cant > 0) {
-                        carrito[item.id] = { ...item, cantidad: cant };
-                        total += item.precio * cant;
-                    }
-                }
+            const items = Object.values(carrito).filter(i => i.cantidad > 0);
+            
+            items.forEach(item => {
+                total += item.precio * item.cantidad;
             });
 
-            const items = Object.values(carrito);
             const container = document.getElementById('carritoItems');
             const totalContainer = document.getElementById('carritoTotal');
             const ubicacion = document.getElementById('ubicacionSelect').value;
@@ -467,36 +493,36 @@
                 container.innerHTML = items.map(item => `<div class="carrito-item"><span>${item.cantidad}x ${item.nombre}</span><strong>€${(item.precio * item.cantidad).toFixed(2)}</strong></div>`).join('');
                 document.getElementById('totalPrice').textContent = total.toFixed(2) + '€';
                 totalContainer.classList.remove('hidden');
-                document.getElementById('btnPedir').disabled = !ubicacion || !mesa || comensaisSeleccionados.length === 0;
+                document.getElementById('btnPedir').disabled = !ubicacion || !mesa;
             }
         }
 
         function enviarComanda() {
             const ubicacion = document.getElementById('ubicacionSelect').value;
             const mesa = document.getElementById('mesaSelect').value;
-            if (Object.keys(carrito).length === 0 || !ubicacion || !mesa || comensaisSeleccionados.length === 0) return;
+            const items = Object.values(carrito).filter(i => i.cantidad > 0);
+            
+            if (items.length === 0 || !ubicacion || !mesa) return;
 
             const orden = {
                 numero: numeroOrden++,
                 camarero: currentUser,
                 ubicacion,
                 mesa,
-                comensais: [...comensaisSeleccionados],
-                items: Object.values(carrito),
+                items: items.map(i => ({ ...i, comensais: i.comensais || [] })),
                 timestamp: Date.now(),
                 status: 'pendente',
-                total: Object.values(carrito).reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
+                total: items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
             };
 
             ordenes.push(orden);
             carrito = {};
-            comensaisSeleccionados = [];
+
             document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
             document.getElementById('ubicacionSelect').value = '';
-            document.getElementById('mesaSelect').value = '';
-            document.getElementById('inputComensal').value = '';
-            renderComensaisList();
+            document.getElementById('mesaSelect').innerHTML = '<option value="">Selecciona mesa...</option>';
             actualizarCarrito();
+
             alert('✅ Comanda ' + orden.numero + ' enviada!');
         }
 
@@ -522,8 +548,8 @@
 
             container.innerHTML = ordenes.map(orden => {
                 const fecha = new Date(orden.timestamp).toLocaleDateString('gl-ES');
-                const itemsHtml = orden.items.map((item, idx) => {
-                    const comensaisPorItem = orden.comensais.slice(idx, idx + item.cantidad).join(', ');
+                const itemsHtml = orden.items.map((item) => {
+                    const comensaisPorItem = (item.comensais || []).join(', ') || '-';
                     return `<tr><td class="raciones">${item.cantidad}</td><td class="producto">${item.nombre}</td><td class="comensal">${comensaisPorItem}</td></tr>`;
                 }).join('');
 
