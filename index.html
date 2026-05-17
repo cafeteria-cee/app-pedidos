@@ -164,6 +164,36 @@
     <button class="btn-login" onclick="login()">Entrar</button>
 </div>
 
+<!-- MODAL EDITAR ITEM -->
+<div id="modalEditarItem" class="modal-overlay">
+    <div class="modal-box" style="max-width:400px;">
+        <div class="modal-header">
+            <h3>✏️ Editar Produto</h3>
+            <button class="modal-close" onclick="cerrarEditarItem()">✕</button>
+        </div>
+        <div class="modal-body" style="padding:20px;">
+            <input type="hidden" id="editItemId">
+            <div class="form-group">
+                <label style="font-weight:600;color:#8B6914;">Nome:</label>
+                <input type="text" id="editItemNome" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+            </div>
+            <div class="form-group">
+                <label style="font-weight:600;color:#8B6914;">Precio (€):</label>
+                <input type="number" id="editItemPrecio" step="0.01" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;">
+            </div>
+            <div class="form-group">
+                <label style="font-weight:600;color:#8B6914;">Imaxe:</label>
+                <div id="editImaxeActual" style="margin-bottom:8px;"></div>
+                <input type="file" id="editImaxeInput" accept="image/*" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px;">
+                <button onclick="gardarEdicionItem()" style="padding:12px;background:linear-gradient(135deg,#8B6914,#D4AF37);color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">💾 Gardar</button>
+                <button onclick="cerrarEditarItem()" style="padding:12px;background:#eee;border:none;border-radius:6px;font-weight:bold;cursor:pointer;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL MESA -->
 <div id="modalMesa" class="modal-overlay">
     <div class="modal-box">
@@ -423,13 +453,11 @@ function renderItemsAdmin() {
         const items = config.items.filter(i => i.grupoId === g.id);
         if (items.length) {
             html += `<div style="font-weight:bold;color:#8B6914;padding:5px 0 2px;">${g.nome}</div>`;
-            html += items.map(i => `<div class="item-row">
-    ${i.imaxe ? `<img src="${i.imaxe}" class="item-img-small">` : '<span style="font-size:24px;margin-right:8px;">🍽️</span>'}
-    <span style="flex:1;">${i.nombre} — €${i.precio.toFixed(2)}</span>
-    <div style="display:flex;gap:4px;">
-        <label style="cursor:pointer;padding:4px 6px;background:#f0f0f0;border-radius:4px;font-size:11px;" title="Cambiar imaxe">
-            📷<input type="file" accept="image/*" style="display:none;" onchange="cambiarImaxeItem('${i.id}', this)">
-        </label>
+            html += items.map(i => `<div class="item-row" style="gap:6px;">
+    ${i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-small" style="flex-shrink:0;">' : '<span style="font-size:22px;flex-shrink:0;">🍽️</span>'}
+    <span style="flex:1;font-size:13px;">${i.nombre} — €${i.precio.toFixed(2)}</span>
+    <div style="display:flex;gap:4px;flex-shrink:0;">
+        <button onclick="abrirEditarItem('${i.id}')" style="padding:4px 8px;background:#D4AF37;color:#8B6914;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;">✏️</button>
         <button class="btn-red" onclick="eliminarItem('${i.id}')">X</button>
     </div>
 </div>`).join('');
@@ -448,6 +476,52 @@ function cambiarImaxeItem(id, input) {
         if (item) { item.imaxe = e.target.result; renderItemsAdmin(); gardarConfig(); }
     };
     reader.readAsDataURL(file);
+}
+
+function abrirEditarItem(id) {
+    const item = config.items.find(i => i.id === id);
+    if (!item) return;
+    document.getElementById('editItemId').value = id;
+    document.getElementById('editItemNome').value = item.nombre;
+    document.getElementById('editItemPrecio').value = item.precio;
+    document.getElementById('editImaxeActual').innerHTML = item.imaxe
+        ? `<img src="${item.imaxe}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;"><p style="font-size:11px;color:#999;margin-top:4px;">Imaxe actual</p>`
+        : '<p style="font-size:12px;color:#999;">Sen imaxe</p>';
+    document.getElementById('editImaxeInput').value = '';
+    document.getElementById('modalEditarItem').classList.add('show');
+}
+
+function cerrarEditarItem() {
+    document.getElementById('modalEditarItem').classList.remove('show');
+}
+
+function gardarEdicionItem() {
+    const id = document.getElementById('editItemId').value;
+    const nome = document.getElementById('editItemNome').value.trim();
+    const precio = parseFloat(document.getElementById('editItemPrecio').value);
+    if (!nome || !precio) { alert('Enche todos os campos'); return; }
+
+    const fileInput = document.getElementById('editImaxeInput');
+    const file = fileInput.files[0];
+    const item = config.items.find(i => i.id === id);
+    if (!item) return;
+
+    const aplicar = (imaxe) => {
+        item.nombre = nome;
+        item.precio = precio;
+        if (imaxe) item.imaxe = imaxe;
+        cerrarEditarItem();
+        renderItemsAdmin();
+        gardarConfig();
+    };
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => aplicar(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        aplicar(null);
+    }
 }
 function engadirCamarero() {
     const nome = document.getElementById('nomeCamareroAdmin').value.trim();
@@ -648,12 +722,24 @@ function renderResumoCarrito() {
 
     const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
     resumo.innerHTML = items.map(i => `
-        <div class="resumo-item">
-            <div class="ritem-nome">${i.cantidad}x ${i.nombre}</div>
-            <div class="ritem-comensais">👤 ${(i.comensais || []).join(', ')}</div>
+        <div class="resumo-item" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #eee;">
+            <div>
+                <div class="ritem-nome">${i.cantidad}x ${i.nombre}</div>
+                <div class="ritem-comensais">👤 ${(i.comensais || []).join(', ')}</div>
+            </div>
+            <button onclick="eliminarItemCarrito('${i.id}')" style="background:#e74c3c;color:white;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:12px;font-weight:bold;flex-shrink:0;">✕</button>
         </div>`).join('');
     if (totalEl) totalEl.innerHTML = `<div class="resumo-total"><span>Total:</span><span>€${total.toFixed(2)}</span></div>`;
     if (btn) btn.disabled = false;
+}
+
+function eliminarItemCarrito(itemId) {
+    if (carritoModal[itemId]) {
+        delete carritoModal[itemId];
+        const input = document.querySelector(`#mq-${itemId}`);
+        if (input) input.textContent = '0';
+        renderResumoCarrito();
+    }
 }
 
 function enviarComandaMesa() {
@@ -707,11 +793,10 @@ function renderModalEstadoMesa(key, estado) {
                 <table class="tabla-mini">
                     <thead><tr><th>Rac.</th><th>Producto</th><th>Comensal</th></tr></thead>
                     <tbody>
-                        ${orden.items.map(i => `<tr>
-    <td style="text-align:center;font-weight:bold;">${i.cantidad}</td>
-    <td>${i.imaxe ? `<img src="${i.imaxe}" class="item-img-tabla">` : ''}${i.nombre}</td>
-    <td>${(i.comensais||[]).join(', ')||'-'}</td>
-</tr>`).join('')}
+                        ${orden.items.map(i => {
+    const imgHtml = i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-tabla">' : '';
+    return '<tr><td style="text-align:center;font-weight:bold;">' + i.cantidad + '</td><td>' + imgHtml + i.nombre + '</td><td>' + ((i.comensais||[]).join(', ')||'-') + '</td></tr>';
+}).join('')}
                     </tbody>
                 </table>
                 <div style="text-align:right;padding-top:5px;font-weight:bold;color:#27ae60;font-size:13px;">€${orden.total.toFixed(2)}</div>
