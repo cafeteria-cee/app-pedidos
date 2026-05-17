@@ -12,6 +12,10 @@
         .header h1 { font-size: 24px; }
         .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
         .hidden { display: none !important; }
+        .item-img { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; margin-right: 10px; border: 1px solid #eee; }
+        .item-img-small { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; margin-right: 8px; border: 1px solid #eee; }
+        .item-img-tabla { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; vertical-align: middle; margin-right: 6px; }
+        .item-emoji { font-size: 36px; margin-right: 10px; }
         .btn { padding: 9px 14px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px; }
         .btn:hover { background: #D4AF37; color: #8B6914; }
         .btn-red { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
@@ -196,6 +200,11 @@
                     <div class="form-group"><select id="grupoSelect"><option value="">Grupo...</option></select></div>
                     <div class="form-group"><input type="text" id="nomeItem" placeholder="Nome do item"></div>
                     <div class="form-group"><input type="number" id="precioItem" placeholder="Precio €" step="0.01"></div>
+                    <div class="form-group">
+                        <label style="font-weight:600;color:#8B6914;font-size:14px;">Imaxe (opcional):</label>
+                        <input type="file" id="imaxeItem" accept="image/*" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;">
+                        <div id="previewImaxe" style="margin-top:6px;"></div>
+                    </div>
                     <button class="btn" onclick="engadirItem()">+ Engadir</button>
                     <div class="item-list" id="itemsListAdmin"></div>
                 </div>
@@ -372,23 +381,74 @@ function engadirItem() {
     const nombre = document.getElementById('nomeItem').value.trim();
     const precio = parseFloat(document.getElementById('precioItem').value);
     if (!grupoId || !nombre || !precio) return;
-    config.items.push({ id: 'i' + Date.now(), grupoId, nombre, precio });
-    document.getElementById('nomeItem').value = '';
-    document.getElementById('precioItem').value = '';
-    renderItemsAdmin(); renderStatsAdmin(); gardarConfig();
+
+    const fileInput = document.getElementById('imaxeItem');
+    const file = fileInput.files[0];
+
+    const gardar = (imaxe) => {
+        config.items.push({ id: 'i' + Date.now(), grupoId, nombre, precio, imaxe: imaxe || null });
+        document.getElementById('nomeItem').value = '';
+        document.getElementById('precioItem').value = '';
+        document.getElementById('previewImaxe').innerHTML = '';
+        fileInput.value = '';
+        renderItemsAdmin(); renderStatsAdmin(); gardarConfig();
+    };
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => gardar(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        gardar(null);
+    }
 }
+
+// Preview da imaxe antes de engadir
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('imaxeItem') && document.getElementById('imaxeItem').addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('previewImaxe').innerHTML = 
+                    '<img src="' + e.target.result + '" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;">';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
 function renderItemsAdmin() {
     let html = '';
     config.grupos.forEach(g => {
         const items = config.items.filter(i => i.grupoId === g.id);
         if (items.length) {
             html += `<div style="font-weight:bold;color:#8B6914;padding:5px 0 2px;">${g.nome}</div>`;
-            html += items.map(i => `<div class="item-row">${i.nombre} — €${i.precio.toFixed(2)} <button class="btn-red" onclick="eliminarItem('${i.id}')">X</button></div>`).join('');
+            html += items.map(i => `<div class="item-row">
+    ${i.imaxe ? `<img src="${i.imaxe}" class="item-img-small">` : '<span style="font-size:24px;margin-right:8px;">🍽️</span>'}
+    <span style="flex:1;">${i.nombre} — €${i.precio.toFixed(2)}</span>
+    <div style="display:flex;gap:4px;">
+        <label style="cursor:pointer;padding:4px 6px;background:#f0f0f0;border-radius:4px;font-size:11px;" title="Cambiar imaxe">
+            📷<input type="file" accept="image/*" style="display:none;" onchange="cambiarImaxeItem('${i.id}', this)">
+        </label>
+        <button class="btn-red" onclick="eliminarItem('${i.id}')">X</button>
+    </div>
+</div>`).join('');
         }
     });
     document.getElementById('itemsListAdmin').innerHTML = html || '<p style="color:#999;padding:5px;">Sen items</p>';
 }
 function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); renderItemsAdmin(); renderStatsAdmin(); gardarConfig(); }
+
+function cambiarImaxeItem(id, input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const item = config.items.find(i => i.id === id);
+        if (item) { item.imaxe = e.target.result; renderItemsAdmin(); gardarConfig(); }
+    };
+    reader.readAsDataURL(file);
+}
 function engadirCamarero() {
     const nome = document.getElementById('nomeCamareroAdmin').value.trim();
     const pass = document.getElementById('passCamareroAdmin').value;
@@ -647,7 +707,11 @@ function renderModalEstadoMesa(key, estado) {
                 <table class="tabla-mini">
                     <thead><tr><th>Rac.</th><th>Producto</th><th>Comensal</th></tr></thead>
                     <tbody>
-                        ${orden.items.map(i => `<tr><td style="text-align:center;font-weight:bold;">${i.cantidad}</td><td>${i.nombre}</td><td>${(i.comensais||[]).join(', ')||'-'}</td></tr>`).join('')}
+                        ${orden.items.map(i => `<tr>
+    <td style="text-align:center;font-weight:bold;">${i.cantidad}</td>
+    <td>${i.imaxe ? `<img src="${i.imaxe}" class="item-img-tabla">` : ''}${i.nombre}</td>
+    <td>${(i.comensais||[]).join(', ')||'-'}</td>
+</tr>`).join('')}
                     </tbody>
                 </table>
                 <div style="text-align:right;padding-top:5px;font-weight:bold;color:#27ae60;font-size:13px;">€${orden.total.toFixed(2)}</div>
@@ -734,7 +798,11 @@ function renderBarra() {
                 <div class="orden-badge">Comanda #${orden.numero}</div>
                 <table class="tabla-orden">
                     <thead><tr><th style="width:15%;text-align:center;">Rac.</th><th style="width:55%;">Producto</th><th>Comensal</th></tr></thead>
-                    <tbody>${orden.items.map(i => `<tr><td style="text-align:center;font-weight:bold;">${i.cantidad}</td><td>${i.nombre}</td><td>${(i.comensais||[]).join(', ')||'-'}</td></tr>`).join('')}</tbody>
+                    <tbody>${orden.items.map(i => `<tr>
+    <td style="text-align:center;font-weight:bold;">${i.cantidad}</td>
+    <td>${i.imaxe ? `<img src="${i.imaxe}" class="item-img-tabla">` : ''}${i.nombre}</td>
+    <td>${(i.comensais||[]).join(', ')||'-'}</td>
+</tr>`).join('')}</tbody>
                 </table>
             </div>
             <div class="orden-foot">
