@@ -739,7 +739,21 @@ function renderBarra() {
             </div>
             <div class="orden-foot">
                 <span style="font-size:13px;">👨‍💼 ${orden.camarero}</span>
-                <span class="status-badge ${statusClass}" onclick="cambiarStatusBarra(${orden.numero})">${statusLabel}</span>
+                <div style="display:flex;gap:8px;">
+                    <button onclick="ponerPreparando(${orden.numero})" 
+                        style="padding:10px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:13px;
+                        background:${orden.status==='en-preparacion'?'#e67e22':'#fff5e5'};
+                        color:${orden.status==='en-preparacion'?'white':'#e67e22'};
+                        opacity:${orden.status==='lista'?'0.4':'1'};">
+                        👨‍🍳 Preparando
+                    </button>
+                    <button onclick="ponerLista(${orden.numero})"
+                        style="padding:10px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:13px;
+                        background:${orden.status==='lista'?'#27ae60':'#e8f8f5'};
+                        color:${orden.status==='lista'?'white':'#27ae60'};">
+                        ✅ Lista!
+                    </button>
+                </div>
                 <span style="font-weight:bold;color:#27ae60;">€${orden.total.toFixed(2)}</span>
             </div>
         </div>`;
@@ -754,6 +768,20 @@ function cambiarStatusBarra(num) {
             o.status = estados[(estados.indexOf(o.status) + 1) % estados.length];
             break;
         }
+    }
+}
+
+function ponerPreparando(num) {
+    for (const comandas of Object.values(comandasPorMesa)) {
+        const o = comandas.find(c => c.numero === num);
+        if (o) { o.status = 'en-preparacion'; break; }
+    }
+}
+
+function ponerLista(num) {
+    for (const comandas of Object.values(comandasPorMesa)) {
+        const o = comandas.find(c => c.numero === num);
+        if (o) { o.status = 'lista'; break; }
     }
 }
 </script>
