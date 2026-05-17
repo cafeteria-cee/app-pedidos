@@ -253,6 +253,23 @@ let carritoModal = {};
 let itemPendenteComensal = null; // item esperando asignación de comensal
 let comensaisSelActual = [];
 
+
+// ─── PERSISTENCIA localStorage ────────────────────────────────────
+const CONFIG_KEY = 'cafeteria_config_v2';
+
+function gardarConfig() {
+    try {
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+    } catch(e) { console.warn('Non se puido gardar:', e); }
+}
+
+function cargarConfigGardada() {
+    try {
+        const g = localStorage.getItem(CONFIG_KEY);
+        return g ? JSON.parse(g) : null;
+    } catch(e) { return null; }
+}
+
 let config = {
     grupos: [
         { id: 'g1', nome: 'Bebidas Frías' },
@@ -272,6 +289,16 @@ let config = {
     adminPass: 'admin',
     zonas: { comedor: 5, terraza: 4 }
 };
+
+// Aplicar config gardada se existe
+const _configGardada = cargarConfigGardada();
+if (_configGardada) {
+    config.grupos = _configGardada.grupos || config.grupos;
+    config.items = _configGardada.items || config.items;
+    config.camareros = _configGardada.camareros || config.camareros;
+    config.adminPass = _configGardada.adminPass || config.adminPass;
+    config.zonas = _configGardada.zonas || config.zonas;
+}
 
 let comandasPorMesa = {};
 let historial = [];
@@ -325,7 +352,7 @@ function engadirGrupo() {
     if (!nome) return;
     config.grupos.push({ id: 'g' + Date.now(), nome });
     document.getElementById('nomeGrupo').value = '';
-    renderGruposAdmin(); renderGruposSelect(); renderStatsAdmin();
+    renderGruposAdmin(); renderGruposSelect(); renderStatsAdmin(); gardarConfig();
 }
 function renderGruposAdmin() {
     document.getElementById('gruposList').innerHTML = config.grupos.map(g =>
@@ -338,7 +365,7 @@ function renderGruposSelect() {
 function eliminarGrupo(id) {
     config.grupos = config.grupos.filter(g => g.id !== id);
     config.items = config.items.filter(i => i.grupoId !== id);
-    renderGruposAdmin(); renderGruposSelect(); renderItemsAdmin(); renderStatsAdmin();
+    renderGruposAdmin(); renderGruposSelect(); renderItemsAdmin(); renderStatsAdmin(); gardarConfig();
 }
 function engadirItem() {
     const grupoId = document.getElementById('grupoSelect').value;
@@ -348,7 +375,7 @@ function engadirItem() {
     config.items.push({ id: 'i' + Date.now(), grupoId, nombre, precio });
     document.getElementById('nomeItem').value = '';
     document.getElementById('precioItem').value = '';
-    renderItemsAdmin(); renderStatsAdmin();
+    renderItemsAdmin(); renderStatsAdmin(); gardarConfig();
 }
 function renderItemsAdmin() {
     let html = '';
@@ -361,7 +388,7 @@ function renderItemsAdmin() {
     });
     document.getElementById('itemsListAdmin').innerHTML = html || '<p style="color:#999;padding:5px;">Sen items</p>';
 }
-function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); renderItemsAdmin(); renderStatsAdmin(); }
+function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); renderItemsAdmin(); renderStatsAdmin(); gardarConfig(); }
 function engadirCamarero() {
     const nome = document.getElementById('nomeCamareroAdmin').value.trim();
     const pass = document.getElementById('passCamareroAdmin').value;
@@ -369,7 +396,7 @@ function engadirCamarero() {
     config.camareros.push({ nome, pass });
     document.getElementById('nomeCamareroAdmin').value = '';
     document.getElementById('passCamareroAdmin').value = '';
-    renderCamarosAdmin(); renderStatsAdmin();
+    renderCamarosAdmin(); renderStatsAdmin(); gardarConfig();
 }
 function renderCamarosAdmin() {
     document.getElementById('camarosList').innerHTML = config.camareros.map(c =>
@@ -377,7 +404,7 @@ function renderCamarosAdmin() {
 }
 function eliminarCamarero(nome) {
     config.camareros = config.camareros.filter(c => c.nome !== nome);
-    renderCamarosAdmin(); renderStatsAdmin();
+    renderCamarosAdmin(); renderStatsAdmin(); gardarConfig();
 }
 function renderStatsAdmin() {
     document.getElementById('stGrupos').textContent = config.grupos.length;
