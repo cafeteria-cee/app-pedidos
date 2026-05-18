@@ -440,41 +440,74 @@ document.getElementById('imaxeItem').addEventListener('change', function() {
     }
 });
 
-function renderItemsAdmin() {
-    let html = '';
-    config.grupos.forEach(g => {
-        const items = config.items.filter(i => i.grupoId === g.id);
-        if (items.length) {
-            html += `<div style="font-weight:bold;color:#8B6914;padding:5px 0 2px;">${g.nome}</div>`;
-            html += items.map(i => `<div class="item-row">
-                ${i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-small">' : '<span style="font-size:22px;flex-shrink:0;">🍽️</span>'}
-                <span style="flex:1;">${i.nombre} — €${i.precio.toFixed(2)}</span>
+async function renderItemsAdmin() {
+    try {
+        // Cargar items de Supabase
+        const { data: items, error } = await sb.from('items').select('*').order('grupo', { ascending: true });
+        
+        if (error) throw error;
+        if (!items || items.length === 0) {
+            document.getElementById('itemsListAdmin').innerHTML = '<p style="color:#999;padding:5px;">Sin items en Supabase</p>';
+            renderStatsAdmin();
+            return;
+        }
+        
+        // Agrupar por categoría
+        const grupos = {};
+        items.forEach(item => {
+            if (!grupos[item.grupo]) grupos[item.grupo] = [];
+            grupos[item.grupo].push(item);
+        });
+        
+        // Renderizar HTML
+        let html = '';
+        Object.entries(grupos).forEach(([grupo, itemsDelGrupo]) => {
+            html += `<div style="font-weight:bold;color:#8B6914;padding:5px 0 2px;">${grupo}</div>`;
+            html += itemsDelGrupo.map(i => `<div class="item-row">
+                ${i.imagen ? '<img src="' + i.imagen + '" class="item-img-small">' : '<span style="font-size:22px;flex-shrink:0;">🍽️</span>'}
+                <span style="flex:1;">${i.nombre} — €${(i.precio || 0).toFixed(2)}</span>
                 <div style="display:flex;gap:4px;">
-                    <button onclick="abrirEditarItem('${i.id}')" style="padding:4px 8px;background:#D4AF37;color:#8B6914;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;">✏️</button>
-                    <button class="btn-red" onclick="eliminarItem('${i.id}')">X</button>
+                    <button onclick="abrirEditarItem(${i.id})" style="padding:4px 8px;background:#D4AF37;color:#8B6914;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;">✏️</button>
                 </div>
             </div>`).join('');
-        }
-    });
-    document.getElementById('itemsListAdmin').innerHTML = html || '<p style="color:#999;padding:5px;">Sen items</p>';
+        });
+        
+        document.getElementById('itemsListAdmin').innerHTML = html;
+        renderStatsAdmin();
+        
+    } catch (err) {
+        console.error('Error renderItemsAdmin:', err);
+        document.getElementById('itemsListAdmin').innerHTML = '<p style="color:red;padding:5px;">Error cargando items: ' + err.message + '</p>';
+    }
 }
 function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); gardarConfig(); renderItemsAdmin(); renderStatsAdmin(); }
 
-function abrirEditarItem(id) {
-    const item = config.items.find(i => i.id === id);
-    if (!item) return;
-    
-    document.getElementById('editItemId').value = id;
-    document.getElementById('editItemNome').value = item.nombre;
-    document.getElementById('editItemPrecio').value = item.precio;
-    document.getElementById('editItemImagen').value = '';
-    document.getElementById('editImaxeInput').value = '';
-    
-    // Mostrar preview si tiene imagen
-    mostrarPreviewImagen(item.imaxe);
-    
-    cargarImagenesSupabase();
-    document.getElementById('modalEditarItem').classList.add('show');
+async function abrirEditarItem(id) {
+    try {
+        // Cargar item de Supabase
+        const { data: items, error } = await sb.from('items').select('*').eq('id', id).single();
+        
+        if (error) throw error;
+        if (!items) return;
+        
+        // Guardar ID para referencia
+        window.itemEditando = items;
+        
+        document.getElementById('editItemId').value = id;
+        document.getElementById('editItemNome').value = items.nombre;
+        document.getElementById('editItemPrecio').value = items.precio;
+        document.getElementById('editItemImagen').value = '';
+        document.getElementById('editImaxeInput').value = '';
+        
+        // Mostrar preview si tiene imagen
+        mostrarPreviewImagen(items.imagen);
+        
+        cargarImagenesSupabase();
+        document.getElementById('modalEditarItem').classList.add('show');
+    } catch (err) {
+        console.error('Error abrirEditarItem:', err);
+        alert('Error cargando item');
+    }
 }
 function cerrarEditarItem() { document.getElementById('modalEditarItem').classList.remove('show'); }
 
@@ -547,12 +580,6 @@ function gardarEdicionItem() {
         return;
     }
     
-    const item = config.items.find(i => i.id === id);
-    if (!item) return;
-    
-    item.nombre = nome;
-    item.precio = precio;
-    
     // Obtener imagen (de dropdown o de archivo local)
     const imagenDropdown = document.getElementById('editItemImagen').value;
     const imagenLocal = document.getElementById('editImaxeInput').files[0];
@@ -561,23 +588,33 @@ function gardarEdicionItem() {
         // Si hay archivo local, convertir a base64
         const reader = new FileReader();
         reader.onload = (e) => {
-            item.imaxe = e.target.result;
-            finalizarGuardado();
+            guardarEnSupabase(id, nome, precio, e.target.result);
         };
         reader.readAsDataURL(imagenLocal);
     } else if (imagenDropdown) {
         // Si hay imagen del dropdown, usar esa
-        item.imaxe = imagenDropdown;
-        finalizarGuardado();
+        guardarEnSupabase(id, nome, precio, imagenDropdown);
     } else {
         // Sin imagen
-        finalizarGuardado();
+        guardarEnSupabase(id, nome, precio, null);
     }
-    
-    function finalizarGuardado() {
+}
+
+async function guardarEnSupabase(id, nombre, precio, imagen) {
+    try {
+        const updateData = { nombre, precio };
+        if (imagen) updateData.imagen = imagen;
+        
+        const { error } = await sb.from('items').update(updateData).eq('id', id);
+        
+        if (error) throw error;
+        
         cerrarEditarItem();
-        gardarConfig();
         renderItemsAdmin();
+        alert('✅ Producto actualizado en Supabase');
+    } catch (err) {
+        console.error('Error guardarEnSupabase:', err);
+        alert('Error: ' + err.message);
     }
 }
 
@@ -595,11 +632,16 @@ function renderCamarosAdmin() {
         `<div class="item-row">${c.nome} <button class="btn-red" onclick="eliminarCamarero('${c.nome}')">X</button></div>`).join('');
 }
 function eliminarCamarero(nome) { config.camareros = config.camareros.filter(c => c.nome !== nome); gardarConfig(); renderCamarosAdmin(); renderStatsAdmin(); }
-function renderStatsAdmin() {
-    document.getElementById('stGrupos').textContent = config.grupos.length;
-    document.getElementById('stItems').textContent = config.items.length;
-    document.getElementById('stCamareros').textContent = config.camareros.length;
-    document.getElementById('stComandas').textContent = Object.values(comandasPorMesa).flat().length;
+async function renderStatsAdmin() {
+    try {
+        const { count } = await sb.from('items').select('*', { count: 'exact', head: true });
+        document.getElementById('stItems').textContent = count || 0;
+        document.getElementById('stGrupos').textContent = '∞';
+        document.getElementById('stCamareros').textContent = config.camareros.length;
+        document.getElementById('stComandas').textContent = Object.values(comandasPorMesa).flat().length;
+    } catch (err) {
+        console.error('Error renderStatsAdmin:', err);
+    }
 }
 
 // ─── MESAS ────────────────────────────────────────────────────────
