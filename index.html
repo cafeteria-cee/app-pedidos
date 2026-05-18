@@ -316,10 +316,17 @@ async function cargarHistorial() {
 }
 
 // ─── LOGIN ────────────────────────────────────────────────────────
-document.getElementById('rolLogin').addEventListener('change', function() {
-    document.getElementById('camareroLogin').classList.toggle('hidden', this.value !== 'camarero');
-    document.getElementById('adminLogin').classList.toggle('hidden', this.value !== 'admin');
-});
+function actualizarFormularioLogin() {
+    const rol = document.getElementById('rolLogin').value;
+    document.getElementById('camareroLogin').classList.toggle('hidden', rol !== 'camarero');
+    document.getElementById('adminLogin').classList.toggle('hidden', rol !== 'admin');
+}
+
+// Ejecutar al cargar la página (para mostrar admin por defecto)
+document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
+
+// También ejecutar cuando cambia el rol
+document.getElementById('rolLogin').addEventListener('change', actualizarFormularioLogin);
 
 async function login() {
     const rol = document.getElementById('rolLogin').value;
