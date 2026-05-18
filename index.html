@@ -175,12 +175,15 @@
                 <input type="number" id="editItemPrecio" step="0.01" placeholder="Ej: 1.50">
             </div>
             
-            <!-- SELECTOR DE IMÁGENES DE SUPABASE -->
+            <!-- SELECTOR VISUAL DE IMÁGENES -->
             <div class="form-group">
-                <label>📷 Imágen (desde Supabase):</label>
-                <select id="editItemImagen" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;font-size:14px;">
-                    <option value="">-- Selecciona una imagen --</option>
-                </select>
+                <label>📷 Selecciona Imágen:</label>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
+                    <input type="hidden" id="editItemImagenSeleccionada" value="">
+                    <div id="imagenesGrid" style="grid-column: 1/-1; text-align: center; color: #999;">
+                        Cargando imágenes...
+                    </div>
+                </div>
             </div>
             
             <!-- O SUBIR DESDE ORDENADOR -->
@@ -525,35 +528,46 @@ function mostrarPreviewImagen(imagenBase64) {
     }
 }
 
-// Cargar imágenes de Supabase al abrir modal
+// Cargar y mostrar imágenes como grid visual
 async function cargarImagenesSupabase() {
     try {
         const { data, error } = await sb.from('items').select('nombre, imagen').not('imagen', 'is', null);
+        
         if (error) throw error;
         
-        const select = document.getElementById('editItemImagen');
-        select.innerHTML = '<option value="">-- Selecciona una imagen --</option>';
+        const grid = document.getElementById('imagenesGrid');
         
-        if (data && data.length) {
-            data.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.imagen;
-                option.textContent = item.nombre;
-                select.appendChild(option);
-            });
+        if (!data || data.length === 0) {
+            grid.innerHTML = '<p style="color:#999;padding:10px;grid-column:1/-1;">Sin imágenes en Supabase. Sube imágenes manualmente.</p>';
+            return;
         }
+        
+        // Crear grid de imágenes
+        let html = '';
+        data.forEach(item => {
+            html += `
+                <div onclick="seleccionarImagen('${item.imagen.replace(/'/g, "\\'")}', '${item.nombre.replace(/'/g, "\\'")}')" 
+                     style="cursor:pointer;border:2px solid #ddd;border-radius:8px;padding:5px;background:white;transition:all 0.2s;hover:box-shadow: 0 0 10px #D4AF37;">
+                    <img src="${item.imagen}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;display:block;margin:auto;">
+                    <p style="font-size:10px;text-align:center;margin:4px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.nombre}</p>
+                </div>
+            `;
+        });
+        
+        grid.innerHTML = html;
+        
     } catch (err) {
-        console.error('Error cargando imágenes:', err);
+        console.error('Error cargarImagenesSupabase:', err);
+        document.getElementById('imagenesGrid').innerHTML = '<p style="color:red;padding:10px;grid-column:1/-1;">Error: ' + err.message + '</p>';
     }
 }
 
-// Selector de imagen de Supabase (dropdown)
-if (document.getElementById('editItemImagen')) {
-    document.getElementById('editItemImagen').addEventListener('change', function() {
-        if (this.value) {
-            mostrarPreviewImagen(this.value);
-        }
-    });
+// Seleccionar imagen del grid
+function seleccionarImagen(imagen, nombre) {
+    document.getElementById('editItemImagenSeleccionada').value = imagen;
+    mostrarPreviewImagen(imagen);
+    document.getElementById('editImaxeInput').value = ''; // Limpiar upload
+    console.log('Seleccionada imagen de:', nombre);
 }
 
 // Upload de imagen local (archivo)
@@ -563,7 +577,7 @@ if (document.getElementById('editImaxeInput')) {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                document.getElementById('editItemImagen').value = ''; // Limpiar dropdown
+                document.getElementById('editItemImagenSeleccionada').value = ''; // Limpiar grid
                 mostrarPreviewImagen(e.target.result);
             };
             reader.readAsDataURL(file);
@@ -580,8 +594,8 @@ function gardarEdicionItem() {
         return;
     }
     
-    // Obtener imagen (de dropdown o de archivo local)
-    const imagenDropdown = document.getElementById('editItemImagen').value;
+    // Obtener imagen (del grid visual o de archivo local)
+    const imagenSeleccionada = document.getElementById('editItemImagenSeleccionada').value;
     const imagenLocal = document.getElementById('editImaxeInput').files[0];
     
     if (imagenLocal) {
@@ -591,9 +605,9 @@ function gardarEdicionItem() {
             guardarEnSupabase(id, nome, precio, e.target.result);
         };
         reader.readAsDataURL(imagenLocal);
-    } else if (imagenDropdown) {
-        // Si hay imagen del dropdown, usar esa
-        guardarEnSupabase(id, nome, precio, imagenDropdown);
+    } else if (imagenSeleccionada) {
+        // Si hay imagen del grid, usar esa
+        guardarEnSupabase(id, nome, precio, imagenSeleccionada);
     } else {
         // Sin imagen
         guardarEnSupabase(id, nome, precio, null);
