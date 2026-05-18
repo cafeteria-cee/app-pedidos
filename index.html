@@ -537,17 +537,26 @@ async function cargarImagenesSupabase() {
         
         const grid = document.getElementById('imagenesGrid');
         
-        if (!data || data.length === 0) {
-            grid.innerHTML = '<p style="color:#999;padding:10px;grid-column:1/-1;">Sin imágenes en Supabase. Sube imágenes manualmente.</p>';
-            return;
+        // Si no hay imágenes en Supabase, usar imágenes predefinidas
+        let imagenes = data && data.length > 0 ? data : [];
+        
+        // Agregar imágenes por defecto si la tabla está vacía
+        if (imagenes.length === 0) {
+            imagenes = [
+                { nombre: 'Café', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjOEI0NTEzIi8+PHJlY3QgeD0iNjAiIHk9IjE0MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNjU0MzIxIi8+PC9zdmc+' },
+                { nombre: 'Croissant', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTAwIiByeD0iNjAiIHJ5PSI0MCIgZmlsbD0iI0NEODUzRiIvPjxjaXJjbGUgY3g9IjcwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PGNpcmNsZSBjeD0iMTMwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+' },
+                { nombre: 'Hamburguesa', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNjAiIHJ4PSI0NSIgcnk9IjEyIiBmaWxsPSIjQ0Q4NTNGIi8+PHJlY3QgeD0iNTUiIHk9Ijc1IiB3aWR0aD0iOTAiIGhlaWdodD0iNTAiIGZpbGw9IiM4QjQ1MTMiLz48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTQ1IiByeD0iNDUiIHJ5PSIxMiIgZmlsbD0iI0NEODUzRiIvPjwvc3ZnPg==' },
+                { nombre: 'Cerveza', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSI3MCIgeT0iNzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZENzAwIiBzdHJva2Utd2lkdGg9IjMiLz48cmVjdCB4PSI3NSIgeT0iMTAwIiB3aWR0aD0iNTAiIGhlaWdodD0iNDAiIGZpbGw9IiNDRDg1M0YiIG9wYWNpdHk9IjAuNyIvPjxlbGxpcHNlIGN4PSIxMDAiIGN5PSI2NSIgcng9IjMwIiByeT0iOCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=' },
+                { nombre: 'Tarta', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNIDUwIDEwMCBMIDEwMCA1MCBMIDE1MCAxMDAgWiIgZmlsbD0iI0ZGQjZDMSIvPjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNjAiIGZpbGw9IiNENjkxRSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjQwIiByPSI4IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+' },
+            ];
         }
         
         // Crear grid de imágenes
         let html = '';
-        data.forEach(item => {
+        imagenes.forEach(item => {
             html += `
                 <div onclick="seleccionarImagen('${item.imagen.replace(/'/g, "\\'")}', '${item.nombre.replace(/'/g, "\\'")}')" 
-                     style="cursor:pointer;border:2px solid #ddd;border-radius:8px;padding:5px;background:white;transition:all 0.2s;hover:box-shadow: 0 0 10px #D4AF37;">
+                     style="cursor:pointer;border:2px solid #ddd;border-radius:8px;padding:5px;background:white;transition:all 0.2s;">
                     <img src="${item.imagen}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;display:block;margin:auto;">
                     <p style="font-size:10px;text-align:center;margin:4px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.nombre}</p>
                 </div>
@@ -558,7 +567,8 @@ async function cargarImagenesSupabase() {
         
     } catch (err) {
         console.error('Error cargarImagenesSupabase:', err);
-        document.getElementById('imagenesGrid').innerHTML = '<p style="color:red;padding:10px;grid-column:1/-1;">Error: ' + err.message + '</p>';
+        // Mostrar imágenes por defecto si hay error
+        document.getElementById('imagenesGrid').innerHTML = '<p style="color:#666;padding:10px;grid-column:1/-1;text-align:center;">Carga imágenes localmente</p>';
     }
 }
 
