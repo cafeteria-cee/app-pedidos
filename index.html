@@ -9,128 +9,41 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
         .container { max-width: 1400px; margin: 0 auto; padding: 10px; }
-        .header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 24px; }
-        .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
         .hidden { display: none !important; }
-        .btn { padding: 9px 14px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn { padding: 10px 15px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn:hover { background: #D4AF37; color: #8B6914; }
-        .btn-red { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #8B6914; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
-
-        /* LOGIN */
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #8B6914; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
         .login-view { max-width: 400px; margin: 80px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .login-view h2 { color: #8B6914; margin-bottom: 25px; text-align: center; }
         .btn-login { width: 100%; padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-
-        /* ADMIN */
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .admin-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .admin-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 12px; font-size: 16px; }
-        .item-list { background: #f9f9f9; border-radius: 4px; padding: 8px; max-height: 280px; overflow-y: auto; margin-top: 8px; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px solid #eee; font-size: 13px; gap: 6px; }
-
-        /* MESAS */
-        .mesas-view { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .zona-mesas { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .zona-titulo { font-size: 18px; font-weight: bold; color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; margin-bottom: 15px; }
-        .mesas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-        .mesa-icon { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 10px; border-radius: 10px; cursor: pointer; border: 2px solid #ddd; background: white; transition: all 0.2s; position: relative; }
-        .mesa-icon:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
-        .mesa-icon .icon { font-size: 32px; margin-bottom: 5px; }
-        .mesa-icon .nome { font-size: 13px; font-weight: bold; }
-        .mesa-icon .status-text { font-size: 10px; margin-top: 3px; font-weight: 600; }
-        .mesa-icon .badge { position: absolute; top: -6px; right: -6px; background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .mesa-libre { border-color: #27ae60; background: #f0fff4; }
-        .mesa-libre .status-text { color: #27ae60; }
-        .mesa-ocupada { border-color: #f39c12; background: #fffbf0; }
-        .mesa-ocupada .status-text { color: #f39c12; }
-        .mesa-lista { border-color: #3498db; background: #f0f8ff; animation: glow-blue 1.5s infinite; }
-        .mesa-lista .status-text { color: #3498db; }
-        .mesa-pago { border-color: #e74c3c; background: #fff5f5; animation: glow-red 1.5s infinite; }
-        .mesa-pago .status-text { color: #e74c3c; }
-        @keyframes glow-blue { 0%,100% { box-shadow: 0 0 5px rgba(52,152,219,0.3); } 50% { box-shadow: 0 0 15px rgba(52,152,219,0.7); } }
-        @keyframes glow-red { 0%,100% { box-shadow: 0 0 5px rgba(231,76,60,0.3); } 50% { box-shadow: 0 0 15px rgba(231,76,60,0.7); } }
-
-        /* MODAIS */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; }
-        .modal-overlay.show { display: flex; }
-        .modal-box { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); width: 95%; max-width: 700px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
-        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .modal-header h3 { font-size: 18px; }
-        .modal-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .modal-body { padding: 0; overflow-y: auto; flex: 1; }
-
-        /* COMANDA LAYOUT */
-        .comanda-layout { display: grid; grid-template-columns: 1fr 200px; height: 100%; }
-        .comanda-menu { padding: 15px; overflow-y: auto; max-height: 70vh; border-right: 2px solid #f0f0f0; }
-        .comanda-panel { padding: 15px; background: #fafafa; display: flex; flex-direction: column; }
-        .comanda-panel h4 { color: #8B6914; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #D4AF37; padding-bottom: 6px; }
-        .panel-comensal-activo { background: #fff8e1; border: 2px solid #D4AF37; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
-        .panel-comensal-activo .produto-nome { font-size: 12px; font-weight: bold; color: #8B6914; margin-bottom: 8px; }
-        .nums-comensais { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 8px; }
-        .btn-num { padding: 8px 0; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .btn-num.sel { background: #8B6914; color: white; border-color: #8B6914; }
-        .btn-confirmar-comensal { width: 100%; padding: 8px; background: #8B6914; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
-        .resumo-carrito { flex: 1; overflow-y: auto; }
-        .resumo-item { font-size: 12px; padding: 5px 0; border-bottom: 1px dashed #eee; display: flex; justify-content: space-between; align-items: center; }
-        .resumo-total { margin-top: 8px; padding-top: 8px; border-top: 2px solid #8B6914; font-weight: bold; color: #8B6914; display: flex; justify-content: space-between; font-size: 14px; }
-        .btn-enviar { width: 100%; padding: 10px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
-        .btn-enviar:disabled { opacity: 0.4; cursor: not-allowed; }
-
-        /* MENU */
-        .menu-grupo h4 { color: #8B6914; font-size: 13px; border-bottom: 1px solid #D4AF37; padding-bottom: 4px; margin: 12px 0 6px; }
-        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f9f9f9; border-radius: 5px; margin-bottom: 5px; }
-        .item-info h5 { font-size: 13px; margin-bottom: 2px; }
-        .item-info span { font-size: 11px; color: #8B6914; font-weight: bold; }
-        .item-controls { display: flex; gap: 5px; align-items: center; }
-        .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; color: #8B6914; font-size: 14px; }
-        .qty-btn:hover { background: #8B6914; color: white; }
-        .qty-show { width: 30px; text-align: center; font-weight: bold; font-size: 14px; }
-        .item-img { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; margin-right: 10px; border: 1px solid #eee; flex-shrink: 0; }
-        .item-img-small { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; margin-right: 8px; border: 1px solid #eee; flex-shrink: 0; }
-        .item-img-tabla { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; vertical-align: middle; margin-right: 6px; }
-
-        /* ESTADO MESA */
-        .comanda-card { background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; overflow: hidden; }
-        .comanda-card-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f0f0f0; }
-        .status-pill { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
-        .pill-pendente { background: #ffe5e5; color: #c0392b; }
-        .pill-preparando { background: #fff5e5; color: #e67e22; }
-        .pill-lista { background: #e3f2fd; color: #1565c0; }
-        .tabla-mini { width: 100%; font-size: 12px; border-collapse: collapse; }
-        .tabla-mini th { background: #e8e8e8; padding: 5px 8px; text-align: left; color: #8B6914; }
-        .tabla-mini td { padding: 5px 8px; border-bottom: 1px solid #eee; }
-        .btn-pago { width: 100%; padding: 11px; background: #e74c3c; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
-        .btn-cobrado { width: 100%; padding: 11px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 8px; }
-
-        /* HISTORIAL */
-        .historial-section { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 20px; }
-        .historial-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 12px; }
-        .historial-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
-        .historial-total { font-weight: bold; color: #27ae60; font-size: 15px; }
-
-        /* BARRA */
-        .kitchen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
-        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #8B6914; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .stat-card h3 { font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 6px; }
-        .stat-value { font-size: 26px; font-weight: bold; color: #8B6914; }
-        .orden-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #D4AF37; }
-        .orden-head { background: linear-gradient(90deg, #8B6914, #D4AF37); color: white; padding: 12px 15px; display: grid; grid-template-columns: 1fr 1fr 1fr; text-align: center; font-weight: bold; font-size: 14px; }
-        .orden-body { padding: 15px; }
-        .orden-badge { display: inline-block; background: #8B6914; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; margin-bottom: 10px; font-size: 13px; }
-        .tabla-orden { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .tabla-orden th { background: #f0f0f0; color: #8B6914; padding: 8px; text-align: left; border-bottom: 2px solid #D4AF37; }
-        .tabla-orden td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: middle; }
-        .orden-foot { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-top: 2px solid #D4AF37; background: #f9f9f9; gap: 8px; }
-
-        /* MODAL EDITAR */
-        #modalEditarItem .modal-box { max-width: 400px; }
-
-        @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } .mesas-view { grid-template-columns: 1fr; } .stats-bar { grid-template-columns: 1fr; } .comanda-layout { grid-template-columns: 1fr; } }
+        .admin-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 15px; }
+        .item-list { background: #f9f9f9; border-radius: 4px; padding: 8px; max-height: 400px; overflow-y: auto; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .item-row button { padding: 5px 10px; font-size: 12px; cursor: pointer; margin-left: 5px; }
+        .btn-edit { background: #D4AF37; color: #8B6914; border: none; border-radius: 4px; }
+        .btn-delete { background: #e74c3c; color: white; border: none; border-radius: 4px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-box { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 30px; }
+        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px; margin: -30px -30px 20px -30px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .grid-imagenes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; max-height: 250px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
+        .img-item { cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 8px; text-align: center; background: white; transition: all 0.2s; }
+        .img-item:hover { border-color: #D4AF37; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        .img-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; display: block; margin: auto; }
+        .img-item p { font-size: 10px; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .preview-img { max-width: 120px; max-height: 120px; border-radius: 8px; border: 2px solid #D4AF37; margin: 10px auto; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #8B6914; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .stat-card h3 { font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-value { font-size: 28px; font-weight: bold; color: #8B6914; }
     </style>
 </head>
 <body>
@@ -138,7 +51,8 @@
 <!-- LOGIN -->
 <div id="loginView" class="login-view">
     <h2>☕ App Cafetería</h2>
-    <div class="form-group"><label>Rol:</label>
+    <div class="form-group">
+        <label>Rol:</label>
         <select id="rolLogin">
             <option value="admin">Admin</option>
             <option value="camarero">Camarero</option>
@@ -156,68 +70,44 @@
 </div>
 
 <!-- MODAL EDITAR ITEM -->
-<div id="modalEditarItem" class="modal-overlay">
+<div id="modalEditarItem" class="modal">
     <div class="modal-box">
         <div class="modal-header">
             <h3>✏️ Editar Producto</h3>
             <button class="modal-close" onclick="cerrarEditarItem()">✕</button>
         </div>
-        <div class="modal-body" style="padding:20px;">
-            <input type="hidden" id="editItemId">
-            
-            <!-- NOMBRE Y PRECIO -->
-            <div class="form-group">
-                <label>Nombre:</label>
-                <input type="text" id="editItemNome" placeholder="Ej: Café Solo">
+        <input type="hidden" id="editItemId">
+        <div class="form-group">
+            <label>Nombre:</label>
+            <input type="text" id="editItemNome" placeholder="Nombre">
+        </div>
+        <div class="form-group">
+            <label>Precio (€):</label>
+            <input type="number" id="editItemPrecio" step="0.01" placeholder="Precio">
+        </div>
+        <div class="form-group">
+            <label>📷 Selecciona Imágen:</label>
+            <div id="imagenesGrid" class="grid-imagenes">
+                <p style="grid-column:1/-1;text-align:center;color:#999;">Cargando imágenes...</p>
             </div>
-            <div class="form-group">
-                <label>Precio (€):</label>
-                <input type="number" id="editItemPrecio" step="0.01" placeholder="Ej: 1.50">
-            </div>
-            
-            <!-- SELECTOR VISUAL DE IMÁGENES -->
-            <div class="form-group">
-                <label>📷 Selecciona Imágen:</label>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px;">
-                    <input type="hidden" id="editItemImagenSeleccionada" value="">
-                    <div id="imagenesGrid" style="grid-column: 1/-1; text-align: center; color: #999;">
-                        Cargando imágenes...
-                    </div>
-                </div>
-            </div>
-            
-            <!-- O SUBIR DESDE ORDENADOR -->
-            <div class="form-group">
-                <label>O subir imagen local:</label>
-                <input type="file" id="editImaxeInput" accept="image/*" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;">
-            </div>
-            
-            <!-- PREVIEW -->
-            <div id="editImaxePreview" style="margin-top:15px;text-align:center;padding:10px;background:#f9f9f9;border-radius:8px;">
-                <img id="previewImagen" style="max-width:120px;max-height:120px;border-radius:8px;border:2px solid #D4AF37;display:none;">
-                <p id="previewText" style="color:#999;font-size:12px;margin:0;">Sin imagen seleccionada</p>
-            </div>
-            
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
-                <button onclick="gardarEdicionItem()" style="padding:12px;background:linear-gradient(135deg,#8B6914,#D4AF37);color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;">💾 Guardar</button>
-                <button onclick="cerrarEditarItem()" style="padding:12px;background:#eee;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:14px;">Cancelar</button>
-            </div>
+            <input type="hidden" id="editItemImagenSeleccionada" value="">
+        </div>
+        <div class="form-group">
+            <label>O sube imagen local:</label>
+            <input type="file" id="editImaxeInput" accept="image/*">
+        </div>
+        <div style="text-align:center;margin:15px 0;">
+            <img id="previewImagen" class="preview-img hidden">
+            <p id="previewText" style="color:#999;">Sin imagen seleccionada</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
+            <button class="btn" onclick="gardarEdicionItem()" style="background:linear-gradient(135deg,#8B6914,#D4AF37);">💾 Guardar</button>
+            <button class="btn" onclick="cerrarEditarItem()" style="background:#eee;color:#333;">Cancelar</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL MESA -->
-<div id="modalMesa" class="modal-overlay">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 id="modalMesaTitulo">Mesa</h3>
-            <button class="modal-close" onclick="cerrarModalMesa()">✕</button>
-        </div>
-        <div class="modal-body" id="modalMesaBody"></div>
-    </div>
-</div>
-
-<!-- APP -->
+<!-- APP VIEW -->
 <div id="appView" class="hidden">
     <div class="container">
         <div class="header">
@@ -228,149 +118,93 @@
             </div>
         </div>
 
-        <!-- ADMIN -->
+        <!-- ADMIN VIEW -->
         <div id="adminView" class="hidden">
+            <div class="stats">
+                <div class="stat-card"><h3>Items</h3><div class="stat-value" id="stItems">0</div></div>
+                <div class="stat-card"><h3>Categorías</h3><div class="stat-value" id="stGrupos">∞</div></div>
+                <div class="stat-card"><h3>Camareros</h3><div class="stat-value" id="stCamareros">0</div></div>
+                <div class="stat-card"><h3>Comandas</h3><div class="stat-value" id="stComandas">0</div></div>
+            </div>
+
             <div class="admin-grid">
                 <div class="admin-section">
-                    <h2>📂 Grupos do Menú</h2>
-                    <div class="form-group"><input type="text" id="nomeGrupo" placeholder="Nome do grupo"></div>
-                    <button class="btn" onclick="engadirGrupo()">+ Engadir</button>
-                    <div class="item-list" id="gruposList"></div>
-                </div>
-                <div class="admin-section">
-                    <h2>🍽️ Items</h2>
-                    <div class="form-group"><select id="grupoSelect"><option value="">Grupo...</option></select></div>
-                    <div class="form-group"><input type="text" id="nomeItem" placeholder="Nome do item"></div>
-                    <div class="form-group"><input type="number" id="precioItem" placeholder="Precio €" step="0.01"></div>
-                    <div class="form-group">
-                        <label>Imaxe (opcional):</label>
-                        <input type="file" id="imaxeItem" accept="image/*">
-                        <div id="previewImaxe" style="margin-top:6px;"></div>
+                    <h2>📋 Items en Supabase</h2>
+                    <div class="item-list" id="itemsListAdmin">
+                        <p style="color:#999;">Cargando items...</p>
                     </div>
-                    <button class="btn" onclick="engadirItem()">+ Engadir</button>
-                    <div class="item-list" id="itemsListAdmin"></div>
                 </div>
+
                 <div class="admin-section">
-                    <h2>👥 Camareros</h2>
-                    <div class="form-group"><input type="text" id="nomeCamareroAdmin" placeholder="Nome"></div>
-                    <div class="form-group"><input type="password" id="passCamareroAdmin" placeholder="Contrasenal"></div>
+                    <h2>👨‍💼 Camareros</h2>
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="nomeCamareroAdmin" placeholder="Nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Contrasenal:</label>
+                        <input type="password" id="passCamareroAdmin" placeholder="Contrasenal">
+                    </div>
                     <button class="btn" onclick="engadirCamarero()">+ Engadir</button>
-                    <div class="item-list" id="camarosList"></div>
-                </div>
-                <div class="admin-section">
-                    <h2>📊 Estatísticas</h2>
-                    <p style="margin-bottom:8px;"><strong>Grupos:</strong> <span id="stGrupos">0</span></p>
-                    <p style="margin-bottom:8px;"><strong>Items:</strong> <span id="stItems">0</span></p>
-                    <p style="margin-bottom:8px;"><strong>Camareros:</strong> <span id="stCamareros">0</span></p>
-                    <p><strong>Comandas:</strong> <span id="stComandas">0</span></p>
+                    <div class="item-list" id="camarosList" style="margin-top:15px;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- CAMARERO -->
+        <!-- CAMARERO VIEW -->
         <div id="camareroView" class="hidden">
-            <div class="mesas-view">
-                <div class="zona-mesas"><div class="zona-titulo">🏠 Comedor</div><div class="mesas-grid" id="mesasComedor"></div></div>
-                <div class="zona-mesas"><div class="zona-titulo">☀️ Terraza</div><div class="mesas-grid" id="mesasTerraza"></div></div>
-            </div>
-            <div class="historial-section">
-                <h2>📜 Historial de Pagos</h2>
-                <div id="historialContainer" style="color:#999;text-align:center;padding:20px;font-style:italic;">Sen rexistros</div>
-            </div>
+            <p>Camarero view (en desarrollo)</p>
         </div>
 
-        <!-- BARRA -->
+        <!-- BARRA VIEW -->
         <div id="barraView" class="hidden">
-            <div class="stats-bar">
-                <div class="stat-card"><h3>Pendentes</h3><div class="stat-value" id="stPendentes">0</div></div>
-                <div class="stat-card"><h3>En Preparación</h3><div class="stat-value" id="stPreparacion">0</div></div>
-                <div class="stat-card"><h3>Listas</h3><div class="stat-value" id="stListas">0</div></div>
-            </div>
-            <div id="ordenesContainer" class="kitchen-grid"></div>
+            <p>Barra view (en desarrollo)</p>
         </div>
     </div>
 </div>
 
 <script>
-// ─── SUPABASE ─────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://ssdlvuugugpvderhqist.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_qf_-CHKcKgA_Q5TVR6Q6hA_x1XjycQl';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ─── ESTADO ──────────────────────────────────────────────────────
-let currentUser = null, currentRole = null;
-let itemPendenteComensal = null, comensaisSelActual = [];
-let mesaEnModal = null, carritoModal = {};
-let config = {
-    grupos: [], items: [], camareros: [], adminPass: 'admin',
-    zonas: { comedor: 5, terraza: 4 }
-};
-let comandasPorMesa = {}, historial = [], numeroOrden = 1;
+let currentUser = null;
+let currentRole = null;
+let config = { camareros: [] };
+let itemsCache = [];
 
-// ─── GARDAR/CARGAR CONFIG EN SUPABASE ────────────────────────────
-async function cargarConfig() {
-    const { data } = await sb.from('config').select('*');
-    if (data && data.length > 0) {
-        data.forEach(row => {
-            if (row.id === 'principal') {
-                config = { ...config, ...row.valor };
-            }
-        });
-    }
-}
-
-async function gardarConfig() {
-    await sb.from('config').upsert({ id: 'principal', valor: config });
-}
-
-// ─── CARGAR COMANDAS ──────────────────────────────────────────────
-async function cargarComandas() {
-    const { data } = await sb.from('comandas').select('*').not('status', 'eq', 'cobrada');
-    comandasPorMesa = {};
-    if (data) {
-        data.forEach(o => {
-            const key = `${o.zona}-${o.mesa}`;
-            if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
-            comandasPorMesa[key].push(o);
-        });
-        if (data.length > 0) numeroOrden = Math.max(...data.map(o => o.numero)) + 1;
-    }
-}
-
-async function cargarHistorial() {
-    const { data } = await sb.from('historial').select('*').order('created_at', { ascending: false }).limit(50);
-    if (data) historial = data;
-}
-
-// ─── LOGIN ────────────────────────────────────────────────────────
+// LOGIN
 function actualizarFormularioLogin() {
     const rol = document.getElementById('rolLogin').value;
     document.getElementById('camareroLogin').classList.toggle('hidden', rol !== 'camarero');
     document.getElementById('adminLogin').classList.toggle('hidden', rol !== 'admin');
 }
 
-// Ejecutar cuando el DOM está listo (muestra Admin por defecto)
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
 } else {
     actualizarFormularioLogin();
 }
 
-// También ejecutar cuando cambia el rol
 document.getElementById('rolLogin').addEventListener('change', actualizarFormularioLogin);
 
 async function login() {
     const rol = document.getElementById('rolLogin').value;
-    await cargarConfig();
+    
     if (rol === 'admin') {
-        if (document.getElementById('passAdmin').value !== config.adminPass) { alert('Contrasenal incorrecta'); return; }
+        if (document.getElementById('passAdmin').value !== 'admin123') {
+            alert('Contrasenal incorrecta');
+            return;
+        }
         currentUser = 'Admin';
     } else if (rol === 'camarero') {
         const nome = document.getElementById('nomeCamarero').value;
         const pass = document.getElementById('passCamarero').value;
-        if (!config.camareros.find(c => c.nome === nome && c.pass === pass)) { alert('Credenciais incorrectas'); return; }
+        if (!nome || !pass) { alert('Completa os campos'); return; }
         currentUser = nome;
-    } else { currentUser = 'Barra'; }
+    } else {
+        currentUser = 'Barra';
+    }
 
     currentRole = rol;
     document.getElementById('currentRoleLabel').textContent = rol === 'admin' ? '⚙️ Admin' : rol === 'camarero' ? '👨‍💼 Camarero' : '👨‍🍳 Barra/Cociña';
@@ -381,245 +215,159 @@ async function login() {
     document.getElementById('camareroView').classList.toggle('hidden', rol !== 'camarero');
     document.getElementById('barraView').classList.toggle('hidden', rol !== 'barra');
 
-    if (rol === 'admin') renderAdmin();
-    else if (rol === 'camarero') { await cargarComandas(); await cargarHistorial(); renderMesas(); setInterval(async () => { await cargarComandas(); renderMesas(); }, 3000); }
-    else { await cargarComandas(); renderBarra(); setInterval(async () => { await cargarComandas(); renderBarra(); }, 2000); }
+    if (rol === 'admin') {
+        renderAdmin();
+    }
 }
 
 function logout() {
-    currentUser = null; currentRole = null; carritoModal = {};
+    currentUser = null;
+    currentRole = null;
     document.getElementById('loginView').classList.remove('hidden');
     document.getElementById('appView').classList.add('hidden');
 }
 
-// ─── ADMIN ────────────────────────────────────────────────────────
-function renderAdmin() { renderGruposAdmin(); renderItemsAdmin(); renderCamarosAdmin(); renderStatsAdmin(); }
-
-function engadirGrupo() {
-    const nome = document.getElementById('nomeGrupo').value.trim();
-    if (!nome) return;
-    config.grupos.push({ id: 'g' + Date.now(), nome });
-    document.getElementById('nomeGrupo').value = '';
-    gardarConfig(); renderGruposAdmin(); renderGruposSelect(); renderStatsAdmin();
+// ADMIN
+async function renderAdmin() {
+    await renderItemsAdmin();
+    await renderStatsAdmin();
+    renderCamarosAdmin();
 }
-function renderGruposAdmin() {
-    document.getElementById('gruposList').innerHTML = config.grupos.map(g =>
-        `<div class="item-row">${g.nome} <button class="btn-red" onclick="eliminarGrupo('${g.id}')">X</button></div>`).join('') || '<p style="color:#999;padding:5px;">Sen grupos</p>';
-}
-function renderGruposSelect() {
-    document.getElementById('grupoSelect').innerHTML = '<option value="">Grupo...</option>' +
-        config.grupos.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
-}
-function eliminarGrupo(id) {
-    config.grupos = config.grupos.filter(g => g.id !== id);
-    config.items = config.items.filter(i => i.grupoId !== id);
-    gardarConfig(); renderGruposAdmin(); renderGruposSelect(); renderItemsAdmin(); renderStatsAdmin();
-}
-
-function engadirItem() {
-    const grupoId = document.getElementById('grupoSelect').value;
-    const nombre = document.getElementById('nomeItem').value.trim();
-    const precio = parseFloat(document.getElementById('precioItem').value);
-    if (!grupoId || !nombre || !precio) return;
-    const file = document.getElementById('imaxeItem').files[0];
-    const gardar = (imaxe) => {
-        config.items.push({ id: 'i' + Date.now(), grupoId, nombre, precio, imaxe: imaxe || null });
-        document.getElementById('nomeItem').value = '';
-        document.getElementById('precioItem').value = '';
-        document.getElementById('previewImaxe').innerHTML = '';
-        document.getElementById('imaxeItem').value = '';
-        gardarConfig(); renderItemsAdmin(); renderStatsAdmin();
-    };
-    if (file) { const r = new FileReader(); r.onload = e => gardar(e.target.result); r.readAsDataURL(file); }
-    else gardar(null);
-}
-
-document.getElementById('imaxeItem').addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        const r = new FileReader();
-        r.onload = e => { document.getElementById('previewImaxe').innerHTML = '<img src="' + e.target.result + '" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;">'; };
-        r.readAsDataURL(file);
-    }
-});
 
 async function renderItemsAdmin() {
     try {
-        // Cargar items de Supabase
-        const { data: items, error } = await sb.from('items').select('*').order('grupo', { ascending: true });
-        
+        const { data, error } = await sb.from('items').select('*').order('grupo', { ascending: true });
         if (error) throw error;
-        if (!items || items.length === 0) {
-            document.getElementById('itemsListAdmin').innerHTML = '<p style="color:#999;padding:5px;">Sin items en Supabase</p>';
-            renderStatsAdmin();
+        
+        itemsCache = data || [];
+        
+        if (!itemsCache.length) {
+            document.getElementById('itemsListAdmin').innerHTML = '<p style="color:#999;">Sin items en Supabase</p>';
             return;
         }
-        
-        // Agrupar por categoría
+
         const grupos = {};
-        items.forEach(item => {
+        itemsCache.forEach(item => {
             if (!grupos[item.grupo]) grupos[item.grupo] = [];
             grupos[item.grupo].push(item);
         });
-        
-        // Renderizar HTML
+
         let html = '';
-        Object.entries(grupos).forEach(([grupo, itemsDelGrupo]) => {
-            html += `<div style="font-weight:bold;color:#8B6914;padding:5px 0 2px;">${grupo}</div>`;
-            html += itemsDelGrupo.map(i => `<div class="item-row">
-                ${i.imagen ? '<img src="' + i.imagen + '" class="item-img-small">' : '<span style="font-size:22px;flex-shrink:0;">🍽️</span>'}
-                <span style="flex:1;">${i.nombre} — €${(i.precio || 0).toFixed(2)}</span>
-                <div style="display:flex;gap:4px;">
-                    <button onclick="abrirEditarItem(${i.id})" style="padding:4px 8px;background:#D4AF37;color:#8B6914;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;">✏️</button>
-                </div>
-            </div>`).join('');
+        Object.entries(grupos).forEach(([grupo, items]) => {
+            html += `<div style="font-weight:bold;color:#8B6914;padding:8px 0 4px;">📁 ${grupo}</div>`;
+            items.forEach(i => {
+                html += `<div class="item-row">
+                    ${i.imagen ? '<img src="' + i.imagen + '" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">' : '<span>🍽️</span>'}
+                    <span style="flex:1;margin-left:10px;"><strong>${i.nombre}</strong><br><span style="color:#666;font-size:11px;">€${(i.precio || 0).toFixed(2)}</span></span>
+                    <button class="btn-edit" onclick="abrirEditarItem(${i.id})">✏️</button>
+                </div>`;
+            });
         });
-        
+
         document.getElementById('itemsListAdmin').innerHTML = html;
-        renderStatsAdmin();
-        
     } catch (err) {
         console.error('Error renderItemsAdmin:', err);
-        document.getElementById('itemsListAdmin').innerHTML = '<p style="color:red;padding:5px;">Error cargando items: ' + err.message + '</p>';
+        document.getElementById('itemsListAdmin').innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
     }
 }
-function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); gardarConfig(); renderItemsAdmin(); renderStatsAdmin(); }
 
 async function abrirEditarItem(id) {
     try {
-        // Cargar item de Supabase
-        const { data: items, error } = await sb.from('items').select('*').eq('id', id).single();
-        
+        const { data, error } = await sb.from('items').select('*').eq('id', id).single();
         if (error) throw error;
-        if (!items) return;
-        
-        // Guardar ID para referencia
-        window.itemEditando = items;
         
         document.getElementById('editItemId').value = id;
-        document.getElementById('editItemNome').value = items.nombre;
-        document.getElementById('editItemPrecio').value = items.precio;
-        document.getElementById('editItemImagen').value = '';
+        document.getElementById('editItemNome').value = data.nombre;
+        document.getElementById('editItemPrecio').value = data.precio;
+        document.getElementById('editItemImagenSeleccionada').value = '';
         document.getElementById('editImaxeInput').value = '';
         
-        // Mostrar preview si tiene imagen
-        mostrarPreviewImagen(items.imagen);
-        
+        mostrarPreviewImagen(data.imagen);
         cargarImagenesSupabase();
         document.getElementById('modalEditarItem').classList.add('show');
     } catch (err) {
-        console.error('Error abrirEditarItem:', err);
+        console.error('Error:', err);
         alert('Error cargando item');
     }
 }
-function cerrarEditarItem() { document.getElementById('modalEditarItem').classList.remove('show'); }
 
-// Mostrar preview de imagen
-function mostrarPreviewImagen(imagenBase64) {
+function cerrarEditarItem() {
+    document.getElementById('modalEditarItem').classList.remove('show');
+}
+
+function mostrarPreviewImagen(imagen) {
     const preview = document.getElementById('previewImagen');
-    const previewText = document.getElementById('previewText');
-    if (imagenBase64) {
-        preview.src = imagenBase64;
-        preview.style.display = 'block';
-        previewText.style.display = 'none';
+    const text = document.getElementById('previewText');
+    if (imagen) {
+        preview.src = imagen;
+        preview.classList.remove('hidden');
+        text.style.display = 'none';
     } else {
-        preview.style.display = 'none';
-        previewText.style.display = 'block';
+        preview.classList.add('hidden');
+        text.style.display = 'block';
     }
 }
 
-// Cargar y mostrar imágenes como grid visual
 async function cargarImagenesSupabase() {
     try {
-        const { data, error } = await sb.from('items').select('nombre, imagen').not('imagen', 'is', null);
-        
-        if (error) throw error;
-        
-        const grid = document.getElementById('imagenesGrid');
-        
-        // Si no hay imágenes en Supabase, usar imágenes predefinidas
-        let imagenes = data && data.length > 0 ? data : [];
-        
-        // Agregar imágenes por defecto si la tabla está vacía
-        if (imagenes.length === 0) {
-            imagenes = [
-                { nombre: 'Café', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjOEI0NTEzIi8+PHJlY3QgeD0iNjAiIHk9IjE0MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNjU0MzIxIi8+PC9zdmc+' },
-                { nombre: 'Croissant', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTAwIiByeD0iNjAiIHJ5PSI0MCIgZmlsbD0iI0NEODUzRiIvPjxjaXJjbGUgY3g9IjcwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PGNpcmNsZSBjeD0iMTMwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+' },
-                { nombre: 'Hamburguesa', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNjAiIHJ4PSI0NSIgcnk9IjEyIiBmaWxsPSIjQ0Q4NTNGIi8+PHJlY3QgeD0iNTUiIHk9Ijc1IiB3aWR0aD0iOTAiIGhlaWdodD0iNTAiIGZpbGw9IiM4QjQ1MTMiLz48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTQ1IiByeD0iNDUiIHJ5PSIxMiIgZmlsbD0iI0NEODUzRiIvPjwvc3ZnPg==' },
-                { nombre: 'Cerveza', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSI3MCIgeT0iNzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZENzAwIiBzdHJva2Utd2lkdGg9IjMiLz48cmVjdCB4PSI3NSIgeT0iMTAwIiB3aWR0aD0iNTAiIGhlaWdodD0iNDAiIGZpbGw9IiNDRDg1M0YiIG9wYWNpdHk9IjAuNyIvPjxlbGxpcHNlIGN4PSIxMDAiIGN5PSI2NSIgcng9IjMwIiByeT0iOCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=' },
-                { nombre: 'Tarta', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNIDUwIDEwMCBMIDEwMCA1MCBMIDE1MCAxMDAgWiIgZmlsbD0iI0ZGQjZDMSIvPjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNjAiIGZpbGw9IiNENjkxRSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjQwIiByPSI4IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+' },
-            ];
-        }
-        
-        // Crear grid de imágenes
+        const { data } = await sb.from('items').select('nombre, imagen').not('imagen', 'is', null);
+        const imagenes = (data || []).concat([
+            { nombre: 'Café', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjOEI0NTEzIi8+PHJlY3QgeD0iNjAiIHk9IjE0MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNjU0MzIxIi8+PC9zdmc+' },
+            { nombre: 'Croissant', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTAwIiByeD0iNjAiIHJ5PSI0MCIgZmlsbD0iI0NEODUzRiIvPjxjaXJjbGUgY3g9IjcwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+' },
+            { nombre: 'Hamburguesa', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNjAiIHJ4PSI0NSIgcnk9IjEyIiBmaWxsPSIjQ0Q4NTNGIi8+PHJlY3QgeD0iNTUiIHk9Ijc1IiB3aWR0aD0iOTAiIGhlaWdodD0iNTAiIGZpbGw9IiM4QjQ1MTMiLz48L3N2Zz4=' },
+        ]);
+
         let html = '';
-        imagenes.forEach(item => {
-            html += `
-                <div onclick="seleccionarImagen('${item.imagen.replace(/'/g, "\\'")}', '${item.nombre.replace(/'/g, "\\'")}')" 
-                     style="cursor:pointer;border:2px solid #ddd;border-radius:8px;padding:5px;background:white;transition:all 0.2s;">
-                    <img src="${item.imagen}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;display:block;margin:auto;">
-                    <p style="font-size:10px;text-align:center;margin:4px 0 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.nombre}</p>
-                </div>
-            `;
+        imagenes.forEach(img => {
+            html += `<div class="img-item" onclick="seleccionarImagen('${img.imagen.replace(/'/g, "\\'")}','${img.nombre}')">
+                <img src="${img.imagen}"><p>${img.nombre}</p>
+            </div>`;
         });
-        
-        grid.innerHTML = html;
-        
+        document.getElementById('imagenesGrid').innerHTML = html;
     } catch (err) {
         console.error('Error cargarImagenesSupabase:', err);
-        // Mostrar imágenes por defecto si hay error
-        document.getElementById('imagenesGrid').innerHTML = '<p style="color:#666;padding:10px;grid-column:1/-1;text-align:center;">Carga imágenes localmente</p>';
     }
 }
 
-// Seleccionar imagen del grid
 function seleccionarImagen(imagen, nombre) {
     document.getElementById('editItemImagenSeleccionada').value = imagen;
     mostrarPreviewImagen(imagen);
-    document.getElementById('editImaxeInput').value = ''; // Limpiar upload
-    console.log('Seleccionada imagen de:', nombre);
+    document.getElementById('editImaxeInput').value = '';
 }
 
-// Upload de imagen local (archivo)
 if (document.getElementById('editImaxeInput')) {
     document.getElementById('editImaxeInput').addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
+        if (this.files[0]) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                document.getElementById('editItemImagenSeleccionada').value = ''; // Limpiar grid
+                document.getElementById('editItemImagenSeleccionada').value = '';
                 mostrarPreviewImagen(e.target.result);
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(this.files[0]);
         }
     });
 }
-function gardarEdicionItem() {
+
+async function gardarEdicionItem() {
     const id = document.getElementById('editItemId').value;
     const nome = document.getElementById('editItemNome').value.trim();
     const precio = parseFloat(document.getElementById('editItemPrecio').value);
-    
-    if (!nome || !precio || precio <= 0) {
-        alert('Por favor, completa los campos con valores válidos');
+
+    if (!nome || !precio) {
+        alert('Completa los campos');
         return;
     }
-    
-    // Obtener imagen (del grid visual o de archivo local)
+
     const imagenSeleccionada = document.getElementById('editItemImagenSeleccionada').value;
     const imagenLocal = document.getElementById('editImaxeInput').files[0];
-    
+
     if (imagenLocal) {
-        // Si hay archivo local, convertir a base64
         const reader = new FileReader();
-        reader.onload = (e) => {
-            guardarEnSupabase(id, nome, precio, e.target.result);
-        };
+        reader.onload = (e) => guardarEnSupabase(id, nome, precio, e.target.result);
         reader.readAsDataURL(imagenLocal);
     } else if (imagenSeleccionada) {
-        // Si hay imagen del grid, usar esa
         guardarEnSupabase(id, nome, precio, imagenSeleccionada);
     } else {
-        // Sin imagen
         guardarEnSupabase(id, nome, precio, null);
     }
 }
@@ -628,17 +376,25 @@ async function guardarEnSupabase(id, nombre, precio, imagen) {
     try {
         const updateData = { nombre, precio };
         if (imagen) updateData.imagen = imagen;
-        
+
         const { error } = await sb.from('items').update(updateData).eq('id', id);
-        
         if (error) throw error;
-        
+
         cerrarEditarItem();
         renderItemsAdmin();
-        alert('✅ Producto actualizado en Supabase');
+        alert('✅ Guardado en Supabase');
     } catch (err) {
-        console.error('Error guardarEnSupabase:', err);
         alert('Error: ' + err.message);
+    }
+}
+
+async function renderStatsAdmin() {
+    try {
+        const { count } = await sb.from('items').select('*', { count: 'exact', head: true });
+        document.getElementById('stItems').textContent = count || 0;
+        document.getElementById('stCamareros').textContent = config.camareros.length;
+    } catch (err) {
+        console.error('Error renderStatsAdmin:', err);
     }
 }
 
@@ -649,345 +405,22 @@ function engadirCamarero() {
     config.camareros.push({ nome, pass });
     document.getElementById('nomeCamareroAdmin').value = '';
     document.getElementById('passCamareroAdmin').value = '';
-    gardarConfig(); renderCamarosAdmin(); renderStatsAdmin();
+    renderCamarosAdmin();
+    renderStatsAdmin();
 }
+
 function renderCamarosAdmin() {
     document.getElementById('camarosList').innerHTML = config.camareros.map(c =>
-        `<div class="item-row">${c.nome} <button class="btn-red" onclick="eliminarCamarero('${c.nome}')">X</button></div>`).join('');
-}
-function eliminarCamarero(nome) { config.camareros = config.camareros.filter(c => c.nome !== nome); gardarConfig(); renderCamarosAdmin(); renderStatsAdmin(); }
-async function renderStatsAdmin() {
-    try {
-        const { count } = await sb.from('items').select('*', { count: 'exact', head: true });
-        document.getElementById('stItems').textContent = count || 0;
-        document.getElementById('stGrupos').textContent = '∞';
-        document.getElementById('stCamareros').textContent = config.camareros.length;
-        document.getElementById('stComandas').textContent = Object.values(comandasPorMesa).flat().length;
-    } catch (err) {
-        console.error('Error renderStatsAdmin:', err);
-    }
+        `<div class="item-row">${c.nome} <button class="btn-delete" onclick="eliminarCamarero('${c.nome}')">X</button></div>`
+    ).join('');
 }
 
-// ─── MESAS ────────────────────────────────────────────────────────
-function getMesaKey(zona, num) { return `${zona}-${num}`; }
-function getEstadoMesa(zona, num) {
-    const comandas = comandasPorMesa[getMesaKey(zona, num)] || [];
-    if (!comandas.length) return 'libre';
-    if (comandas.some(o => o.status === 'pago')) return 'pago';
-    if (comandas.every(o => o.status === 'lista')) return 'lista';
-    return 'ocupada';
-}
-function renderMesas() {
-    renderZona('comedor', config.zonas.comedor, 'mesasComedor');
-    renderZona('terraza', config.zonas.terraza, 'mesasTerraza');
-    renderHistorial();
-}
-function renderZona(zona, total, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    let html = '';
-    for (let i = 1; i <= total; i++) {
-        const estado = getEstadoMesa(zona, i);
-        const key = getMesaKey(zona, i);
-        const numComandas = (comandasPorMesa[key] || []).length;
-        const icono = estado === 'libre' ? '🪑' : estado === 'ocupada' ? '🍽️' : estado === 'lista' ? '✅' : '💳';
-        const texto = estado === 'libre' ? 'Libre' : estado === 'ocupada' ? 'Ocupada' : estado === 'lista' ? 'Lista!' : 'Pagar';
-        html += `<div class="mesa-icon mesa-${estado}" onclick="abrirModalMesa('${zona}', ${i})">
-            ${numComandas > 0 ? `<div class="badge">${numComandas}</div>` : ''}
-            <div class="icon">${icono}</div>
-            <div class="nome">Mesa ${i}</div>
-            <div class="status-text">${texto}</div>
-        </div>`;
-    }
-    container.innerHTML = html;
-}
-
-// ─── MODAL MESA ───────────────────────────────────────────────────
-function abrirModalMesa(zona, num) {
-    mesaEnModal = { zona, num }; carritoModal = {};
-    itemPendenteComensal = null; comensaisSelActual = [];
-    const nomeZona = zona === 'comedor' ? 'Comedor' : 'Terraza';
-    document.getElementById('modalMesaTitulo').textContent = `${nomeZona} — Mesa ${num}`;
-    const estado = getEstadoMesa(zona, num);
-    if (estado === 'libre') renderModalNovaComanda();
-    else renderModalEstadoMesa(getMesaKey(zona, num), estado);
-    document.getElementById('modalMesa').classList.add('show');
-}
-function cerrarModalMesa() { document.getElementById('modalMesa').classList.remove('show'); mesaEnModal = null; carritoModal = {}; }
-
-function renderModalNovaComanda() {
-    let menuHtml = '<h4 style="color:#8B6914;margin-bottom:10px;">🛒 Nova Comanda</h4>';
-    config.grupos.forEach(grupo => {
-        const items = config.items.filter(i => i.grupoId === grupo.id);
-        if (!items.length) return;
-        menuHtml += `<div class="menu-grupo"><h4>${grupo.nome}</h4>`;
-        items.forEach(item => {
-            const imgHtml = item.imaxe ? '<img src="' + item.imaxe + '" class="item-img">' : '<span style="font-size:36px;margin-right:10px;">🍽️</span>';
-            menuHtml += `<div class="menu-item" id="mitem-${item.id}">
-                <div style="display:flex;align-items:center;flex:1;">
-                    ${imgHtml}
-                    <div class="item-info"><h5>${item.nombre}</h5><span>€${item.precio.toFixed(2)}</span></div>
-                </div>
-                <div class="item-controls" style="margin-left:8px;">
-                    <button class="qty-btn" onclick="cambiarCantModal('${item.id}', '${item.nombre}', -1)">−</button>
-                    <span class="qty-show" id="mq-${item.id}">0</span>
-                    <button class="qty-btn" onclick="cambiarCantModal('${item.id}', '${item.nombre}', 1)">+</button>
-                </div>
-            </div>`;
-        });
-        menuHtml += '</div>';
-    });
-
-    document.getElementById('modalMesaBody').innerHTML = `
-        <div class="comanda-layout">
-            <div class="comanda-menu">${menuHtml}</div>
-            <div class="comanda-panel">
-                <h4>👤 Comensal</h4>
-                <div id="panelComensalActivo" style="color:#999;font-size:12px;font-style:italic;margin-bottom:10px;">Clica + nun produto</div>
-                <h4 style="margin-top:10px;">🛒 Resumo</h4>
-                <div class="resumo-carrito" id="resumoCarrito"><p style="color:#999;font-size:12px;">Sen items</p></div>
-                <div id="totalCarrito"></div>
-                <button class="btn-enviar" id="btnEnviarComanda" onclick="enviarComandaMesa()" disabled>📤 Enviar</button>
-            </div>
-        </div>`;
-}
-
-function cambiarCantModal(itemId, itemNombre, delta) {
-    const item = config.items.find(i => i.id === itemId);
-    const actual = carritoModal[itemId] ? carritoModal[itemId].cantidad : 0;
-    const nova = Math.max(0, actual + delta);
-    if (nova > actual) {
-        itemPendenteComensal = { itemId, itemNombre: item.nombre, nova };
-        comensaisSelActual = [];
-        renderPanelComensal();
-    } else {
-        if (carritoModal[itemId]) {
-            carritoModal[itemId].cantidad = nova;
-            carritoModal[itemId].comensais = carritoModal[itemId].comensais.slice(0, nova);
-            if (nova === 0) delete carritoModal[itemId];
-        }
-        document.getElementById(`mq-${itemId}`).textContent = nova;
-        renderResumoCarrito();
-    }
-}
-
-function renderPanelComensal() {
-    const panel = document.getElementById('panelComensalActivo');
-    if (!panel || !itemPendenteComensal) return;
-    let html = `<div class="panel-comensal-activo">
-        <div class="produto-nome">+ ${itemPendenteComensal.itemNombre}</div>
-        <div class="nums-comensais">`;
-    for (let i = 1; i <= 10; i++) {
-        html += `<button class="btn-num ${comensaisSelActual.includes(i) ? 'sel' : ''}" onclick="toggleNumComensal(${i})">${i}</button>`;
-    }
-    html += `</div><button class="btn-confirmar-comensal" onclick="confirmarComensalPanel()">✅ Confirmar</button></div>`;
-    panel.innerHTML = html;
-}
-
-function toggleNumComensal(n) {
-    if (comensaisSelActual.includes(n)) comensaisSelActual = comensaisSelActual.filter(c => c !== n);
-    else comensaisSelActual.push(n);
-    renderPanelComensal();
-}
-
-function confirmarComensalPanel() {
-    if (!comensaisSelActual.length) { alert('Selecciona un comensal'); return; }
-    const { itemId, nova } = itemPendenteComensal;
-    const item = config.items.find(i => i.id === itemId);
-    if (!carritoModal[itemId]) carritoModal[itemId] = { ...item, cantidad: 0, comensais: [] };
-    carritoModal[itemId].cantidad = nova;
-    carritoModal[itemId].comensais.push(...comensaisSelActual);
-    document.getElementById(`mq-${itemId}`).textContent = nova;
-    itemPendenteComensal = null; comensaisSelActual = [];
-    const panel = document.getElementById('panelComensalActivo');
-    if (panel) panel.innerHTML = '<span style="color:#999;font-size:12px;font-style:italic;">Clica + nun produto</span>';
-    renderResumoCarrito();
-}
-
-function renderResumoCarrito() {
-    const items = Object.values(carritoModal).filter(i => i.cantidad > 0);
-    const resumo = document.getElementById('resumoCarrito');
-    const totalEl = document.getElementById('totalCarrito');
-    const btn = document.getElementById('btnEnviarComanda');
-    if (!resumo) return;
-    if (!items.length) {
-        resumo.innerHTML = '<p style="color:#999;font-size:12px;">Sen items</p>';
-        if (totalEl) totalEl.innerHTML = '';
-        if (btn) btn.disabled = true;
-        return;
-    }
-    const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    resumo.innerHTML = items.map(i => `
-        <div class="resumo-item">
-            <div><div style="font-weight:bold;font-size:12px;">${i.cantidad}x ${i.nombre}</div>
-            <div style="color:#8B6914;font-size:11px;">👤 ${(i.comensais||[]).join(', ')}</div></div>
-            <button onclick="eliminarItemCarrito('${i.id}')" style="background:#e74c3c;color:white;border:none;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:11px;">✕</button>
-        </div>`).join('');
-    if (totalEl) totalEl.innerHTML = `<div class="resumo-total"><span>Total:</span><span>€${total.toFixed(2)}</span></div>`;
-    if (btn) btn.disabled = false;
-}
-
-function eliminarItemCarrito(itemId) {
-    if (carritoModal[itemId]) {
-        delete carritoModal[itemId];
-        const el = document.getElementById(`mq-${itemId}`);
-        if (el) el.textContent = '0';
-        renderResumoCarrito();
-    }
-}
-
-async function enviarComandaMesa() {
-    if (!mesaEnModal) return;
-    const { zona, num } = mesaEnModal;
-    const items = Object.values(carritoModal).filter(i => i.cantidad > 0);
-    if (!items.length) return;
-    const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    const orden = { numero: numeroOrden++, camarero: currentUser, zona, mesa: num, items, status: 'pendente', total };
-    const { data } = await sb.from('comandas').insert(orden).select().single();
-    if (data) {
-        const key = getMesaKey(zona, num);
-        if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
-        comandasPorMesa[key].push(data);
-    }
-    carritoModal = {};
-    cerrarModalMesa();
-    renderMesas();
-}
-
-function renderModalEstadoMesa(key, estado) {
-    const comandas = comandasPorMesa[key] || [];
-    const total = comandas.reduce((s, o) => s + o.total, 0);
-    let html = '<div style="padding:15px;">';
-    if (estado === 'pago') {
-        html += `<div style="background:#fff5f5;border:2px solid #e74c3c;border-radius:8px;padding:15px;margin-bottom:15px;text-align:center;">
-            <div style="font-size:22px;">💳</div>
-            <div style="font-weight:bold;color:#e74c3c;font-size:16px;">TOTAL A PAGAR</div>
-            <div style="font-size:26px;font-weight:bold;color:#27ae60;">€${total.toFixed(2)}</div>
-        </div>`;
-    }
-    html += '<h4 style="color:#8B6914;margin-bottom:10px;">Comandas desta mesa:</h4>';
-    comandas.forEach(orden => {
-        const pillClass = orden.status === 'pendente' ? 'pill-pendente' : orden.status === 'en-preparacion' ? 'pill-preparando' : 'pill-lista';
-        const statusLabel = orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : '✅ Lista!';
-        html += `<div class="comanda-card">
-            <div class="comanda-card-header">
-                <span style="font-weight:bold;">#${orden.numero}</span>
-                <span class="status-pill ${pillClass}">${statusLabel}</span>
-            </div>
-            <div style="padding:8px;">
-                <table class="tabla-mini">
-                    <thead><tr><th>Rac.</th><th>Produto</th><th>Comensal</th></tr></thead>
-                    <tbody>${(orden.items||[]).map(i => {
-                        const imgHtml = i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-tabla">' : '';
-                        return '<tr><td style="text-align:center;font-weight:bold;">' + i.cantidad + '</td><td>' + imgHtml + i.nombre + '</td><td>' + ((i.comensais||[]).join(', ')||'-') + '</td></tr>';
-                    }).join('')}</tbody>
-                </table>
-                <div style="text-align:right;padding-top:5px;font-weight:bold;color:#27ae60;">€${Number(orden.total).toFixed(2)}</div>
-            </div>
-        </div>`;
-    });
-    html += `<button onclick="abrirNovaComandaEnMesa('${key}')" style="width:100%;padding:9px;background:#f0f0f0;border:1px dashed #8B6914;border-radius:6px;cursor:pointer;color:#8B6914;font-weight:bold;margin-bottom:10px;">+ Engadir nova comanda</button>`;
-    if (estado !== 'libre') html += `<button class="btn-pago" onclick="pedirPago('${key}')">💳 Pedir o Pago — €${total.toFixed(2)}</button>`;
-    if (estado === 'pago') html += `<button class="btn-cobrado" onclick="cobrarMesa('${key}')">✅ Cobrado! Pechar Mesa</button>`;
-    html += '</div>';
-    document.getElementById('modalMesaBody').innerHTML = html;
-}
-
-function abrirNovaComandaEnMesa(key) { carritoModal = {}; itemPendenteComensal = null; comensaisSelActual = []; renderModalNovaComanda(); }
-
-async function pedirPago(key) {
-    const comandas = comandasPorMesa[key] || [];
-    for (const o of comandas) {
-        if (!['pago','cobrada'].includes(o.status)) {
-            o.status = 'pago';
-            await sb.from('comandas').update({ status: 'pago' }).eq('id', o.id);
-        }
-    }
-    renderModalEstadoMesa(key, 'pago');
-    renderMesas();
-}
-
-async function cobrarMesa(key) {
-    const comandas = comandasPorMesa[key] || [];
-    const total = comandas.reduce((s, o) => s + Number(o.total), 0);
-    const parts = key.split('-');
-    const zona = parts[0], mesa = parts[1];
-    const fecha = new Date().toLocaleDateString('gl-ES');
-    const hora = new Date().toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit' });
-    for (const o of comandas) await sb.from('comandas').update({ status: 'cobrada' }).eq('id', o.id);
-    await sb.from('historial').insert({ zona, mesa, total, camarero: currentUser, fecha, hora });
-    delete comandasPorMesa[key];
-    await cargarHistorial();
-    cerrarModalMesa();
-    renderMesas();
-}
-
-function renderHistorial() {
-    const container = document.getElementById('historialContainer');
-    if (!historial.length) { container.innerHTML = '<p style="color:#999;text-align:center;padding:20px;font-style:italic;">Sen rexistros</p>'; return; }
-    container.innerHTML = historial.map(h => `
-        <div class="historial-item">
-            <div><span style="font-weight:bold;color:#8B6914;">${h.zona === 'comedor' ? '🏠' : '☀️'} ${h.zona} Mesa ${h.mesa}</span>
-            <span style="color:#999;font-size:12px;margin-left:10px;">${h.fecha} ${h.hora} — ${h.camarero}</span></div>
-            <span class="historial-total">€${Number(h.total).toFixed(2)}</span>
-        </div>`).join('');
-}
-
-// ─── BARRA ────────────────────────────────────────────────────────
-function renderBarra() {
-    const todas = Object.values(comandasPorMesa).flat().filter(o => !['pago','cobrada'].includes(o.status));
-    document.getElementById('stPendentes').textContent = todas.filter(o => o.status === 'pendente').length;
-    document.getElementById('stPreparacion').textContent = todas.filter(o => o.status === 'en-preparacion').length;
-    document.getElementById('stListas').textContent = todas.filter(o => o.status === 'lista').length;
-    const container = document.getElementById('ordenesContainer');
-    if (!todas.length) { container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#8B6914;">⏳ Esperando comandas...</div>'; return; }
-    container.innerHTML = todas.map(orden => {
-        const fecha = new Date(orden.created_at).toLocaleDateString('gl-ES');
-        return `<div class="orden-card">
-            <div class="orden-head">
-                <div>${orden.zona.toUpperCase()}</div>
-                <div>${fecha}</div>
-                <div>🪑 Mesa ${orden.mesa}</div>
-            </div>
-            <div class="orden-body">
-                <div class="orden-badge">Comanda #${orden.numero}</div>
-                <table class="tabla-orden">
-                    <thead><tr><th style="width:12%;text-align:center;">Rac.</th><th style="width:58%;">Produto</th><th>Comensal</th></tr></thead>
-                    <tbody>${(orden.items||[]).map(i => {
-                        const imgHtml = i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-tabla">' : '';
-                        return '<tr><td style="text-align:center;font-weight:bold;">' + i.cantidad + '</td><td>' + imgHtml + i.nombre + '</td><td>' + ((i.comensais||[]).join(', ')||'-') + '</td></tr>';
-                    }).join('')}</tbody>
-                </table>
-            </div>
-            <div class="orden-foot">
-                <span style="font-size:13px;">👨‍💼 ${orden.camarero}</span>
-                <div style="display:flex;gap:6px;">
-                    <button onclick="ponerPreparando(${orden.id})" style="padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;background:${orden.status==='en-preparacion'?'#e67e22':'#fff5e5'};color:${orden.status==='en-preparacion'?'white':'#e67e22'};">👨‍🍳 Preparando</button>
-                    <button onclick="ponerLista(${orden.id})" style="padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;background:${orden.status==='lista'?'#27ae60':'#e8f8f5'};color:${orden.status==='lista'?'white':'#27ae60'};">✅ Lista!</button>
-                </div>
-                <span style="font-weight:bold;color:#27ae60;">€${Number(orden.total).toFixed(2)}</span>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-async function ponerPreparando(id) {
-    await sb.from('comandas').update({ status: 'en-preparacion' }).eq('id', id);
-    for (const comandas of Object.values(comandasPorMesa)) {
-        const o = comandas.find(c => c.id === id);
-        if (o) { o.status = 'en-preparacion'; break; }
-    }
-    renderBarra();
-}
-
-async function ponerLista(id) {
-    await sb.from('comandas').update({ status: 'lista' }).eq('id', id);
-    for (const comandas of Object.values(comandasPorMesa)) {
-        const o = comandas.find(c => c.id === id);
-        if (o) { o.status = 'lista'; break; }
-    }
-    renderBarra();
+function eliminarCamarero(nome) {
+    config.camareros = config.camareros.filter(c => c.nome !== nome);
+    renderCamarosAdmin();
+    renderStatsAdmin();
 }
 </script>
+
 </body>
 </html>
