@@ -3,47 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Cafetería</title>
+    <title>App Cafetería - Accessibilidad</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
         .container { max-width: 1400px; margin: 0 auto; padding: 10px; }
-        .header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 24px; }
-        .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+        .header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .header h1 { font-size: 28px; }
+        .logout-btn { background: rgba(255,255,255,0.3); color: white; border: 2px solid white; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .logout-btn:hover { background: rgba(255,255,255,0.5); }
         .hidden { display: none !important; }
-        .btn { padding: 10px 15px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn:hover { background: #D4AF37; color: #8B6914; }
+        .btn { padding: 12px 20px; background: #8B6914; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s; }
+        .btn:hover { background: #D4AF37; color: #8B6914; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-lg { font-size: 18px; padding: 15px 25px; }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #8B6914; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        .login-view { max-width: 400px; margin: 80px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .login-view h2 { color: #8B6914; margin-bottom: 25px; text-align: center; }
-        .btn-login { width: 100%; padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .admin-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .admin-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 15px; }
-        .item-list { background: #f9f9f9; border-radius: 4px; padding: 8px; max-height: 400px; overflow-y: auto; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        .item-row button { padding: 5px 10px; font-size: 12px; cursor: pointer; margin-left: 5px; }
-        .btn-edit { background: #D4AF37; color: #8B6914; border: none; border-radius: 4px; }
-        .btn-delete { background: #e74c3c; color: white; border: none; border-radius: 4px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #8B6914; font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
+        .login-view { max-width: 450px; margin: 60px auto; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+        .login-view h2 { color: #8B6914; margin-bottom: 30px; text-align: center; font-size: 28px; }
+        .btn-login { width: 100%; padding: 15px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .section { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .section h2 { color: #8B6914; border-bottom: 3px solid #D4AF37; padding-bottom: 12px; margin-bottom: 20px; font-size: 20px; }
+        .item-card { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 15px; display: flex; gap: 12px; align-items: center; margin-bottom: 10px; transition: all 0.2s; }
+        .item-card:hover { border-color: #D4AF37; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2); }
+        .item-card img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+        .item-info { flex: 1; }
+        .item-info h4 { font-weight: bold; margin-bottom: 4px; }
+        .item-info p { font-size: 12px; color: #666; }
+        .item-actions { display: flex; gap: 8px; }
+        .item-actions button { padding: 6px 12px; font-size: 12px; cursor: pointer; border: none; border-radius: 4px; }
+        .btn-edit { background: #D4AF37; color: #8B6914; font-weight: bold; }
+        .btn-delete { background: #e74c3c; color: white; font-weight: bold; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; }
         .modal.show { display: flex; }
-        .modal-box { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 30px; }
-        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 15px; margin: -30px -30px 20px -30px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
-        .modal-close { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
-        .grid-imagenes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; max-height: 250px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
-        .img-item { cursor: pointer; border: 2px solid #ddd; border-radius: 8px; padding: 8px; text-align: center; background: white; transition: all 0.2s; }
-        .img-item:hover { border-color: #D4AF37; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
-        .img-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; display: block; margin: auto; }
-        .img-item p { font-size: 10px; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .preview-img { max-width: 120px; max-height: 120px; border-radius: 8px; border: 2px solid #D4AF37; margin: 10px auto; }
-        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #8B6914; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .stat-card h3 { font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 8px; }
-        .stat-value { font-size: 28px; font-weight: bold; color: #8B6914; }
+        .modal-box { background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); width: 95%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0; }
+        .modal-header h3 { font-size: 22px; }
+        .modal-close { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
+        .modal-body { padding: 30px; }
+        .grid-imagenes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 15px 0; max-height: 300px; overflow-y: auto; border: 2px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+        .img-item { cursor: pointer; border: 3px solid #ddd; border-radius: 10px; padding: 10px; text-align: center; background: white; transition: all 0.3s; }
+        .img-item:hover { border-color: #D4AF37; transform: scale(1.05); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+        .img-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; display: block; margin: auto; }
+        .img-item p { font-size: 11px; margin-top: 6px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .preview-img { max-width: 150px; max-height: 150px; border-radius: 8px; border: 3px solid #D4AF37; margin: 15px auto; display: block; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; border-left: 5px solid #8B6914; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .stat-card h3 { font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #8B6914; }
+        .mesas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 15px; }
+        .mesa-btn { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid #ddd; border-radius: 10px; background: white; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.3s; }
+        .mesa-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+        .mesa-btn.libre { border-color: #27ae60; background: #f0fff4; color: #27ae60; }
+        .mesa-btn.ocupada { border-color: #f39c12; background: #fffbf0; color: #f39c12; animation: pulse-orange 1.5s infinite; }
+        .mesa-btn.pago { border-color: #e74c3c; background: #fff5f5; color: #e74c3c; animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-orange { 0%, 100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.3); } 50% { box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); } }
+        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.3); } 50% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } }
+        .orden-card { background: #f9f9f9; border: 2px solid #D4AF37; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .orden-header { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding-bottom: 10px; border-bottom: 2px solid #D4AF37; margin-bottom: 10px; font-weight: bold; color: #8B6914; }
+        .orden-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .orden-status { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-pendiente { background: #ffe5e5; color: #c0392b; }
+        .status-preparando { background: #fff5e5; color: #e67e22; }
+        .status-lista { background: #e3f2fd; color: #1565c0; }
+        .btn-small { padding: 8px 12px; font-size: 12px; }
+        .contador-comensales { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px 0; }
+        .btn-comensal { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border: 2px solid #ddd; background: white; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-comensal.selected { border-color: #8B6914; background: #8B6914; color: white; }
+        .carrito { background: #f9f9f9; border: 2px solid #ddd; border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .carrito-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 13px; }
+        .carrito-total { margin-top: 10px; padding-top: 10px; border-top: 2px solid #8B6914; font-weight: bold; font-size: 16px; color: #8B6914; text-align: right; }
+        .btn-cantidad { width: 30px; height: 30px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .mesas-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -51,58 +87,84 @@
 <!-- LOGIN -->
 <div id="loginView" class="login-view">
     <h2>☕ App Cafetería</h2>
+    <p style="text-align:center;color:#666;margin-bottom:20px;">Accesible para niños con discapacidad</p>
     <div class="form-group">
         <label>Rol:</label>
         <select id="rolLogin">
-            <option value="admin">Admin</option>
-            <option value="camarero">Camarero</option>
-            <option value="barra">Barra/Cociña</option>
+            <option value="admin">👨‍💼 Admin</option>
+            <option value="camarero">🧑‍💻 Camarero</option>
+            <option value="barra">👨‍🍳 Barra/Cociña</option>
         </select>
     </div>
     <div id="camareroLogin" class="hidden">
-        <div class="form-group"><label>Nome:</label><input type="text" id="nomeCamarero" placeholder="Nome"></div>
-        <div class="form-group"><label>Contrasenal:</label><input type="password" id="passCamarero" placeholder="Contrasenal"></div>
+        <div class="form-group"><label>Nome:</label><input type="text" id="nomeCamarero" placeholder="Tu nombre"></div>
+        <div class="form-group"><label>Contrasenal:</label><input type="password" id="passCamarero" placeholder="Contraseña"></div>
     </div>
     <div id="adminLogin" class="hidden">
-        <div class="form-group"><label>Contrasenal Admin:</label><input type="password" id="passAdmin" placeholder="Contrasenal"></div>
+        <div class="form-group"><label>Contrasenal Admin:</label><input type="password" id="passAdmin" placeholder="admin123"></div>
     </div>
-    <button class="btn-login" onclick="login()">Entrar</button>
+    <button class="btn-login">Entrar</button>
 </div>
 
-<!-- MODAL EDITAR ITEM -->
+<!-- MODALES -->
 <div id="modalEditarItem" class="modal">
     <div class="modal-box">
         <div class="modal-header">
             <h3>✏️ Editar Producto</h3>
-            <button class="modal-close" onclick="cerrarEditarItem()">✕</button>
+            <button class="modal-close" onclick="cerrarModal('modalEditarItem')">✕</button>
         </div>
-        <input type="hidden" id="editItemId">
-        <div class="form-group">
-            <label>Nombre:</label>
-            <input type="text" id="editItemNome" placeholder="Nombre">
-        </div>
-        <div class="form-group">
-            <label>Precio (€):</label>
-            <input type="number" id="editItemPrecio" step="0.01" placeholder="Precio">
-        </div>
-        <div class="form-group">
-            <label>📷 Selecciona Imágen:</label>
-            <div id="imagenesGrid" class="grid-imagenes">
-                <p style="grid-column:1/-1;text-align:center;color:#999;">Cargando imágenes...</p>
+        <div class="modal-body">
+            <input type="hidden" id="editItemId">
+            <div class="form-group">
+                <label>Nombre del producto:</label>
+                <input type="text" id="editItemNome">
             </div>
-            <input type="hidden" id="editItemImagenSeleccionada" value="">
+            <div class="form-group">
+                <label>Precio (€):</label>
+                <input type="number" id="editItemPrecio" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>📷 Selecciona Imágen:</label>
+                <div id="imagenesGrid" class="grid-imagenes"></div>
+                <input type="hidden" id="editItemImagenSeleccionada">
+            </div>
+            <div class="form-group">
+                <label>O sube imagen local:</label>
+                <input type="file" id="editImaxeInput" accept="image/*">
+            </div>
+            <div style="text-align:center;">
+                <img id="previewImagen" class="preview-img hidden">
+                <p id="previewText" style="color:#999;">Sin imagen</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
+                <button class="btn" onclick="gardarEdicionItem()">💾 Guardar</button>
+                <button class="btn" style="background:#ccc;color:#333;" onclick="cerrarModal('modalEditarItem')">Cancelar</button>
+            </div>
         </div>
-        <div class="form-group">
-            <label>O sube imagen local:</label>
-            <input type="file" id="editImaxeInput" accept="image/*">
+    </div>
+</div>
+
+<div id="modalNuevaComanda" class="modal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📋 Nueva Comanda - Mesa <span id="mesaNumero"></span></h3>
+            <button class="modal-close" onclick="cerrarModal('modalNuevaComanda')">✕</button>
         </div>
-        <div style="text-align:center;margin:15px 0;">
-            <img id="previewImagen" class="preview-img hidden">
-            <p id="previewText" style="color:#999;">Sin imagen seleccionada</p>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
-            <button class="btn" onclick="gardarEdicionItem()" style="background:linear-gradient(135deg,#8B6914,#D4AF37);">💾 Guardar</button>
-            <button class="btn" onclick="cerrarEditarItem()" style="background:#eee;color:#333;">Cancelar</button>
+        <div class="modal-body">
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
+                <div>
+                    <h4 style="color:#8B6914;margin-bottom:15px;font-size:16px;">🍔 Productos</h4>
+                    <div id="productosGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-height:400px;overflow-y:auto;"></div>
+                </div>
+                <div>
+                    <h4 style="color:#8B6914;margin-bottom:15px;font-size:16px;">🛒 Carrito</h4>
+                    <div id="carritoComanda" class="carrito" style="max-height:400px;overflow-y:auto;"></div>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
+                <button class="btn" onclick="enviarComanda()">📤 Enviar Pedido</button>
+                <button class="btn" style="background:#ccc;color:#333;" onclick="cerrarModal('modalNuevaComanda')">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -111,9 +173,9 @@
 <div id="appView" class="hidden">
     <div class="container">
         <div class="header">
-            <div><h1>☕ App Cafetería</h1><span id="currentRoleLabel" style="opacity:0.85;font-size:14px;"></span></div>
+            <div><h1>☕ App Cafetería</h1><span id="currentRoleLabel" style="opacity:0.85;"></span></div>
             <div style="display:flex;align-items:center;gap:15px;">
-                <span id="userLabel" style="font-size:14px;"></span>
+                <span id="userLabel"></span>
                 <button class="logout-btn" onclick="logout()">Sair</button>
             </div>
         </div>
@@ -121,44 +183,77 @@
         <!-- ADMIN VIEW -->
         <div id="adminView" class="hidden">
             <div class="stats">
-                <div class="stat-card"><h3>Items</h3><div class="stat-value" id="stItems">0</div></div>
-                <div class="stat-card"><h3>Categorías</h3><div class="stat-value" id="stGrupos">∞</div></div>
+                <div class="stat-card"><h3>Categorías</h3><div class="stat-value" id="stGrupos">0</div></div>
+                <div class="stat-card"><h3>Produtos</h3><div class="stat-value" id="stItems">0</div></div>
                 <div class="stat-card"><h3>Camareros</h3><div class="stat-value" id="stCamareros">0</div></div>
                 <div class="stat-card"><h3>Comandas</h3><div class="stat-value" id="stComandas">0</div></div>
             </div>
 
-            <div class="admin-grid">
-                <div class="admin-section">
-                    <h2>📋 Items en Supabase</h2>
-                    <div class="item-list" id="itemsListAdmin">
-                        <p style="color:#999;">Cargando items...</p>
+            <div class="grid-2">
+                <!-- CATEGORÍAS -->
+                <div class="section">
+                    <h2>📁 Categorías</h2>
+                    <div class="form-group">
+                        <input type="text" id="nombreGrupo" placeholder="Nova categoría">
+                        <button class="btn" onclick="engadirGrupo()" style="margin-top:8px;width:100%;">+ Engadir</button>
                     </div>
+                    <div id="gruposList" style="margin-top:15px;"></div>
                 </div>
 
-                <div class="admin-section">
+                <!-- CAMAREROS -->
+                <div class="section">
                     <h2>👨‍💼 Camareros</h2>
                     <div class="form-group">
-                        <label>Nombre:</label>
-                        <input type="text" id="nomeCamareroAdmin" placeholder="Nombre">
+                        <input type="text" id="nomeCamareroAdmin" placeholder="Nome">
                     </div>
                     <div class="form-group">
-                        <label>Contrasenal:</label>
-                        <input type="password" id="passCamareroAdmin" placeholder="Contrasenal">
+                        <input type="password" id="passCamareroAdmin" placeholder="Contraseña">
+                        <button class="btn" onclick="engadirCamarero()" style="margin-top:8px;width:100%;">+ Engadir</button>
                     </div>
-                    <button class="btn" onclick="engadirCamarero()">+ Engadir</button>
-                    <div class="item-list" id="camarosList" style="margin-top:15px;"></div>
+                    <div id="camarosList" style="margin-top:15px;"></div>
                 </div>
+            </div>
+
+            <!-- PRODUCTOS -->
+            <div class="section" style="margin-top:20px;">
+                <h2>🍔 Productos</h2>
+                <div class="grid-3" style="margin-bottom:20px;">
+                    <div class="form-group">
+                        <label>Categoría:</label>
+                        <select id="grupoProducto"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" id="nombreProducto" placeholder="Nombre del producto">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio (€):</label>
+                        <input type="number" id="precioProducto" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+                <button class="btn btn-lg" onclick="engadirProducto()" style="width:100%;margin-bottom:20px;">➕ Engadir Producto</button>
+                <div id="productosListAdmin" style="max-height:500px;overflow-y:auto;"></div>
             </div>
         </div>
 
         <!-- CAMARERO VIEW -->
         <div id="camareroView" class="hidden">
-            <p>Camarero view (en desarrollo)</p>
+            <div class="section">
+                <h2>🪑 Mesas</h2>
+                <div class="form-group">
+                    <label>Selecciona una mesa:</label>
+                    <div class="mesas-grid" id="mesasGrid"></div>
+                </div>
+            </div>
+            <div id="mesasInfo" style="margin-top:20px;"></div>
         </div>
 
         <!-- BARRA VIEW -->
         <div id="barraView" class="hidden">
-            <p>Barra view (en desarrollo)</p>
+            <div class="section">
+                <h2>👨‍🍳 Pedidos Pendentes</h2>
+                <div id="ordenesContainer"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -168,10 +263,10 @@ const SUPABASE_URL = 'https://ssdlvuugugpvderhqist.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_qf_-CHKcKgA_Q5TVR6Q6hA_x1XjycQl';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let currentUser = null;
-let currentRole = null;
-let config = { camareros: [] };
-let itemsCache = [];
+let currentUser = null, currentRole = null;
+let config = { grupos: [], camareros: [], mesas: { comedor: 8, terraza: 6 } };
+let comandasPorMesa = {}, historialpagos = [];
+let mesaSeleccionada = null, carritoComanda = {};
 
 // LOGIN
 function actualizarFormularioLogin() {
@@ -179,32 +274,21 @@ function actualizarFormularioLogin() {
     document.getElementById('camareroLogin').classList.toggle('hidden', rol !== 'camarero');
     document.getElementById('adminLogin').classList.toggle('hidden', rol !== 'admin');
 }
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
-} else {
-    actualizarFormularioLogin();
-}
-
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
+else actualizarFormularioLogin();
 document.getElementById('rolLogin').addEventListener('change', actualizarFormularioLogin);
+document.querySelector('.btn-login').addEventListener('click', login);
 
 async function login() {
     const rol = document.getElementById('rolLogin').value;
-    
     if (rol === 'admin') {
-        if (document.getElementById('passAdmin').value !== 'admin123') {
-            alert('Contrasenal incorrecta');
-            return;
-        }
+        if (document.getElementById('passAdmin').value !== 'admin123') return alert('Contraseña incorrecta');
         currentUser = 'Admin';
     } else if (rol === 'camarero') {
-        const nome = document.getElementById('nomeCamarero').value;
-        const pass = document.getElementById('passCamarero').value;
-        if (!nome || !pass) { alert('Completa os campos'); return; }
+        const nome = document.getElementById('nomeCamarero').value.trim();
+        if (!nome) return alert('Completa o nome');
         currentUser = nome;
-    } else {
-        currentUser = 'Barra';
-    }
+    } else currentUser = 'Barra';
 
     currentRole = rol;
     document.getElementById('currentRoleLabel').textContent = rol === 'admin' ? '⚙️ Admin' : rol === 'camarero' ? '👨‍💼 Camarero' : '👨‍🍳 Barra/Cociña';
@@ -215,9 +299,9 @@ async function login() {
     document.getElementById('camareroView').classList.toggle('hidden', rol !== 'camarero');
     document.getElementById('barraView').classList.toggle('hidden', rol !== 'barra');
 
-    if (rol === 'admin') {
-        renderAdmin();
-    }
+    if (rol === 'admin') renderAdmin();
+    else if (rol === 'camarero') { await cargarComandas(); renderMesas(); }
+    else { await cargarComandas(); renderBarra(); }
 }
 
 function logout() {
@@ -227,72 +311,103 @@ function logout() {
     document.getElementById('appView').classList.add('hidden');
 }
 
+function cerrarModal(id) { document.getElementById(id).classList.remove('show'); }
+
 // ADMIN
 async function renderAdmin() {
-    await renderItemsAdmin();
-    await renderStatsAdmin();
-    renderCamarosAdmin();
+    await renderProductosListAdmin();
+    renderGrupos();
+    renderCamareros();
+    renderStatsAdmin();
+    cargarCategorias();
 }
 
-async function renderItemsAdmin() {
-    try {
-        const { data, error } = await sb.from('items').select('*').order('grupo', { ascending: true });
-        if (error) throw error;
-        
-        itemsCache = data || [];
-        
-        if (!itemsCache.length) {
-            document.getElementById('itemsListAdmin').innerHTML = '<p style="color:#999;">Sin items en Supabase</p>';
-            return;
-        }
+function engadirGrupo() {
+    const nome = document.getElementById('nombreGrupo').value.trim();
+    if (!nome) return alert('Escribe o nome da categoría');
+    if (!config.grupos.find(g => g.nome === nome)) {
+        config.grupos.push({ id: 'g' + Date.now(), nome });
+        document.getElementById('nombreGrupo').value = '';
+        renderGrupos();
+        cargarCategorias();
+        renderStatsAdmin();
+    }
+}
 
+function renderGrupos() {
+    document.getElementById('gruposList').innerHTML = config.grupos.map(g => 
+        `<div class="item-card"><span>${g.nome}</span><button class="btn-delete btn-small" onclick="eliminarGrupo('${g.id}')">X</button></div>`
+    ).join('');
+}
+
+function eliminarGrupo(id) {
+    config.grupos = config.grupos.filter(g => g.id !== id);
+    renderGrupos();
+    cargarCategorias();
+    renderStatsAdmin();
+}
+
+function cargarCategorias() {
+    const select = document.getElementById('grupoProducto');
+    select.innerHTML = config.grupos.map(g => `<option value="${g.id}">${g.nome}</option>`).join('');
+}
+
+async function engadirProducto() {
+    const grupoId = document.getElementById('grupoProducto').value;
+    const nombre = document.getElementById('nombreProducto').value.trim();
+    const precio = parseFloat(document.getElementById('precioProducto').value);
+    if (!nombre || !precio) return alert('Completa os campos');
+
+    try {
+        const { error } = await sb.from('items').insert([{ nombre, grupo: config.grupos.find(g => g.id === grupoId)?.nome || 'Sin categoría', precio }]);
+        if (error) throw error;
+        document.getElementById('nombreProducto').value = '';
+        document.getElementById('precioProducto').value = '';
+        await renderProductosListAdmin();
+        renderStatsAdmin();
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+}
+
+async function renderProductosListAdmin() {
+    try {
+        const { data } = await sb.from('items').select('*').order('grupo');
+        let html = '';
         const grupos = {};
-        itemsCache.forEach(item => {
+        (data || []).forEach(item => {
             if (!grupos[item.grupo]) grupos[item.grupo] = [];
             grupos[item.grupo].push(item);
         });
-
-        let html = '';
         Object.entries(grupos).forEach(([grupo, items]) => {
-            html += `<div style="font-weight:bold;color:#8B6914;padding:8px 0 4px;">📁 ${grupo}</div>`;
+            html += `<div style="font-weight:bold;color:#8B6914;margin:15px 0 10px;">📁 ${grupo}</div>`;
             items.forEach(i => {
-                html += `<div class="item-row">
-                    ${i.imagen ? '<img src="' + i.imagen + '" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">' : '<span>🍽️</span>'}
-                    <span style="flex:1;margin-left:10px;"><strong>${i.nombre}</strong><br><span style="color:#666;font-size:11px;">€${(i.precio || 0).toFixed(2)}</span></span>
-                    <button class="btn-edit" onclick="abrirEditarItem(${i.id})">✏️</button>
+                html += `<div class="item-card">
+                    ${i.imagen ? '<img src="' + i.imagen + '">' : '<span style="font-size:24px;">🍽️</span>'}
+                    <div class="item-info"><h4>${i.nombre}</h4><p>€${i.precio.toFixed(2)}</p></div>
+                    <div class="item-actions">
+                        <button class="btn-edit btn-small" onclick="abrirEditarItem(${i.id})">✏️</button>
+                        <button class="btn-delete btn-small" onclick="eliminarProducto(${i.id})">X</button>
+                    </div>
                 </div>`;
             });
         });
-
-        document.getElementById('itemsListAdmin').innerHTML = html;
+        document.getElementById('productosListAdmin').innerHTML = html || '<p style="color:#999;">Sin productos</p>';
     } catch (err) {
-        console.error('Error renderItemsAdmin:', err);
-        document.getElementById('itemsListAdmin').innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
+        console.error('Error:', err);
     }
 }
 
 async function abrirEditarItem(id) {
-    try {
-        const { data, error } = await sb.from('items').select('*').eq('id', id).single();
-        if (error) throw error;
-        
-        document.getElementById('editItemId').value = id;
-        document.getElementById('editItemNome').value = data.nombre;
-        document.getElementById('editItemPrecio').value = data.precio;
-        document.getElementById('editItemImagenSeleccionada').value = '';
-        document.getElementById('editImaxeInput').value = '';
-        
-        mostrarPreviewImagen(data.imagen);
-        cargarImagenesSupabase();
-        document.getElementById('modalEditarItem').classList.add('show');
-    } catch (err) {
-        console.error('Error:', err);
-        alert('Error cargando item');
-    }
-}
-
-function cerrarEditarItem() {
-    document.getElementById('modalEditarItem').classList.remove('show');
+    const { data } = await sb.from('items').select('*').eq('id', id).single();
+    if (!data) return;
+    document.getElementById('editItemId').value = id;
+    document.getElementById('editItemNome').value = data.nombre;
+    document.getElementById('editItemPrecio').value = data.precio;
+    document.getElementById('editItemImagenSeleccionada').value = '';
+    mostrarPreviewImagen(data.imagen);
+    cargarImagenesSupabase();
+    document.getElementById('modalEditarItem').classList.add('show');
 }
 
 function mostrarPreviewImagen(imagen) {
@@ -309,116 +424,262 @@ function mostrarPreviewImagen(imagen) {
 }
 
 async function cargarImagenesSupabase() {
-    try {
-        const { data } = await sb.from('items').select('nombre, imagen').not('imagen', 'is', null);
-        const imagenes = (data || []).concat([
-            { nombre: 'Café', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjOEI0NTEzIi8+PHJlY3QgeD0iNjAiIHk9IjE0MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNjU0MzIxIi8+PC9zdmc+' },
-            { nombre: 'Croissant', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTAwIiByeD0iNjAiIHJ5PSI0MCIgZmlsbD0iI0NEODUzRiIvPjxjaXJjbGUgY3g9IjcwIiBjeT0iMTAwIiByPSI1IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+' },
-            { nombre: 'Hamburguesa', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNjAiIHJ4PSI0NSIgcnk9IjEyIiBmaWxsPSIjQ0Q4NTNGIi8+PHJlY3QgeD0iNTUiIHk9Ijc1IiB3aWR0aD0iOTAiIGhlaWdodD0iNTAiIGZpbGw9IiM4QjQ1MTMiLz48L3N2Zz4=' },
-        ]);
-
-        let html = '';
-        imagenes.forEach(img => {
-            html += `<div class="img-item" onclick="seleccionarImagen('${img.imagen.replace(/'/g, "\\'")}','${img.nombre}')">
-                <img src="${img.imagen}"><p>${img.nombre}</p>
-            </div>`;
-        });
-        document.getElementById('imagenesGrid').innerHTML = html;
-    } catch (err) {
-        console.error('Error cargarImagenesSupabase:', err);
-    }
+    const { data } = await sb.from('items').select('nombre, imagen').not('imagen', 'is', null);
+    const imagenes = (data || []).concat([
+        { nombre: 'Café', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjOEI0NTEzIi8+PHJlY3QgeD0iNjAiIHk9IjE0MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNjU0MzIxIi8+PC9zdmc+' },
+        { nombre: 'Hamburguesa', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNjAiIHJ4PSI0NSIgcnk9IjEyIiBmaWxsPSIjQ0Q4NTNGIi8+PHJlY3QgeD0iNTUiIHk9Ijc1IiB3aWR0aD0iOTAiIGhlaWdodD0iNTAiIGZpbGw9IiM4QjQ1MTMiLz48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTQ1IiByeD0iNDUiIHJ5PSIxMiIgZmlsbD0iI0NEODUzRiIvPjwvc3ZnPg==' },
+        { nombre: 'Cerveza', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSI3MCIgeT0iNzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZENzAwIiBzdHJva2Utd2lkdGg9IjMiLz48cmVjdCB4PSI3NSIgeT0iMTAwIiB3aWR0aD0iNTAiIGhlaWdodD0iNDAiIGZpbGw9IiNDRDg1M0YiIG9wYWNpdHk9IjAuNyIvPjxlbGxpcHNlIGN4PSIxMDAiIGN5PSI2NSIgcng9IjMwIiByeT0iOCIgZmlsbD0id2hpdGUiLz48L3N2Zz4=' },
+    ]);
+    document.getElementById('imagenesGrid').innerHTML = imagenes.map(img => 
+        `<div class="img-item" onclick="seleccionarImagen('${img.imagen.replace(/'/g, "\\'")}')"><img src="${img.imagen}"><p>${img.nombre}</p></div>`
+    ).join('');
 }
 
-function seleccionarImagen(imagen, nombre) {
+function seleccionarImagen(imagen) {
     document.getElementById('editItemImagenSeleccionada').value = imagen;
     mostrarPreviewImagen(imagen);
-    document.getElementById('editImaxeInput').value = '';
 }
 
-if (document.getElementById('editImaxeInput')) {
-    document.getElementById('editImaxeInput').addEventListener('change', function() {
-        if (this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('editItemImagenSeleccionada').value = '';
-                mostrarPreviewImagen(e.target.result);
-            };
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
-}
+document.addEventListener('change', function(e) {
+    if (e.target.id === 'editImaxeInput' && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = evt => { document.getElementById('editItemImagenSeleccionada').value = ''; mostrarPreviewImagen(evt.target.result); };
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
 
 async function gardarEdicionItem() {
     const id = document.getElementById('editItemId').value;
     const nome = document.getElementById('editItemNome').value.trim();
     const precio = parseFloat(document.getElementById('editItemPrecio').value);
-
-    if (!nome || !precio) {
-        alert('Completa los campos');
+    const imagen = document.getElementById('editItemImagenSeleccionada').value || document.getElementById('editImaxeInput').files[0];
+    
+    if (!nome || !precio) return alert('Completa os campos');
+    
+    const updateData = { nombre: nome, precio };
+    if (typeof imagen === 'string') updateData.imagen = imagen;
+    else if (imagen) {
+        const reader = new FileReader();
+        reader.onload = async evt => {
+            updateData.imagen = evt.target.result;
+            await sb.from('items').update(updateData).eq('id', id);
+            cerrarModal('modalEditarItem');
+            await renderProductosListAdmin();
+        };
+        reader.readAsDataURL(imagen);
         return;
     }
-
-    const imagenSeleccionada = document.getElementById('editItemImagenSeleccionada').value;
-    const imagenLocal = document.getElementById('editImaxeInput').files[0];
-
-    if (imagenLocal) {
-        const reader = new FileReader();
-        reader.onload = (e) => guardarEnSupabase(id, nome, precio, e.target.result);
-        reader.readAsDataURL(imagenLocal);
-    } else if (imagenSeleccionada) {
-        guardarEnSupabase(id, nome, precio, imagenSeleccionada);
-    } else {
-        guardarEnSupabase(id, nome, precio, null);
-    }
+    
+    await sb.from('items').update(updateData).eq('id', id);
+    cerrarModal('modalEditarItem');
+    await renderProductosListAdmin();
 }
 
-async function guardarEnSupabase(id, nombre, precio, imagen) {
-    try {
-        const updateData = { nombre, precio };
-        if (imagen) updateData.imagen = imagen;
-
-        const { error } = await sb.from('items').update(updateData).eq('id', id);
-        if (error) throw error;
-
-        cerrarEditarItem();
-        renderItemsAdmin();
-        alert('✅ Guardado en Supabase');
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
-}
-
-async function renderStatsAdmin() {
-    try {
-        const { count } = await sb.from('items').select('*', { count: 'exact', head: true });
-        document.getElementById('stItems').textContent = count || 0;
-        document.getElementById('stCamareros').textContent = config.camareros.length;
-    } catch (err) {
-        console.error('Error renderStatsAdmin:', err);
+async function eliminarProducto(id) {
+    if (confirm('¿Estás seguro?')) {
+        await sb.from('items').delete().eq('id', id);
+        await renderProductosListAdmin();
+        renderStatsAdmin();
     }
 }
 
 function engadirCamarero() {
     const nome = document.getElementById('nomeCamareroAdmin').value.trim();
     const pass = document.getElementById('passCamareroAdmin').value;
-    if (!nome || !pass) return;
+    if (!nome || !pass) return alert('Completa os campos');
     config.camareros.push({ nome, pass });
     document.getElementById('nomeCamareroAdmin').value = '';
     document.getElementById('passCamareroAdmin').value = '';
-    renderCamarosAdmin();
+    renderCamareros();
     renderStatsAdmin();
 }
 
-function renderCamarosAdmin() {
-    document.getElementById('camarosList').innerHTML = config.camareros.map(c =>
-        `<div class="item-row">${c.nome} <button class="btn-delete" onclick="eliminarCamarero('${c.nome}')">X</button></div>`
+function renderCamareros() {
+    document.getElementById('camarosList').innerHTML = config.camareros.map(c => 
+        `<div class="item-card"><span>${c.nome}</span><button class="btn-delete btn-small" onclick="eliminarCamarero('${c.nome}')">X</button></div>`
     ).join('');
 }
 
 function eliminarCamarero(nome) {
     config.camareros = config.camareros.filter(c => c.nome !== nome);
-    renderCamarosAdmin();
+    renderCamareros();
     renderStatsAdmin();
+}
+
+async function renderStatsAdmin() {
+    const { count } = await sb.from('items').select('*', { count: 'exact', head: true });
+    document.getElementById('stGrupos').textContent = config.grupos.length;
+    document.getElementById('stItems').textContent = count || 0;
+    document.getElementById('stCamareros').textContent = config.camareros.length;
+}
+
+// CAMARERO
+function renderMesas() {
+    let html = '';
+    ['comedor', 'terraza'].forEach(zona => {
+        html += `<div style="margin-top:25px;"><h3 style="color:#8B6914;margin-bottom:15px;font-size:18px;">${zona === 'comedor' ? '🏠' : '☀️'} ${zona.toUpperCase()}</h3>`;
+        html += '<div class="mesas-grid">';
+        for (let i = 1; i <= config.mesas[zona]; i++) {
+            const key = `${zona}-${i}`;
+            const comandas = comandasPorMesa[key] || [];
+            const estado = !comandas.length ? 'libre' : comandas.some(c => c.status === 'pago') ? 'pago' : 'ocupada';
+            html += `<button class="mesa-btn ${estado}" onclick="abrirMesa('${key}')" style="font-size:20px;"><span>${i}</span><span style="font-size:12px;margin-top:4px;">${estado === 'libre' ? '✅' : estado === 'pago' ? '💳' : '⏳'}</span></button>`;
+        }
+        html += '</div></div>';
+    });
+    document.getElementById('mesasGrid').innerHTML = html;
+}
+
+async function cargarComandas() {
+    const { data } = await sb.from('comandas').select('*').neq('status', 'cobrada');
+    comandasPorMesa = {};
+    (data || []).forEach(o => {
+        const key = `${o.zona}-${o.mesa}`;
+        if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
+        comandasPorMesa[key].push(o);
+    });
+}
+
+function abrirMesa(key) {
+    mesaSeleccionada = key;
+    const [zona, mesa] = key.split('-');
+    document.getElementById('mesaNumero').textContent = `${mesa} (${zona})`;
+    carritoComanda = {};
+    document.getElementById('carritoComanda').innerHTML = '<p style="color:#999;">Carrito vacío</p>';
+    cargarProductosModal();
+    document.getElementById('modalNuevaComanda').classList.add('show');
+}
+
+async function cargarProductosModal() {
+    const { data } = await sb.from('items').select('*').order('grupo');
+    let html = '';
+    const grupos = {};
+    (data || []).forEach(i => {
+        if (!grupos[i.grupo]) grupos[i.grupo] = [];
+        grupos[i.grupo].push(i);
+    });
+    Object.entries(grupos).forEach(([grupo, items]) => {
+        html += `<div style="grid-column:1/-1;font-weight:bold;color:#8B6914;margin:10px 0 5px;border-bottom:2px solid #D4AF37;padding-bottom:5px;">${grupo}</div>`;
+        items.forEach(i => {
+            html += `<button onclick="agregarAlCarrito(${i.id},'${i.nombre}',${i.precio})" style="border:2px solid #ddd;border-radius:8px;padding:10px;background:white;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all 0.2s;" onmouseover="this.style.borderColor='#D4AF37';this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)'" onmouseout="this.style.borderColor='#ddd';this.style.boxShadow='none'">
+                ${i.imagen ? '<img src="' + i.imagen + '" style="width:60px;height:60px;object-fit:cover;border-radius:6px;">' : '<span style="font-size:32px;">🍽️</span>'}
+                <span style="font-size:12px;font-weight:bold;">${i.nombre}</span>
+                <span style="color:#8B6914;font-weight:bold;">€${i.precio.toFixed(2)}</span>
+            </button>`;
+        });
+    });
+    document.getElementById('productosGrid').innerHTML = html;
+}
+
+function agregarAlCarrito(id, nombre, precio) {
+    if (!carritoComanda[id]) carritoComanda[id] = { nombre, precio, cantidad: 0, comensales: [] };
+    carritoComanda[id].cantidad++;
+    actualizarCarrito();
+    actualizarSelectorComensales(id);
+}
+
+function actualizarSelectorComensales(id) {
+    const max = carritoComanda[id].cantidad;
+    document.getElementById('carritoComanda').innerHTML += `
+        <div style="margin-top:12px;padding:10px;background:#fff8e1;border-radius:6px;border-left:4px solid #D4AF37;">
+            <p style="font-size:12px;font-weight:bold;margin-bottom:8px;">${carritoComanda[id].nombre} - Comensal:</p>
+            <div class="contador-comensales">
+                ${Array(max).fill(0).map((_, i) => `<button class="btn-comensal" onclick="seleccionarComensal(${id},${i+1})" style="cursor:pointer;">${i+1}</button>`).join('')}
+            </div>
+        </div>`;
+}
+
+function seleccionarComensal(id, num) {
+    if (!carritoComanda[id].comensales.includes(num)) carritoComanda[id].comensales.push(num);
+    actualizarCarrito();
+}
+
+function actualizarCarrito() {
+    let html = '';
+    let total = 0;
+    Object.entries(carritoComanda).forEach(([id, item]) => {
+        total += item.precio * item.cantidad;
+        html += `<div class="carrito-item">
+            <span><strong>${item.nombre}</strong> x${item.cantidad}</span>
+            <span style="color:#8B6914;font-weight:bold;">€${(item.precio * item.cantidad).toFixed(2)}</span>
+            <button class="btn-cantidad" onclick="reducirCantidad(${id})">-</button>
+            <button class="btn-cantidad" onclick="eliminarDelCarrito(${id})" style="background:#e74c3c;color:white;">X</button>
+        </div>`;
+    });
+    html += `<div class="carrito-total">TOTAL: €${total.toFixed(2)}</div>`;
+    document.getElementById('carritoComanda').innerHTML = html || '<p style="color:#999;">Carrito vacío</p>';
+}
+
+function reducirCantidad(id) {
+    if (carritoComanda[id].cantidad > 1) carritoComanda[id].cantidad--;
+    else eliminarDelCarrito(id);
+    actualizarCarrito();
+}
+
+function eliminarDelCarrito(id) {
+    delete carritoComanda[id];
+    actualizarCarrito();
+}
+
+async function enviarComanda() {
+    if (!Object.keys(carritoComanda).length) return alert('Carrito vacío');
+    const [zona, mesa] = mesaSeleccionada.split('-');
+    const items = Object.entries(carritoComanda).map(([id, item]) => ({
+        nombre: item.nombre,
+        cantidad: item.cantidad,
+        comensais: item.comensales || []
+    }));
+    const total = Object.values(carritoComanda).reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+    
+    try {
+        const { error } = await sb.from('comandas').insert([{
+            zona, mesa: parseInt(mesa), camarero: currentUser, items, total, status: 'pendente',
+            numeroOrden: Date.now() % 10000
+        }]);
+        if (error) throw error;
+        cerrarModal('modalNuevaComanda');
+        await cargarComandas();
+        renderMesas();
+        alert('✅ Pedido enviado a la barra');
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+}
+
+// BARRA
+async function renderBarra() {
+    const { data } = await sb.from('comandas').select('*').neq('status', 'pago').neq('status', 'cobrada').order('created_at', { ascending: true });
+    let html = '';
+    (data || []).forEach(o => {
+        const statusColor = o.status === 'pendente' ? 'status-pendiente' : 'status-preparando';
+        html += `<div class="orden-card">
+            <div class="orden-header">
+                <span>🪑 Mesa ${o.mesa}</span>
+                <span>Camarero: ${o.camarero}</span>
+                <span class="orden-status ${statusColor}">${o.status === 'pendente' ? '⏳ PENDENTE' : '👨‍🍳 PREPARANDO'}</span>
+            </div>
+            <div style="padding:10px 0;">
+                ${(o.items || []).map(item => `<div class="orden-item">
+                    <span><strong>${item.nombre}</strong> x${item.cantidad}</span>
+                    <span style="color:#666;font-size:11px;">Comensales: ${(item.comensais || []).join(', ') || 'Sin asignar'}</span>
+                </div>`).join('')}
+            </div>
+            <div style="display:flex;gap:10px;margin-top:10px;">
+                ${o.status === 'pendente' ? `<button class="btn btn-small" onclick="cambiarStatus(${o.id},'en-preparacion')">👨‍🍳 Preparando</button>` : ''}
+                <button class="btn btn-small" style="background:#27ae60;" onclick="cambiarStatus(${o.id},'lista')">✅ ¡Lista!</button>
+            </div>
+        </div>`;
+    });
+    document.getElementById('ordenesContainer').innerHTML = html || '<p style="color:#999;text-align:center;padding:20px;">No hay pedidos pendentes</p>';
+}
+
+async function cambiarStatus(id, nuevoStatus) {
+    await sb.from('comandas').update({ status: nuevoStatus }).eq('id', id);
+    await cargarComandas();
+    renderBarra();
+    if (nuevoStatus === 'lista') {
+        new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj==').play().catch(() => {});
+    }
 }
 </script>
 
