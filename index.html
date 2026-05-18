@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App Cafetería</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
@@ -12,28 +13,24 @@
         .header h1 { font-size: 24px; }
         .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
         .hidden { display: none !important; }
-        .item-img { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; margin-right: 10px; border: 1px solid #eee; }
-        .item-img-small { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; margin-right: 8px; border: 1px solid #eee; }
-        .item-img-tabla { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; vertical-align: middle; margin-right: 6px; }
-        .item-emoji { font-size: 36px; margin-right: 10px; }
         .btn { padding: 9px 14px; background: #8B6914; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px; }
         .btn:hover { background: #D4AF37; color: #8B6914; }
         .btn-red { background: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #8B6914; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
 
         /* LOGIN */
         .login-view { max-width: 400px; margin: 80px auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .login-view h2 { color: #8B6914; margin-bottom: 25px; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #8B6914; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
         .btn-login { width: 100%; padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
         /* ADMIN */
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .admin-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .admin-section h2 { color: #8B6914; border-bottom: 2px solid #D4AF37; padding-bottom: 8px; margin-bottom: 12px; font-size: 16px; }
-        .item-list { background: #f9f9f9; border-radius: 4px; padding: 8px; max-height: 250px; overflow-y: auto; margin-top: 8px; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .item-list { background: #f9f9f9; border-radius: 4px; padding: 8px; max-height: 280px; overflow-y: auto; margin-top: 8px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 8px; border-bottom: 1px solid #eee; font-size: 13px; gap: 6px; }
 
         /* MESAS */
         .mesas-view { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -57,7 +54,7 @@
         @keyframes glow-blue { 0%,100% { box-shadow: 0 0 5px rgba(52,152,219,0.3); } 50% { box-shadow: 0 0 15px rgba(52,152,219,0.7); } }
         @keyframes glow-red { 0%,100% { box-shadow: 0 0 5px rgba(231,76,60,0.3); } 50% { box-shadow: 0 0 15px rgba(231,76,60,0.7); } }
 
-        /* MODAL */
+        /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; }
         .modal-overlay.show { display: flex; }
         .modal-box { background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); width: 95%; max-width: 700px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
@@ -66,32 +63,24 @@
         .modal-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; font-weight: bold; }
         .modal-body { padding: 0; overflow-y: auto; flex: 1; }
 
-        /* LAYOUT COMANDA: MENÚ + PANEL COMENSAL */
+        /* COMANDA LAYOUT */
         .comanda-layout { display: grid; grid-template-columns: 1fr 200px; height: 100%; }
         .comanda-menu { padding: 15px; overflow-y: auto; max-height: 70vh; border-right: 2px solid #f0f0f0; }
         .comanda-panel { padding: 15px; background: #fafafa; display: flex; flex-direction: column; }
         .comanda-panel h4 { color: #8B6914; font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #D4AF37; padding-bottom: 6px; }
-
-        /* PANEL COMENSAL - aparece cando clicas + */
         .panel-comensal-activo { background: #fff8e1; border: 2px solid #D4AF37; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
         .panel-comensal-activo .produto-nome { font-size: 12px; font-weight: bold; color: #8B6914; margin-bottom: 8px; }
         .nums-comensais { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 8px; }
-        .btn-num { padding: 8px 0; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: bold; color: #333; }
+        .btn-num { padding: 8px 0; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: bold; }
         .btn-num.sel { background: #8B6914; color: white; border-color: #8B6914; }
-        .btn-num:hover { border-color: #8B6914; }
         .btn-confirmar-comensal { width: 100%; padding: 8px; background: #8B6914; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; }
-        .btn-confirmar-comensal:hover { background: #D4AF37; color: #8B6914; }
-
-        /* RESUMO CARRITO NO PANEL */
         .resumo-carrito { flex: 1; overflow-y: auto; }
-        .resumo-item { font-size: 12px; padding: 5px 0; border-bottom: 1px dashed #eee; }
-        .resumo-item .ritem-nome { font-weight: bold; color: #333; }
-        .resumo-item .ritem-comensais { color: #8B6914; }
+        .resumo-item { font-size: 12px; padding: 5px 0; border-bottom: 1px dashed #eee; display: flex; justify-content: space-between; align-items: center; }
         .resumo-total { margin-top: 8px; padding-top: 8px; border-top: 2px solid #8B6914; font-weight: bold; color: #8B6914; display: flex; justify-content: space-between; font-size: 14px; }
         .btn-enviar { width: 100%; padding: 10px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
         .btn-enviar:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* GRUPOS MENÚ */
+        /* MENU */
         .menu-grupo h4 { color: #8B6914; font-size: 13px; border-bottom: 1px solid #D4AF37; padding-bottom: 4px; margin: 12px 0 6px; }
         .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f9f9f9; border-radius: 5px; margin-bottom: 5px; }
         .item-info h5 { font-size: 13px; margin-bottom: 2px; }
@@ -99,9 +88,12 @@
         .item-controls { display: flex; gap: 5px; align-items: center; }
         .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-weight: bold; color: #8B6914; font-size: 14px; }
         .qty-btn:hover { background: #8B6914; color: white; }
-        .qty-show { width: 30px; text-align: center; font-weight: bold; font-size: 14px; color: #333; }
+        .qty-show { width: 30px; text-align: center; font-weight: bold; font-size: 14px; }
+        .item-img { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; margin-right: 10px; border: 1px solid #eee; flex-shrink: 0; }
+        .item-img-small { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; margin-right: 8px; border: 1px solid #eee; flex-shrink: 0; }
+        .item-img-tabla { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; vertical-align: middle; margin-right: 6px; }
 
-        /* ESTADO MESA MODAL */
+        /* ESTADO MESA */
         .comanda-card { background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; overflow: hidden; }
         .comanda-card-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f0f0f0; }
         .status-pill { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; }
@@ -132,12 +124,11 @@
         .orden-badge { display: inline-block; background: #8B6914; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; margin-bottom: 10px; font-size: 13px; }
         .tabla-orden { width: 100%; border-collapse: collapse; font-size: 13px; }
         .tabla-orden th { background: #f0f0f0; color: #8B6914; padding: 8px; text-align: left; border-bottom: 2px solid #D4AF37; }
-        .tabla-orden td { padding: 8px; border-bottom: 1px solid #eee; }
-        .orden-foot { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-top: 2px solid #D4AF37; background: #f9f9f9; }
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .status-pendente { background: #ffe5e5; color: #c0392b; }
-        .status-en-preparacion { background: #fff5e5; color: #e67e22; }
-        .status-lista { background: #e3f2fd; color: #1565c0; }
+        .tabla-orden td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .orden-foot { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-top: 2px solid #D4AF37; background: #f9f9f9; gap: 8px; }
+
+        /* MODAL EDITAR */
+        #modalEditarItem .modal-box { max-width: 400px; }
 
         @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } .mesas-view { grid-template-columns: 1fr; } .stats-bar { grid-template-columns: 1fr; } .comanda-layout { grid-template-columns: 1fr; } }
     </style>
@@ -166,23 +157,17 @@
 
 <!-- MODAL EDITAR ITEM -->
 <div id="modalEditarItem" class="modal-overlay">
-    <div class="modal-box" style="max-width:400px;">
+    <div class="modal-box">
         <div class="modal-header">
             <h3>✏️ Editar Produto</h3>
             <button class="modal-close" onclick="cerrarEditarItem()">✕</button>
         </div>
         <div class="modal-body" style="padding:20px;">
             <input type="hidden" id="editItemId">
+            <div class="form-group"><label>Nome:</label><input type="text" id="editItemNome"></div>
+            <div class="form-group"><label>Precio (€):</label><input type="number" id="editItemPrecio" step="0.01"></div>
             <div class="form-group">
-                <label style="font-weight:600;color:#8B6914;">Nome:</label>
-                <input type="text" id="editItemNome" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;">
-            </div>
-            <div class="form-group">
-                <label style="font-weight:600;color:#8B6914;">Precio (€):</label>
-                <input type="number" id="editItemPrecio" step="0.01" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;">
-            </div>
-            <div class="form-group">
-                <label style="font-weight:600;color:#8B6914;">Imaxe:</label>
+                <label>Imaxe:</label>
                 <div id="editImaxeActual" style="margin-bottom:8px;"></div>
                 <input type="file" id="editImaxeInput" accept="image/*" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;">
             </div>
@@ -231,8 +216,8 @@
                     <div class="form-group"><input type="text" id="nomeItem" placeholder="Nome do item"></div>
                     <div class="form-group"><input type="number" id="precioItem" placeholder="Precio €" step="0.01"></div>
                     <div class="form-group">
-                        <label style="font-weight:600;color:#8B6914;font-size:14px;">Imaxe (opcional):</label>
-                        <input type="file" id="imaxeItem" accept="image/*" style="width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;">
+                        <label>Imaxe (opcional):</label>
+                        <input type="file" id="imaxeItem" accept="image/*">
                         <div id="previewImaxe" style="margin-top:6px;"></div>
                     </div>
                     <button class="btn" onclick="engadirItem()">+ Engadir</button>
@@ -258,14 +243,8 @@
         <!-- CAMARERO -->
         <div id="camareroView" class="hidden">
             <div class="mesas-view">
-                <div class="zona-mesas">
-                    <div class="zona-titulo">🏠 Comedor</div>
-                    <div class="mesas-grid" id="mesasComedor"></div>
-                </div>
-                <div class="zona-mesas">
-                    <div class="zona-titulo">☀️ Terraza</div>
-                    <div class="mesas-grid" id="mesasTerraza"></div>
-                </div>
+                <div class="zona-mesas"><div class="zona-titulo">🏠 Comedor</div><div class="mesas-grid" id="mesasComedor"></div></div>
+                <div class="zona-mesas"><div class="zona-titulo">☀️ Terraza</div><div class="mesas-grid" id="mesasTerraza"></div></div>
             </div>
             <div class="historial-section">
                 <h2>📜 Historial de Pagos</h2>
@@ -286,71 +265,65 @@
 </div>
 
 <script>
+// ─── SUPABASE ─────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://ssdlvuugugpvderhqist.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_qf_-CHKcKgA_Q5TVR6Q6hA_x1XjycQl';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ─── ESTADO ──────────────────────────────────────────────────────
 let currentUser = null, currentRole = null;
-let mesaEnModal = null;
-let carritoModal = {};
-let itemPendenteComensal = null; // item esperando asignación de comensal
-let comensaisSelActual = [];
-
-
-// ─── PERSISTENCIA localStorage ────────────────────────────────────
-const CONFIG_KEY = 'cafeteria_config_v2';
-
-function gardarConfig() {
-    try {
-        localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
-    } catch(e) { console.warn('Non se puido gardar:', e); }
-}
-
-function cargarConfigGardada() {
-    try {
-        const g = localStorage.getItem(CONFIG_KEY);
-        return g ? JSON.parse(g) : null;
-    } catch(e) { return null; }
-}
-
+let itemPendenteComensal = null, comensaisSelActual = [];
+let mesaEnModal = null, carritoModal = {};
 let config = {
-    grupos: [
-        { id: 'g1', nome: 'Bebidas Frías' },
-        { id: 'g2', nome: 'Bebidas Quentes' },
-        { id: 'g3', nome: 'Oferta Salgada' },
-        { id: 'g4', nome: 'Oferta Doce' }
-    ],
-    items: [
-        { id: 'i1', grupoId: 'g1', nombre: 'Zumo de Laranxa', precio: 2.50 },
-        { id: 'i2', grupoId: 'g1', nombre: 'Batido de Fresas', precio: 3.00 },
-        { id: 'i3', grupoId: 'g2', nombre: 'Café Expreso', precio: 1.50 },
-        { id: 'i4', grupoId: 'g2', nombre: 'Café con Leite', precio: 2.00 },
-        { id: 'i5', grupoId: 'g3', nombre: 'Bocadillo de Xaxún', precio: 5.00 },
-        { id: 'i6', grupoId: 'g4', nombre: 'Croissant', precio: 2.50 }
-    ],
-    camareros: [{ nome: 'demo', pass: 'demo' }],
-    adminPass: 'admin',
+    grupos: [], items: [], camareros: [], adminPass: 'admin',
     zonas: { comedor: 5, terraza: 4 }
 };
+let comandasPorMesa = {}, historial = [], numeroOrden = 1;
 
-// Aplicar config gardada se existe
-const _configGardada = cargarConfigGardada();
-if (_configGardada) {
-    config.grupos = _configGardada.grupos || config.grupos;
-    config.items = _configGardada.items || config.items;
-    config.camareros = _configGardada.camareros || config.camareros;
-    config.adminPass = _configGardada.adminPass || config.adminPass;
-    config.zonas = _configGardada.zonas || config.zonas;
+// ─── GARDAR/CARGAR CONFIG EN SUPABASE ────────────────────────────
+async function cargarConfig() {
+    const { data } = await sb.from('config').select('*');
+    if (data && data.length > 0) {
+        data.forEach(row => {
+            if (row.id === 'principal') {
+                config = { ...config, ...row.valor };
+            }
+        });
+    }
 }
 
-let comandasPorMesa = {};
-let historial = [];
-let numeroOrden = 1;
+async function gardarConfig() {
+    await sb.from('config').upsert({ id: 'principal', valor: config });
+}
 
-// LOGIN
+// ─── CARGAR COMANDAS ──────────────────────────────────────────────
+async function cargarComandas() {
+    const { data } = await sb.from('comandas').select('*').not('status', 'eq', 'cobrada');
+    comandasPorMesa = {};
+    if (data) {
+        data.forEach(o => {
+            const key = `${o.zona}-${o.mesa}`;
+            if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
+            comandasPorMesa[key].push(o);
+        });
+        if (data.length > 0) numeroOrden = Math.max(...data.map(o => o.numero)) + 1;
+    }
+}
+
+async function cargarHistorial() {
+    const { data } = await sb.from('historial').select('*').order('created_at', { ascending: false }).limit(50);
+    if (data) historial = data;
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────
 document.getElementById('rolLogin').addEventListener('change', function() {
     document.getElementById('camareroLogin').classList.toggle('hidden', this.value !== 'camarero');
     document.getElementById('adminLogin').classList.toggle('hidden', this.value !== 'admin');
 });
 
-function login() {
+async function login() {
     const rol = document.getElementById('rolLogin').value;
+    await cargarConfig();
     if (rol === 'admin') {
         if (document.getElementById('passAdmin').value !== config.adminPass) { alert('Contrasenal incorrecta'); return; }
         currentUser = 'Admin';
@@ -369,21 +342,19 @@ function login() {
     document.getElementById('adminView').classList.toggle('hidden', rol !== 'admin');
     document.getElementById('camareroView').classList.toggle('hidden', rol !== 'camarero');
     document.getElementById('barraView').classList.toggle('hidden', rol !== 'barra');
+
     if (rol === 'admin') renderAdmin();
-    else if (rol === 'camarero') { try { renderMesas(); setInterval(renderMesas, 2000); } catch(e) { alert('ERRO: ' + e.message); } }
-    else { renderBarra(); setInterval(renderBarra, 1500); }
+    else if (rol === 'camarero') { await cargarComandas(); await cargarHistorial(); renderMesas(); setInterval(async () => { await cargarComandas(); renderMesas(); }, 3000); }
+    else { await cargarComandas(); renderBarra(); setInterval(async () => { await cargarComandas(); renderBarra(); }, 2000); }
 }
 
 function logout() {
-    currentUser = null; currentRole = null;
+    currentUser = null; currentRole = null; carritoModal = {};
     document.getElementById('loginView').classList.remove('hidden');
     document.getElementById('appView').classList.add('hidden');
-    document.getElementById('passAdmin').value = '';
-    document.getElementById('nomeCamarero').value = '';
-    document.getElementById('passCamarero').value = '';
 }
 
-// ADMIN
+// ─── ADMIN ────────────────────────────────────────────────────────
 function renderAdmin() { renderGruposAdmin(); renderItemsAdmin(); renderCamarosAdmin(); renderStatsAdmin(); }
 
 function engadirGrupo() {
@@ -391,11 +362,11 @@ function engadirGrupo() {
     if (!nome) return;
     config.grupos.push({ id: 'g' + Date.now(), nome });
     document.getElementById('nomeGrupo').value = '';
-    renderGruposAdmin(); renderGruposSelect(); renderStatsAdmin(); gardarConfig();
+    gardarConfig(); renderGruposAdmin(); renderGruposSelect(); renderStatsAdmin();
 }
 function renderGruposAdmin() {
     document.getElementById('gruposList').innerHTML = config.grupos.map(g =>
-        `<div class="item-row">${g.nome} <button class="btn-red" onclick="eliminarGrupo('${g.id}')">X</button></div>`).join('');
+        `<div class="item-row">${g.nome} <button class="btn-red" onclick="eliminarGrupo('${g.id}')">X</button></div>`).join('') || '<p style="color:#999;padding:5px;">Sen grupos</p>';
 }
 function renderGruposSelect() {
     document.getElementById('grupoSelect').innerHTML = '<option value="">Grupo...</option>' +
@@ -404,79 +375,55 @@ function renderGruposSelect() {
 function eliminarGrupo(id) {
     config.grupos = config.grupos.filter(g => g.id !== id);
     config.items = config.items.filter(i => i.grupoId !== id);
-    renderGruposAdmin(); renderGruposSelect(); renderItemsAdmin(); renderStatsAdmin(); gardarConfig();
+    gardarConfig(); renderGruposAdmin(); renderGruposSelect(); renderItemsAdmin(); renderStatsAdmin();
 }
+
 function engadirItem() {
     const grupoId = document.getElementById('grupoSelect').value;
     const nombre = document.getElementById('nomeItem').value.trim();
     const precio = parseFloat(document.getElementById('precioItem').value);
     if (!grupoId || !nombre || !precio) return;
-
-    const fileInput = document.getElementById('imaxeItem');
-    const file = fileInput.files[0];
-
+    const file = document.getElementById('imaxeItem').files[0];
     const gardar = (imaxe) => {
         config.items.push({ id: 'i' + Date.now(), grupoId, nombre, precio, imaxe: imaxe || null });
         document.getElementById('nomeItem').value = '';
         document.getElementById('precioItem').value = '';
         document.getElementById('previewImaxe').innerHTML = '';
-        fileInput.value = '';
-        renderItemsAdmin(); renderStatsAdmin(); gardarConfig();
+        document.getElementById('imaxeItem').value = '';
+        gardarConfig(); renderItemsAdmin(); renderStatsAdmin();
     };
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => gardar(e.target.result);
-        reader.readAsDataURL(file);
-    } else {
-        gardar(null);
-    }
+    if (file) { const r = new FileReader(); r.onload = e => gardar(e.target.result); r.readAsDataURL(file); }
+    else gardar(null);
 }
 
-// Preview da imaxe antes de engadir
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('imaxeItem') && document.getElementById('imaxeItem').addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('previewImaxe').innerHTML = 
-                    '<img src="' + e.target.result + '" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;">';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+document.getElementById('imaxeItem').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const r = new FileReader();
+        r.onload = e => { document.getElementById('previewImaxe').innerHTML = '<img src="' + e.target.result + '" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;">'; };
+        r.readAsDataURL(file);
+    }
 });
+
 function renderItemsAdmin() {
     let html = '';
     config.grupos.forEach(g => {
         const items = config.items.filter(i => i.grupoId === g.id);
         if (items.length) {
             html += `<div style="font-weight:bold;color:#8B6914;padding:5px 0 2px;">${g.nome}</div>`;
-            html += items.map(i => `<div class="item-row" style="gap:6px;">
-    ${i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-small" style="flex-shrink:0;">' : '<span style="font-size:22px;flex-shrink:0;">🍽️</span>'}
-    <span style="flex:1;font-size:13px;">${i.nombre} — €${i.precio.toFixed(2)}</span>
-    <div style="display:flex;gap:4px;flex-shrink:0;">
-        <button onclick="abrirEditarItem('${i.id}')" style="padding:4px 8px;background:#D4AF37;color:#8B6914;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;">✏️</button>
-        <button class="btn-red" onclick="eliminarItem('${i.id}')">X</button>
-    </div>
-</div>`).join('');
+            html += items.map(i => `<div class="item-row">
+                ${i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-small">' : '<span style="font-size:22px;flex-shrink:0;">🍽️</span>'}
+                <span style="flex:1;">${i.nombre} — €${i.precio.toFixed(2)}</span>
+                <div style="display:flex;gap:4px;">
+                    <button onclick="abrirEditarItem('${i.id}')" style="padding:4px 8px;background:#D4AF37;color:#8B6914;border:none;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold;">✏️</button>
+                    <button class="btn-red" onclick="eliminarItem('${i.id}')">X</button>
+                </div>
+            </div>`).join('');
         }
     });
     document.getElementById('itemsListAdmin').innerHTML = html || '<p style="color:#999;padding:5px;">Sen items</p>';
 }
-function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); renderItemsAdmin(); renderStatsAdmin(); gardarConfig(); }
-
-function cambiarImaxeItem(id, input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const item = config.items.find(i => i.id === id);
-        if (item) { item.imaxe = e.target.result; renderItemsAdmin(); gardarConfig(); }
-    };
-    reader.readAsDataURL(file);
-}
+function eliminarItem(id) { config.items = config.items.filter(i => i.id !== id); gardarConfig(); renderItemsAdmin(); renderStatsAdmin(); }
 
 function abrirEditarItem(id) {
     const item = config.items.find(i => i.id === id);
@@ -485,44 +432,29 @@ function abrirEditarItem(id) {
     document.getElementById('editItemNome').value = item.nombre;
     document.getElementById('editItemPrecio').value = item.precio;
     document.getElementById('editImaxeActual').innerHTML = item.imaxe
-        ? `<img src="${item.imaxe}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;"><p style="font-size:11px;color:#999;margin-top:4px;">Imaxe actual</p>`
+        ? '<img src="' + item.imaxe + '" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #D4AF37;"><p style="font-size:11px;color:#999;margin-top:4px;">Imaxe actual</p>'
         : '<p style="font-size:12px;color:#999;">Sen imaxe</p>';
     document.getElementById('editImaxeInput').value = '';
     document.getElementById('modalEditarItem').classList.add('show');
 }
-
-function cerrarEditarItem() {
-    document.getElementById('modalEditarItem').classList.remove('show');
-}
-
+function cerrarEditarItem() { document.getElementById('modalEditarItem').classList.remove('show'); }
 function gardarEdicionItem() {
     const id = document.getElementById('editItemId').value;
     const nome = document.getElementById('editItemNome').value.trim();
     const precio = parseFloat(document.getElementById('editItemPrecio').value);
-    if (!nome || !precio) { alert('Enche todos os campos'); return; }
-
-    const fileInput = document.getElementById('editImaxeInput');
-    const file = fileInput.files[0];
+    if (!nome || !precio) { alert('Enche os campos'); return; }
+    const file = document.getElementById('editImaxeInput').files[0];
     const item = config.items.find(i => i.id === id);
     if (!item) return;
-
     const aplicar = (imaxe) => {
-        item.nombre = nome;
-        item.precio = precio;
+        item.nombre = nome; item.precio = precio;
         if (imaxe) item.imaxe = imaxe;
-        cerrarEditarItem();
-        renderItemsAdmin();
-        gardarConfig();
+        cerrarEditarItem(); gardarConfig(); renderItemsAdmin();
     };
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => aplicar(e.target.result);
-        reader.readAsDataURL(file);
-    } else {
-        aplicar(null);
-    }
+    if (file) { const r = new FileReader(); r.onload = e => aplicar(e.target.result); r.readAsDataURL(file); }
+    else aplicar(null);
 }
+
 function engadirCamarero() {
     const nome = document.getElementById('nomeCamareroAdmin').value.trim();
     const pass = document.getElementById('passCamareroAdmin').value;
@@ -530,16 +462,13 @@ function engadirCamarero() {
     config.camareros.push({ nome, pass });
     document.getElementById('nomeCamareroAdmin').value = '';
     document.getElementById('passCamareroAdmin').value = '';
-    renderCamarosAdmin(); renderStatsAdmin(); gardarConfig();
+    gardarConfig(); renderCamarosAdmin(); renderStatsAdmin();
 }
 function renderCamarosAdmin() {
     document.getElementById('camarosList').innerHTML = config.camareros.map(c =>
         `<div class="item-row">${c.nome} <button class="btn-red" onclick="eliminarCamarero('${c.nome}')">X</button></div>`).join('');
 }
-function eliminarCamarero(nome) {
-    config.camareros = config.camareros.filter(c => c.nome !== nome);
-    renderCamarosAdmin(); renderStatsAdmin(); gardarConfig();
-}
+function eliminarCamarero(nome) { config.camareros = config.camareros.filter(c => c.nome !== nome); gardarConfig(); renderCamarosAdmin(); renderStatsAdmin(); }
 function renderStatsAdmin() {
     document.getElementById('stGrupos').textContent = config.grupos.length;
     document.getElementById('stItems').textContent = config.items.length;
@@ -547,7 +476,7 @@ function renderStatsAdmin() {
     document.getElementById('stComandas').textContent = Object.values(comandasPorMesa).flat().length;
 }
 
-// MESAS
+// ─── MESAS ────────────────────────────────────────────────────────
 function getMesaKey(zona, num) { return `${zona}-${num}`; }
 function getEstadoMesa(zona, num) {
     const comandas = comandasPorMesa[getMesaKey(zona, num)] || [];
@@ -581,12 +510,10 @@ function renderZona(zona, total, containerId) {
     container.innerHTML = html;
 }
 
-// MODAL MESA
+// ─── MODAL MESA ───────────────────────────────────────────────────
 function abrirModalMesa(zona, num) {
-    mesaEnModal = { zona, num };
-    carritoModal = {};
-    itemPendenteComensal = null;
-    comensaisSelActual = [];
+    mesaEnModal = { zona, num }; carritoModal = {};
+    itemPendenteComensal = null; comensaisSelActual = [];
     const nomeZona = zona === 'comedor' ? 'Comedor' : 'Terraza';
     document.getElementById('modalMesaTitulo').textContent = `${nomeZona} — Mesa ${num}`;
     const estado = getEstadoMesa(zona, num);
@@ -594,13 +521,8 @@ function abrirModalMesa(zona, num) {
     else renderModalEstadoMesa(getMesaKey(zona, num), estado);
     document.getElementById('modalMesa').classList.add('show');
 }
+function cerrarModalMesa() { document.getElementById('modalMesa').classList.remove('show'); mesaEnModal = null; carritoModal = {}; }
 
-function cerrarModalMesa() {
-    document.getElementById('modalMesa').classList.remove('show');
-    mesaEnModal = null; carritoModal = {}; itemPendenteComensal = null; comensaisSelActual = [];
-}
-
-// ── NOVA COMANDA con panel lateral de comensais ──
 function renderModalNovaComanda() {
     let menuHtml = '<h4 style="color:#8B6914;margin-bottom:10px;">🛒 Nova Comanda</h4>';
     config.grupos.forEach(grupo => {
@@ -608,20 +530,23 @@ function renderModalNovaComanda() {
         if (!items.length) return;
         menuHtml += `<div class="menu-grupo"><h4>${grupo.nome}</h4>`;
         items.forEach(item => {
-            menuHtml += `
-                <div class="menu-item" id="mitem-${item.id}">
+            const imgHtml = item.imaxe ? '<img src="' + item.imaxe + '" class="item-img">' : '<span style="font-size:36px;margin-right:10px;">🍽️</span>';
+            menuHtml += `<div class="menu-item" id="mitem-${item.id}">
+                <div style="display:flex;align-items:center;flex:1;">
+                    ${imgHtml}
                     <div class="item-info"><h5>${item.nombre}</h5><span>€${item.precio.toFixed(2)}</span></div>
-                    <div class="item-controls">
-                        <button class="qty-btn" onclick="cambiarCantModal('${item.id}', -1)">−</button>
-                        <span class="qty-show" id="mq-${item.id}">0</span>
-                        <button class="qty-btn" onclick="cambiarCantModal('${item.id}', 1)">+</button>
-                    </div>
-                </div>`;
+                </div>
+                <div class="item-controls" style="margin-left:8px;">
+                    <button class="qty-btn" onclick="cambiarCantModal('${item.id}', '${item.nombre}', -1)">−</button>
+                    <span class="qty-show" id="mq-${item.id}">0</span>
+                    <button class="qty-btn" onclick="cambiarCantModal('${item.id}', '${item.nombre}', 1)">+</button>
+                </div>
+            </div>`;
         });
         menuHtml += '</div>';
     });
 
-    const html = `
+    document.getElementById('modalMesaBody').innerHTML = `
         <div class="comanda-layout">
             <div class="comanda-menu">${menuHtml}</div>
             <div class="comanda-panel">
@@ -633,21 +558,17 @@ function renderModalNovaComanda() {
                 <button class="btn-enviar" id="btnEnviarComanda" onclick="enviarComandaMesa()" disabled>📤 Enviar</button>
             </div>
         </div>`;
-    document.getElementById('modalMesaBody').innerHTML = html;
 }
 
-function cambiarCantModal(itemId, delta) {
+function cambiarCantModal(itemId, itemNombre, delta) {
     const item = config.items.find(i => i.id === itemId);
     const actual = carritoModal[itemId] ? carritoModal[itemId].cantidad : 0;
     const nova = Math.max(0, actual + delta);
-
     if (nova > actual) {
-        // Engadir unidade - pedir comensal no panel lateral
         itemPendenteComensal = { itemId, itemNombre: item.nombre, nova };
         comensaisSelActual = [];
         renderPanelComensal();
     } else {
-        // Quitar unidade
         if (carritoModal[itemId]) {
             carritoModal[itemId].cantidad = nova;
             carritoModal[itemId].comensais = carritoModal[itemId].comensais.slice(0, nova);
@@ -661,48 +582,33 @@ function cambiarCantModal(itemId, delta) {
 function renderPanelComensal() {
     const panel = document.getElementById('panelComensalActivo');
     if (!panel || !itemPendenteComensal) return;
-
     let html = `<div class="panel-comensal-activo">
         <div class="produto-nome">+ ${itemPendenteComensal.itemNombre}</div>
         <div class="nums-comensais">`;
     for (let i = 1; i <= 10; i++) {
-        const sel = comensaisSelActual.includes(i) ? 'sel' : '';
-        html += `<button class="btn-num ${sel}" onclick="toggleNumComensal(${i})">${i}</button>`;
+        html += `<button class="btn-num ${comensaisSelActual.includes(i) ? 'sel' : ''}" onclick="toggleNumComensal(${i})">${i}</button>`;
     }
-    html += `</div>
-        <button class="btn-confirmar-comensal" onclick="confirmarComensalPanel()">✅ Confirmar</button>
-    </div>`;
+    html += `</div><button class="btn-confirmar-comensal" onclick="confirmarComensalPanel()">✅ Confirmar</button></div>`;
     panel.innerHTML = html;
 }
 
 function toggleNumComensal(n) {
-    if (comensaisSelActual.includes(n)) {
-        comensaisSelActual = comensaisSelActual.filter(c => c !== n);
-    } else {
-        comensaisSelActual.push(n);
-    }
+    if (comensaisSelActual.includes(n)) comensaisSelActual = comensaisSelActual.filter(c => c !== n);
+    else comensaisSelActual.push(n);
     renderPanelComensal();
 }
 
 function confirmarComensalPanel() {
-    if (!comensaisSelActual.length) { alert('Selecciona polo menos un comensal'); return; }
+    if (!comensaisSelActual.length) { alert('Selecciona un comensal'); return; }
     const { itemId, nova } = itemPendenteComensal;
     const item = config.items.find(i => i.id === itemId);
-
-    if (!carritoModal[itemId]) {
-        carritoModal[itemId] = { ...item, cantidad: 0, comensais: [] };
-    }
+    if (!carritoModal[itemId]) carritoModal[itemId] = { ...item, cantidad: 0, comensais: [] };
     carritoModal[itemId].cantidad = nova;
     carritoModal[itemId].comensais.push(...comensaisSelActual);
-
     document.getElementById(`mq-${itemId}`).textContent = nova;
-    itemPendenteComensal = null;
-    comensaisSelActual = [];
-
-    // Limpar panel
+    itemPendenteComensal = null; comensaisSelActual = [];
     const panel = document.getElementById('panelComensalActivo');
     if (panel) panel.innerHTML = '<span style="color:#999;font-size:12px;font-style:italic;">Clica + nun produto</span>';
-
     renderResumoCarrito();
 }
 
@@ -712,22 +618,18 @@ function renderResumoCarrito() {
     const totalEl = document.getElementById('totalCarrito');
     const btn = document.getElementById('btnEnviarComanda');
     if (!resumo) return;
-
     if (!items.length) {
         resumo.innerHTML = '<p style="color:#999;font-size:12px;">Sen items</p>';
         if (totalEl) totalEl.innerHTML = '';
         if (btn) btn.disabled = true;
         return;
     }
-
     const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
     resumo.innerHTML = items.map(i => `
-        <div class="resumo-item" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #eee;">
-            <div>
-                <div class="ritem-nome">${i.cantidad}x ${i.nombre}</div>
-                <div class="ritem-comensais">👤 ${(i.comensais || []).join(', ')}</div>
-            </div>
-            <button onclick="eliminarItemCarrito('${i.id}')" style="background:#e74c3c;color:white;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:12px;font-weight:bold;flex-shrink:0;">✕</button>
+        <div class="resumo-item">
+            <div><div style="font-weight:bold;font-size:12px;">${i.cantidad}x ${i.nombre}</div>
+            <div style="color:#8B6914;font-size:11px;">👤 ${(i.comensais||[]).join(', ')}</div></div>
+            <button onclick="eliminarItemCarrito('${i.id}')" style="background:#e74c3c;color:white;border:none;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:11px;">✕</button>
         </div>`).join('');
     if (totalEl) totalEl.innerHTML = `<div class="resumo-total"><span>Total:</span><span>€${total.toFixed(2)}</span></div>`;
     if (btn) btn.disabled = false;
@@ -736,206 +638,163 @@ function renderResumoCarrito() {
 function eliminarItemCarrito(itemId) {
     if (carritoModal[itemId]) {
         delete carritoModal[itemId];
-        const input = document.querySelector(`#mq-${itemId}`);
-        if (input) input.textContent = '0';
+        const el = document.getElementById(`mq-${itemId}`);
+        if (el) el.textContent = '0';
         renderResumoCarrito();
     }
 }
 
-function enviarComandaMesa() {
+async function enviarComandaMesa() {
     if (!mesaEnModal) return;
     const { zona, num } = mesaEnModal;
-    const key = getMesaKey(zona, num);
     const items = Object.values(carritoModal).filter(i => i.cantidad > 0);
     if (!items.length) return;
-
-    const orden = {
-        numero: numeroOrden++,
-        camarero: currentUser,
-        zona, mesa: num,
-        items: items.map(i => ({ ...i })),
-        timestamp: Date.now(),
-        status: 'pendente',
-        total: items.reduce((s, i) => s + i.precio * i.cantidad, 0)
-    };
-
-    if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
-    comandasPorMesa[key].push(orden);
+    const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const orden = { numero: numeroOrden++, camarero: currentUser, zona, mesa: num, items, status: 'pendente', total };
+    const { data } = await sb.from('comandas').insert(orden).select().single();
+    if (data) {
+        const key = getMesaKey(zona, num);
+        if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
+        comandasPorMesa[key].push(data);
+    }
     carritoModal = {};
     cerrarModalMesa();
     renderMesas();
 }
 
-// ESTADO MESA
 function renderModalEstadoMesa(key, estado) {
     const comandas = comandasPorMesa[key] || [];
     const total = comandas.reduce((s, o) => s + o.total, 0);
     let html = '<div style="padding:15px;">';
-
     if (estado === 'pago') {
         html += `<div style="background:#fff5f5;border:2px solid #e74c3c;border-radius:8px;padding:15px;margin-bottom:15px;text-align:center;">
-            <div style="font-size:22px;margin-bottom:5px;">💳</div>
+            <div style="font-size:22px;">💳</div>
             <div style="font-weight:bold;color:#e74c3c;font-size:16px;">TOTAL A PAGAR</div>
-            <div style="font-size:26px;font-weight:bold;color:#27ae60;margin:8px 0;">€${total.toFixed(2)}</div>
+            <div style="font-size:26px;font-weight:bold;color:#27ae60;">€${total.toFixed(2)}</div>
         </div>`;
     }
-
     html += '<h4 style="color:#8B6914;margin-bottom:10px;">Comandas desta mesa:</h4>';
     comandas.forEach(orden => {
         const pillClass = orden.status === 'pendente' ? 'pill-pendente' : orden.status === 'en-preparacion' ? 'pill-preparando' : 'pill-lista';
         const statusLabel = orden.status === 'pendente' ? '⏳ Pendente' : orden.status === 'en-preparacion' ? '👨‍🍳 Preparando' : '✅ Lista!';
         html += `<div class="comanda-card">
             <div class="comanda-card-header">
-                <span style="font-weight:bold;font-size:13px;">Comanda #${orden.numero}</span>
+                <span style="font-weight:bold;">#${orden.numero}</span>
                 <span class="status-pill ${pillClass}">${statusLabel}</span>
             </div>
             <div style="padding:8px;">
                 <table class="tabla-mini">
-                    <thead><tr><th>Rac.</th><th>Producto</th><th>Comensal</th></tr></thead>
-                    <tbody>
-                        ${orden.items.map(i => {
-    const imgHtml = i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-tabla">' : '';
-    return '<tr><td style="text-align:center;font-weight:bold;">' + i.cantidad + '</td><td>' + imgHtml + i.nombre + '</td><td>' + ((i.comensais||[]).join(', ')||'-') + '</td></tr>';
-}).join('')}
-                    </tbody>
+                    <thead><tr><th>Rac.</th><th>Produto</th><th>Comensal</th></tr></thead>
+                    <tbody>${(orden.items||[]).map(i => {
+                        const imgHtml = i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-tabla">' : '';
+                        return '<tr><td style="text-align:center;font-weight:bold;">' + i.cantidad + '</td><td>' + imgHtml + i.nombre + '</td><td>' + ((i.comensais||[]).join(', ')||'-') + '</td></tr>';
+                    }).join('')}</tbody>
                 </table>
-                <div style="text-align:right;padding-top:5px;font-weight:bold;color:#27ae60;font-size:13px;">€${orden.total.toFixed(2)}</div>
+                <div style="text-align:right;padding-top:5px;font-weight:bold;color:#27ae60;">€${Number(orden.total).toFixed(2)}</div>
             </div>
         </div>`;
     });
-
     html += `<button onclick="abrirNovaComandaEnMesa('${key}')" style="width:100%;padding:9px;background:#f0f0f0;border:1px dashed #8B6914;border-radius:6px;cursor:pointer;color:#8B6914;font-weight:bold;margin-bottom:10px;">+ Engadir nova comanda</button>`;
-
-    if (estado !== 'libre') {
-        html += `<button class="btn-pago" onclick="pedirPago('${key}')">💳 Pedir o Pago — €${total.toFixed(2)}</button>`;
-    }
-    if (estado === 'pago') {
-        html += `<button class="btn-cobrado" onclick="cobrarMesa('${key}')">✅ Cobrado! Pechar Mesa</button>`;
-    }
-
+    if (estado !== 'libre') html += `<button class="btn-pago" onclick="pedirPago('${key}')">💳 Pedir o Pago — €${total.toFixed(2)}</button>`;
+    if (estado === 'pago') html += `<button class="btn-cobrado" onclick="cobrarMesa('${key}')">✅ Cobrado! Pechar Mesa</button>`;
     html += '</div>';
     document.getElementById('modalMesaBody').innerHTML = html;
 }
 
-function abrirNovaComandaEnMesa(key) {
-    carritoModal = {};
-    itemPendenteComensal = null;
-    comensaisSelActual = [];
-    renderModalNovaComanda();
-}
+function abrirNovaComandaEnMesa(key) { carritoModal = {}; itemPendenteComensal = null; comensaisSelActual = []; renderModalNovaComanda(); }
 
-function pedirPago(key) {
+async function pedirPago(key) {
     const comandas = comandasPorMesa[key] || [];
-    comandas.forEach(o => { if (!['servida','pago'].includes(o.status)) o.status = 'pago'; });
+    for (const o of comandas) {
+        if (!['pago','cobrada'].includes(o.status)) {
+            o.status = 'pago';
+            await sb.from('comandas').update({ status: 'pago' }).eq('id', o.id);
+        }
+    }
     renderModalEstadoMesa(key, 'pago');
     renderMesas();
 }
 
-function cobrarMesa(key) {
+async function cobrarMesa(key) {
     const comandas = comandasPorMesa[key] || [];
-    const total = comandas.reduce((s, o) => s + o.total, 0);
+    const total = comandas.reduce((s, o) => s + Number(o.total), 0);
     const parts = key.split('-');
     const zona = parts[0], mesa = parts[1];
     const fecha = new Date().toLocaleDateString('gl-ES');
     const hora = new Date().toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit' });
-    historial.unshift({ key, zona, mesa, total, numComandas: comandas.length, camarero: currentUser, fecha, hora });
+    for (const o of comandas) await sb.from('comandas').update({ status: 'cobrada' }).eq('id', o.id);
+    await sb.from('historial').insert({ zona, mesa, total, camarero: currentUser, fecha, hora });
     delete comandasPorMesa[key];
+    await cargarHistorial();
     cerrarModalMesa();
     renderMesas();
 }
 
 function renderHistorial() {
     const container = document.getElementById('historialContainer');
-    if (!historial.length) {
-        container.innerHTML = '<p style="color:#999;text-align:center;padding:20px;font-style:italic;">Sen rexistros</p>';
-        return;
-    }
+    if (!historial.length) { container.innerHTML = '<p style="color:#999;text-align:center;padding:20px;font-style:italic;">Sen rexistros</p>'; return; }
     container.innerHTML = historial.map(h => `
         <div class="historial-item">
-            <div>
-                <span style="font-weight:bold;color:#8B6914;">${h.zona === 'comedor' ? '🏠' : '☀️'} ${h.zona.charAt(0).toUpperCase()+h.zona.slice(1)} Mesa ${h.mesa}</span>
-                <span style="color:#999;font-size:12px;margin-left:10px;">${h.fecha} ${h.hora} — ${h.camarero}</span>
-            </div>
-            <span class="historial-total">€${h.total.toFixed(2)}</span>
+            <div><span style="font-weight:bold;color:#8B6914;">${h.zona === 'comedor' ? '🏠' : '☀️'} ${h.zona} Mesa ${h.mesa}</span>
+            <span style="color:#999;font-size:12px;margin-left:10px;">${h.fecha} ${h.hora} — ${h.camarero}</span></div>
+            <span class="historial-total">€${Number(h.total).toFixed(2)}</span>
         </div>`).join('');
 }
 
-// BARRA
+// ─── BARRA ────────────────────────────────────────────────────────
 function renderBarra() {
-    const todas = Object.values(comandasPorMesa).flat().filter(o => !['pago','servida'].includes(o.status));
+    const todas = Object.values(comandasPorMesa).flat().filter(o => !['pago','cobrada'].includes(o.status));
     document.getElementById('stPendentes').textContent = todas.filter(o => o.status === 'pendente').length;
     document.getElementById('stPreparacion').textContent = todas.filter(o => o.status === 'en-preparacion').length;
     document.getElementById('stListas').textContent = todas.filter(o => o.status === 'lista').length;
-
     const container = document.getElementById('ordenesContainer');
-    if (!todas.length) {
-        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#8B6914;">⏳ Esperando comandas...</div>';
-        return;
-    }
+    if (!todas.length) { container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#8B6914;">⏳ Esperando comandas...</div>'; return; }
     container.innerHTML = todas.map(orden => {
-        const fecha = new Date(orden.timestamp).toLocaleDateString('gl-ES');
-        const nomeZona = orden.zona === 'comedor' ? 'COMEDOR' : 'TERRAZA';
-        const statusLabel = orden.status === 'pendente' ? '⏳ PENDENTE' : orden.status === 'en-preparacion' ? '👨‍🍳 PREPARANDO' : '✅ LISTA';
-        const statusClass = orden.status === 'pendente' ? 'status-pendente' : orden.status === 'en-preparacion' ? 'status-en-preparacion' : 'status-lista';
+        const fecha = new Date(orden.created_at).toLocaleDateString('gl-ES');
         return `<div class="orden-card">
-            <div class="orden-head"><div>${nomeZona}</div><div>${fecha}</div><div>🪑 Mesa ${orden.mesa}</div></div>
+            <div class="orden-head">
+                <div>${orden.zona.toUpperCase()}</div>
+                <div>${fecha}</div>
+                <div>🪑 Mesa ${orden.mesa}</div>
+            </div>
             <div class="orden-body">
                 <div class="orden-badge">Comanda #${orden.numero}</div>
                 <table class="tabla-orden">
-                    <thead><tr><th style="width:15%;text-align:center;">Rac.</th><th style="width:55%;">Producto</th><th>Comensal</th></tr></thead>
-                    <tbody>${orden.items.map(i => `<tr>
-    <td style="text-align:center;font-weight:bold;">${i.cantidad}</td>
-    <td>${i.imaxe ? `<img src="${i.imaxe}" class="item-img-tabla">` : ''}${i.nombre}</td>
-    <td>${(i.comensais||[]).join(', ')||'-'}</td>
-</tr>`).join('')}</tbody>
+                    <thead><tr><th style="width:12%;text-align:center;">Rac.</th><th style="width:58%;">Produto</th><th>Comensal</th></tr></thead>
+                    <tbody>${(orden.items||[]).map(i => {
+                        const imgHtml = i.imaxe ? '<img src="' + i.imaxe + '" class="item-img-tabla">' : '';
+                        return '<tr><td style="text-align:center;font-weight:bold;">' + i.cantidad + '</td><td>' + imgHtml + i.nombre + '</td><td>' + ((i.comensais||[]).join(', ')||'-') + '</td></tr>';
+                    }).join('')}</tbody>
                 </table>
             </div>
             <div class="orden-foot">
                 <span style="font-size:13px;">👨‍💼 ${orden.camarero}</span>
-                <div style="display:flex;gap:8px;">
-                    <button onclick="ponerPreparando(${orden.numero})" 
-                        style="padding:10px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:13px;
-                        background:${orden.status==='en-preparacion'?'#e67e22':'#fff5e5'};
-                        color:${orden.status==='en-preparacion'?'white':'#e67e22'};
-                        opacity:${orden.status==='lista'?'0.4':'1'};">
-                        👨‍🍳 Preparando
-                    </button>
-                    <button onclick="ponerLista(${orden.numero})"
-                        style="padding:10px 14px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:13px;
-                        background:${orden.status==='lista'?'#27ae60':'#e8f8f5'};
-                        color:${orden.status==='lista'?'white':'#27ae60'};">
-                        ✅ Lista!
-                    </button>
+                <div style="display:flex;gap:6px;">
+                    <button onclick="ponerPreparando(${orden.id})" style="padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;background:${orden.status==='en-preparacion'?'#e67e22':'#fff5e5'};color:${orden.status==='en-preparacion'?'white':'#e67e22'};">👨‍🍳 Preparando</button>
+                    <button onclick="ponerLista(${orden.id})" style="padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;background:${orden.status==='lista'?'#27ae60':'#e8f8f5'};color:${orden.status==='lista'?'white':'#27ae60'};">✅ Lista!</button>
                 </div>
-                <span style="font-weight:bold;color:#27ae60;">€${orden.total.toFixed(2)}</span>
+                <span style="font-weight:bold;color:#27ae60;">€${Number(orden.total).toFixed(2)}</span>
             </div>
         </div>`;
     }).join('');
 }
 
-function cambiarStatusBarra(num) {
-    const estados = ['pendente', 'en-preparacion', 'lista'];
+async function ponerPreparando(id) {
+    await sb.from('comandas').update({ status: 'en-preparacion' }).eq('id', id);
     for (const comandas of Object.values(comandasPorMesa)) {
-        const o = comandas.find(c => c.numero === num);
-        if (o && estados.includes(o.status)) {
-            o.status = estados[(estados.indexOf(o.status) + 1) % estados.length];
-            break;
-        }
-    }
-}
-
-function ponerPreparando(num) {
-    for (const comandas of Object.values(comandasPorMesa)) {
-        const o = comandas.find(c => c.numero === num);
+        const o = comandas.find(c => c.id === id);
         if (o) { o.status = 'en-preparacion'; break; }
     }
+    renderBarra();
 }
 
-function ponerLista(num) {
+async function ponerLista(id) {
+    await sb.from('comandas').update({ status: 'lista' }).eq('id', id);
     for (const comandas of Object.values(comandasPorMesa)) {
-        const o = comandas.find(c => c.numero === num);
+        const o = comandas.find(c => c.id === id);
         if (o) { o.status = 'lista'; break; }
     }
+    renderBarra();
 }
 </script>
 </body>
