@@ -322,8 +322,12 @@ function actualizarFormularioLogin() {
     document.getElementById('adminLogin').classList.toggle('hidden', rol !== 'admin');
 }
 
-// Ejecutar al cargar la página (para mostrar admin por defecto)
-document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
+// Ejecutar cuando el DOM está listo (muestra Admin por defecto)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
+} else {
+    actualizarFormularioLogin();
+}
 
 // También ejecutar cuando cambia el rol
 document.getElementById('rolLogin').addEventListener('change', actualizarFormularioLogin);
