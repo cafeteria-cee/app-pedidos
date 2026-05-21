@@ -1,16 +1,816 @@
--- Crear tabla camareros
-CREATE TABLE IF NOT EXISTS camareros (
-    id BIGSERIAL PRIMARY KEY,
-    nombre TEXT NOT NULL UNIQUE,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Cafetería - Accessibilidad</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 10px; }
+        .header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .header h1 { font-size: 28px; }
+        .logout-btn { background: rgba(255,255,255,0.3); color: white; border: 2px solid white; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .hidden { display: none !important; }
+        .btn { padding: 12px 20px; background: #8B6914; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s; }
+        .btn:hover { background: #D4AF37; color: #8B6914; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn-lg { font-size: 18px; padding: 15px 25px; }
+        .btn-red { background: #e74c3c; color: white; }
+        .btn-green { background: #27ae60; color: white; }
+        .btn-orange { background: #e67e22; color: white; }
+        .btn-small { padding: 6px 12px; font-size: 12px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #8B6914; font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus { border-color: #D4AF37; outline: none; }
+        .login-view { max-width: 450px; margin: 60px auto; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+        .login-view h2 { color: #8B6914; margin-bottom: 30px; text-align: center; font-size: 28px; }
+        .btn-login { width: 100%; padding: 15px; background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .section { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .section h2 { color: #8B6914; border-bottom: 3px solid #D4AF37; padding-bottom: 12px; margin-bottom: 20px; font-size: 20px; }
+        .item-card { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 12px; display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+        .item-card img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; }
+        .item-info { flex: 1; }
+        .item-actions { display: flex; gap: 8px; }
+        .btn-edit { background: #D4AF37; color: #8B6914; font-weight: bold; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-box { background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); width: 95%; max-width: 900px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { background: linear-gradient(135deg, #8B6914 0%, #D4AF37 100%); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0; }
+        .modal-header h3 { font-size: 22px; }
+        .modal-close { background: none; border: none; color: white; font-size: 28px; cursor: pointer; }
+        .modal-body { padding: 25px; }
+        .grid-imagenes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-height: 300px; overflow-y: auto; border: 2px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+        .img-item { cursor: pointer; border: 3px solid #ddd; border-radius: 10px; padding: 10px; text-align: center; background: white; transition: all 0.3s; }
+        .img-item:hover { border-color: #D4AF37; transform: scale(1.05); }
+        .img-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; display: block; margin: auto; }
+        .img-item p { font-size: 11px; margin-top: 6px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .preview-img { max-width: 150px; max-height: 150px; border-radius: 8px; border: 3px solid #D4AF37; margin: 15px auto; display: block; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; border-left: 5px solid #8B6914; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .stat-card h3 { font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 10px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #8B6914; }
+        .mesas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+        .mesa-btn { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px solid #ddd; border-radius: 10px; background: white; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.3s; padding: 10px; }
+        .mesa-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+        .mesa-btn.libre { border-color: #27ae60; background: #f0fff4; color: #27ae60; }
+        .mesa-btn.ocupada { border-color: #f39c12; background: #fffbf0; color: #f39c12; }
+        .mesa-btn.lista { border-color: #3498db; background: #f0f8ff; color: #3498db; animation: glow-blue 1.5s infinite; }
+        .mesa-btn.pago { border-color: #e74c3c; background: #fff5f5; color: #e74c3c; animation: glow-red 1.5s infinite; }
+        @keyframes glow-blue { 0%,100% { box-shadow: 0 0 0 0 rgba(52,152,219,0.3); } 50% { box-shadow: 0 0 20px rgba(52,152,219,0.7); } }
+        @keyframes glow-red { 0%,100% { box-shadow: 0 0 0 0 rgba(231,76,60,0.3); } 50% { box-shadow: 0 0 20px rgba(231,76,60,0.7); } }
+        .orden-card { background: #f9f9f9; border: 2px solid #D4AF37; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .orden-header { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-bottom: 10px; border-bottom: 2px solid #D4AF37; margin-bottom: 10px; font-weight: bold; }
+        .orden-item { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .orden-status { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-pendiente { background: #ffe5e5; color: #c0392b; }
+        .status-preparando { background: #fff5e5; color: #e67e22; }
+        .status-lista { background: #e3f2fd; color: #1565c0; }
+        .status-pago { background: #ffe5e5; color: #c0392b; }
+        .producto-card { border: 2px solid #ddd; border-radius: 10px; padding: 12px; background: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; text-align: center; }
+        .producto-card:hover { border-color: #D4AF37; transform: scale(1.05); box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3); }
+        .producto-card img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
+        .producto-card-nome { font-size: 13px; font-weight: bold; }
+        .producto-card-precio { color: #8B6914; font-weight: bold; }
+        .carrito-item { display: grid; grid-template-columns: 50px 1fr auto auto auto; gap: 8px; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .carrito-item img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .carrito-info { font-size: 13px; }
+        .carrito-info small { color: #666; }
+        .btn-comensal { width: 35px; height: 35px; border: 2px solid #ddd; background: white; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .btn-comensal:hover { border-color: #8B6914; }
+        .btn-comensal.selected { border-color: #8B6914; background: #8B6914; color: white; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
 
--- Desactivar RLS
-ALTER TABLE camareros DISABLE ROW LEVEL SECURITY;
+<!-- LOGIN -->
+<div id="loginView" class="login-view">
+    <h2>☕ App Cafetería</h2>
+    <p style="text-align:center;color:#666;margin-bottom:20px;">Accesible para niños con discapacidad</p>
+    <div class="form-group">
+        <label>Rol:</label>
+        <select id="rolLogin">
+            <option value="admin">👨‍💼 Admin</option>
+            <option value="camarero">🧑‍💻 Camarero</option>
+            <option value="barra">👨‍🍳 Barra/Cociña</option>
+        </select>
+    </div>
+    <div id="camareroLogin" class="hidden">
+        <div class="form-group"><label>Nome:</label><input type="text" id="nomeCamarero" placeholder="Tu nombre"></div>
+    </div>
+    <div id="adminLogin" class="hidden">
+        <div class="form-group"><label>Contrasenal Admin:</label><input type="password" id="passAdmin" placeholder="admin123"></div>
+    </div>
+    <button class="btn-login">Entrar</button>
+</div>
 
--- Insertar los camareros que tenías antes (ajusta los nombres)
-INSERT INTO camareros (nombre) VALUES 
-('Ana'),
-('Carlos'),
-('María')
-ON CONFLICT (nombre) DO NOTHING;
+<!-- MODAL EDITAR ITEM -->
+<div id="modalEditarItem" class="modal">
+    <div class="modal-box" style="max-width:600px;">
+        <div class="modal-header">
+            <h3>✏️ Editar Producto</h3>
+            <button class="modal-close" onclick="cerrarModal('modalEditarItem')">✕</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editItemId">
+            <div class="form-group"><label>Nombre:</label><input type="text" id="editItemNome"></div>
+            <div class="form-group"><label>Precio (€):</label><input type="number" id="editItemPrecio" step="0.01"></div>
+            <div class="form-group">
+                <label>📷 Imágenes disponibles:</label>
+                <div id="imagenesGrid" class="grid-imagenes"></div>
+                <input type="hidden" id="editItemImagenSeleccionada">
+            </div>
+            <div class="form-group"><label>O sube imagen local:</label><input type="file" id="editImaxeInput" accept="image/*"></div>
+            <div style="text-align:center;">
+                <img id="previewImagen" class="preview-img hidden">
+                <p id="previewText" style="color:#999;">Sin imagen</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
+                <button class="btn" onclick="gardarEdicionItem()">💾 Guardar</button>
+                <button class="btn" style="background:#ccc;color:#333;" onclick="cerrarModal('modalEditarItem')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL NUEVA COMANDA -->
+<div id="modalNuevaComanda" class="modal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📋 Nueva Comanda - Mesa <span id="mesaNumero"></span></h3>
+            <button class="modal-close" onclick="cerrarModal('modalNuevaComanda')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>👥 Número de Comensales:</label>
+                <div id="selectorNumComensales" style="display:grid;grid-template-columns:repeat(10,1fr);gap:8px;">
+                    <!-- Botones 1-10 -->
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-top:20px;">
+                <div>
+                    <h4 style="color:#8B6914;margin-bottom:15px;">🍔 Productos</h4>
+                    <div id="productosGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-height:450px;overflow-y:auto;padding:10px;background:#f9f9f9;border-radius:8px;"></div>
+                </div>
+                <div>
+                    <h4 style="color:#8B6914;margin-bottom:15px;">🛒 Carrito</h4>
+                    <div id="carritoComanda" style="max-height:450px;overflow-y:auto;border:2px solid #ddd;border-radius:8px;padding:10px;background:#f9f9f9;"></div>
+                    <div id="totalCarrito" style="text-align:right;font-size:18px;font-weight:bold;color:#8B6914;margin-top:10px;"></div>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
+                <button class="btn btn-lg btn-green" onclick="enviarComanda()">📤 Enviar Pedido</button>
+                <button class="btn btn-lg" style="background:#ccc;color:#333;" onclick="cerrarModal('modalNuevaComanda')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SELECCIONAR COMENSAL -->
+<div id="modalComensal" class="modal">
+    <div class="modal-box" style="max-width:500px;">
+        <div class="modal-header">
+            <h3>👥 ¿Para qué comensal?</h3>
+            <button class="modal-close" onclick="cerrarModal('modalComensal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p id="productoSeleccionadoNombre" style="font-size:18px;font-weight:bold;text-align:center;margin-bottom:15px;color:#8B6914;"></p>
+            <p style="text-align:center;margin-bottom:20px;color:#666;">Selecciona el comensal:</p>
+            <div id="botonesComensales" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VER COMANDA MESA -->
+<div id="modalVerMesa" class="modal">
+    <div class="modal-box" style="max-width:700px;">
+        <div class="modal-header">
+            <h3>🪑 Mesa <span id="verMesaNumero"></span></h3>
+            <button class="modal-close" onclick="cerrarModal('modalVerMesa')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="comandasMesa"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:20px;">
+                <button class="btn" onclick="agregarMasComanda()">➕ Agregar Más</button>
+                <button class="btn btn-orange" onclick="pedirPago()">💳 Pedir Pago</button>
+                <button class="btn btn-green" onclick="cobrarMesa()">✅ Cobrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- APP VIEW -->
+<div id="appView" class="hidden">
+    <div class="container">
+        <div class="header">
+            <div><h1>☕ App Cafetería</h1><span id="currentRoleLabel" style="opacity:0.85;"></span></div>
+            <div style="display:flex;align-items:center;gap:15px;">
+                <span id="userLabel"></span>
+                <button class="logout-btn" onclick="logout()">Sair</button>
+            </div>
+        </div>
+
+        <!-- ADMIN VIEW -->
+        <div id="adminView" class="hidden">
+            <div class="stats">
+                <div class="stat-card"><h3>Categorías</h3><div class="stat-value" id="stGrupos">0</div></div>
+                <div class="stat-card"><h3>Produtos</h3><div class="stat-value" id="stItems">0</div></div>
+                <div class="stat-card"><h3>Camareros</h3><div class="stat-value" id="stCamareros">0</div></div>
+                <div class="stat-card"><h3>Comandas</h3><div class="stat-value" id="stComandas">0</div></div>
+            </div>
+
+            <div class="grid-2">
+                <div class="section">
+                    <h2>📁 Categorías</h2>
+                    <div class="form-group">
+                        <input type="text" id="nombreGrupo" placeholder="Nova categoría">
+                        <button class="btn" onclick="engadirGrupo()" style="margin-top:8px;width:100%;">+ Engadir</button>
+                    </div>
+                    <div id="gruposList"></div>
+                </div>
+                <div class="section">
+                    <h2>👨‍💼 Camareros</h2>
+                    <div class="form-group">
+                        <input type="text" id="nomeCamareroAdmin" placeholder="Nome">
+                        <button class="btn" onclick="engadirCamarero()" style="margin-top:8px;width:100%;">+ Engadir</button>
+                    </div>
+                    <div id="camarosList"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🍔 Productos</h2>
+                <div class="grid-3" style="margin-bottom:20px;">
+                    <div class="form-group">
+                        <label>Categoría:</label>
+                        <select id="grupoProducto"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" id="nombreProducto" placeholder="Nombre del producto">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio (€):</label>
+                        <input type="number" id="precioProducto" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+                <button class="btn btn-lg" onclick="engadirProducto()" style="width:100%;margin-bottom:20px;">➕ Engadir Producto</button>
+                <div id="productosListAdmin" style="max-height:500px;overflow-y:auto;"></div>
+            </div>
+
+            <!-- COMANDAS ENVIADAS -->
+            <div class="section">
+                <h2>📋 Comandas Activas</h2>
+                <div id="comandasAdmin"></div>
+            </div>
+        </div>
+
+        <!-- CAMARERO VIEW -->
+        <div id="camareroView" class="hidden">
+            <div class="section">
+                <h2>🪑 Mesas</h2>
+                <div id="mesasGrid"></div>
+            </div>
+        </div>
+
+        <!-- BARRA VIEW -->
+        <div id="barraView" class="hidden">
+            <div class="section">
+                <h2>👨‍🍳 Pedidos Pendentes</h2>
+                <div id="ordenesContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ssdlvuugugpvderhqist.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_qf_-CHKcKgA_Q5TVR6Q6hA_x1XjycQl';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null, currentRole = null;
+let config = { grupos: [], camareros: [], mesas: { comedor: 8, terraza: 6 } };
+let comandasPorMesa = {};
+let mesaSeleccionada = null;
+let numComensales = 0;
+let carritoComanda = []; // [{id, nombre, precio, imagen, comensal, cantidad}]
+let productoPendienteAsignacion = null;
+
+// LOGIN
+function actualizarFormularioLogin() {
+    const rol = document.getElementById('rolLogin').value;
+    document.getElementById('camareroLogin').classList.toggle('hidden', rol !== 'camarero');
+    document.getElementById('adminLogin').classList.toggle('hidden', rol !== 'admin');
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', actualizarFormularioLogin);
+else actualizarFormularioLogin();
+document.getElementById('rolLogin').addEventListener('change', actualizarFormularioLogin);
+document.querySelector('.btn-login').addEventListener('click', login);
+
+async function login() {
+    const rol = document.getElementById('rolLogin').value;
+    if (rol === 'admin') {
+        if (document.getElementById('passAdmin').value !== 'admin123') return alert('Contraseña incorrecta');
+        currentUser = 'Admin';
+    } else if (rol === 'camarero') {
+        const nome = document.getElementById('nomeCamarero').value.trim();
+        if (!nome) return alert('Pon o teu nome');
+        currentUser = nome;
+    } else currentUser = 'Barra';
+
+    currentRole = rol;
+    document.getElementById('currentRoleLabel').textContent = rol === 'admin' ? '⚙️ Admin' : rol === 'camarero' ? '👨‍💼 Camarero' : '👨‍🍳 Barra/Cociña';
+    document.getElementById('userLabel').textContent = `Usuario: ${currentUser}`;
+    document.getElementById('loginView').classList.add('hidden');
+    document.getElementById('appView').classList.remove('hidden');
+    document.getElementById('adminView').classList.toggle('hidden', rol !== 'admin');
+    document.getElementById('camareroView').classList.toggle('hidden', rol !== 'camarero');
+    document.getElementById('barraView').classList.toggle('hidden', rol !== 'barra');
+
+    if (rol === 'admin') {
+        await renderAdmin();
+        setInterval(renderComandasAdmin, 3000);
+    } else if (rol === 'camarero') {
+        await cargarComandas();
+        renderMesas();
+        setInterval(async () => { await cargarComandas(); renderMesas(); }, 3000);
+    } else {
+        await cargarComandas();
+        renderBarra();
+        setInterval(async () => { await cargarComandas(); renderBarra(); }, 3000);
+    }
+}
+
+function logout() { location.reload(); }
+function cerrarModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// =========== ADMIN ===========
+async function renderAdmin() {
+    await renderProductosListAdmin();
+    renderGrupos();
+    renderCamareros();
+    await renderStatsAdmin();
+    cargarCategorias();
+    await renderComandasAdmin();
+}
+
+function engadirGrupo() {
+    const nome = document.getElementById('nombreGrupo').value.trim();
+    if (!nome) return alert('Escribe a categoría');
+    if (!config.grupos.find(g => g.nome === nome)) {
+        config.grupos.push({ id: 'g' + Date.now(), nome });
+        document.getElementById('nombreGrupo').value = '';
+        renderGrupos();
+        cargarCategorias();
+        renderStatsAdmin();
+    }
+}
+
+function renderGrupos() {
+    document.getElementById('gruposList').innerHTML = config.grupos.map(g => 
+        `<div class="item-card"><span style="flex:1;">${g.nome}</span><button class="btn-red btn-small" onclick="eliminarGrupo('${g.id}')">X</button></div>`
+    ).join('');
+}
+
+function eliminarGrupo(id) {
+    config.grupos = config.grupos.filter(g => g.id !== id);
+    renderGrupos();
+    cargarCategorias();
+    renderStatsAdmin();
+}
+
+function cargarCategorias() {
+    const select = document.getElementById('grupoProducto');
+    select.innerHTML = config.grupos.map(g => `<option value="${g.nome}">${g.nome}</option>`).join('');
+}
+
+async function engadirProducto() {
+    const grupo = document.getElementById('grupoProducto').value;
+    const nombre = document.getElementById('nombreProducto').value.trim();
+    const precio = parseFloat(document.getElementById('precioProducto').value);
+    if (!grupo || !nombre || !precio) return alert('Completa todo');
+
+    try {
+        const { error } = await sb.from('items').insert([{ nombre, grupo, precio }]);
+        if (error) throw error;
+        document.getElementById('nombreProducto').value = '';
+        document.getElementById('precioProducto').value = '';
+        await renderProductosListAdmin();
+        renderStatsAdmin();
+    } catch (err) { alert('Error: ' + err.message); }
+}
+
+async function renderProductosListAdmin() {
+    try {
+        const { data } = await sb.from('items').select('*').order('grupo');
+        let html = '';
+        const grupos = {};
+        (data || []).forEach(item => {
+            if (!grupos[item.grupo]) grupos[item.grupo] = [];
+            grupos[item.grupo].push(item);
+        });
+        Object.entries(grupos).forEach(([grupo, items]) => {
+            html += `<div style="font-weight:bold;color:#8B6914;margin:15px 0 10px;">📁 ${grupo}</div>`;
+            items.forEach(i => {
+                html += `<div class="item-card">
+                    ${i.imagen ? '<img src="' + i.imagen + '">' : '<span style="font-size:24px;">🍽️</span>'}
+                    <div class="item-info"><h4>${i.nombre}</h4><p>€${i.precio.toFixed(2)}</p></div>
+                    <div class="item-actions">
+                        <button class="btn-edit btn-small" onclick="abrirEditarItem(${i.id})">✏️</button>
+                        <button class="btn-red btn-small" onclick="eliminarProducto(${i.id})">X</button>
+                    </div>
+                </div>`;
+            });
+        });
+        document.getElementById('productosListAdmin').innerHTML = html || '<p style="color:#999;">Sin productos</p>';
+    } catch (err) { console.error('Error:', err); }
+}
+
+async function abrirEditarItem(id) {
+    const { data } = await sb.from('items').select('*').eq('id', id).single();
+    if (!data) return;
+    document.getElementById('editItemId').value = id;
+    document.getElementById('editItemNome').value = data.nombre;
+    document.getElementById('editItemPrecio').value = data.precio;
+    document.getElementById('editItemImagenSeleccionada').value = '';
+    mostrarPreviewImagen(data.imagen);
+    cargarImagenesSupabase();
+    document.getElementById('modalEditarItem').classList.add('show');
+}
+
+function mostrarPreviewImagen(imagen) {
+    const preview = document.getElementById('previewImagen');
+    const text = document.getElementById('previewText');
+    if (imagen) { preview.src = imagen; preview.classList.remove('hidden'); text.style.display = 'none'; }
+    else { preview.classList.add('hidden'); text.style.display = 'block'; }
+}
+
+async function cargarImagenesSupabase() {
+    const { data } = await sb.from('items').select('nombre, imagen').not('imagen', 'is', null);
+    const imagenes = (data || []).concat([
+        { nombre: 'Café', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjOEI0NTEzIi8+PHJlY3QgeD0iNjAiIHk9IjE0MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjNjU0MzIxIi8+PC9zdmc+' },
+        { nombre: 'Hamburguesa', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iNjAiIHJ4PSI0NSIgcnk9IjEyIiBmaWxsPSIjQ0Q4NTNGIi8+PHJlY3QgeD0iNTUiIHk9Ijc1IiB3aWR0aD0iOTAiIGhlaWdodD0iNTAiIGZpbGw9IiM4QjQ1MTMiLz48ZWxsaXBzZSBjeD0iMTAwIiBjeT0iMTQ1IiByeD0iNDUiIHJ5PSIxMiIgZmlsbD0iI0NEODUzRiIvPjwvc3ZnPg==' },
+        { nombre: 'Cerveza', imagen: 'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSI3MCIgeT0iNzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZENzAwIiBzdHJva2Utd2lkdGg9IjMiLz48cmVjdCB4PSI3NSIgeT0iMTAwIiB3aWR0aD0iNTAiIGhlaWdodD0iNDAiIGZpbGw9IiNDRDg1M0YiIG9wYWNpdHk9IjAuNyIvPjwvc3ZnPg==' },
+    ]);
+    document.getElementById('imagenesGrid').innerHTML = imagenes.map(img => 
+        `<div class="img-item" onclick="seleccionarImagen('${img.imagen.replace(/'/g, "\\'")}')"><img src="${img.imagen}"><p>${img.nombre}</p></div>`
+    ).join('');
+}
+
+function seleccionarImagen(imagen) {
+    document.getElementById('editItemImagenSeleccionada').value = imagen;
+    mostrarPreviewImagen(imagen);
+}
+
+document.addEventListener('change', function(e) {
+    if (e.target.id === 'editImaxeInput' && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = evt => { document.getElementById('editItemImagenSeleccionada').value = ''; mostrarPreviewImagen(evt.target.result); };
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+
+async function gardarEdicionItem() {
+    const id = document.getElementById('editItemId').value;
+    const nome = document.getElementById('editItemNome').value.trim();
+    const precio = parseFloat(document.getElementById('editItemPrecio').value);
+    const imagen = document.getElementById('editItemImagenSeleccionada').value || document.getElementById('editImaxeInput').files[0];
+    
+    if (!nome || !precio) return alert('Completa os campos');
+    
+    const updateData = { nombre: nome, precio };
+    if (typeof imagen === 'string') updateData.imagen = imagen;
+    else if (imagen) {
+        const reader = new FileReader();
+        reader.onload = async evt => {
+            updateData.imagen = evt.target.result;
+            await sb.from('items').update(updateData).eq('id', id);
+            cerrarModal('modalEditarItem');
+            await renderProductosListAdmin();
+        };
+        reader.readAsDataURL(imagen);
+        return;
+    }
+    
+    await sb.from('items').update(updateData).eq('id', id);
+    cerrarModal('modalEditarItem');
+    await renderProductosListAdmin();
+}
+
+async function eliminarProducto(id) {
+    if (confirm('¿Eliminar?')) {
+        await sb.from('items').delete().eq('id', id);
+        await renderProductosListAdmin();
+        renderStatsAdmin();
+    }
+}
+
+async function engadirCamarero() {
+    const nome = document.getElementById('nomeCamareroAdmin').value.trim();
+    if (!nome) return alert('Pon o nome');
+    
+    try {
+        const { error } = await sb.from('camareros').insert([{ nombre: nome }]);
+        if (error) throw error;
+        document.getElementById('nomeCamareroAdmin').value = '';
+        await renderCamareros();
+        await renderStatsAdmin();
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+}
+
+async function renderCamareros() {
+    try {
+        const { data } = await sb.from('camareros').select('*').order('nombre');
+        const camareros = data || [];
+        document.getElementById('camarosList').innerHTML = camareros.map(c => 
+            `<div class="item-card"><span style="flex:1;">${c.nombre}</span><button class="btn-red btn-small" onclick="eliminarCamarero(${c.id})">X</button></div>`
+        ).join('') || '<p style="color:#999;">Sin camareros</p>';
+    } catch (err) {
+        console.error('Error renderCamareros:', err);
+    }
+}
+
+async function eliminarCamarero(id) {
+    if (confirm('¿Eliminar camarero?')) {
+        await sb.from('camareros').delete().eq('id', id);
+        await renderCamareros();
+        await renderStatsAdmin();
+    }
+}
+
+async function renderStatsAdmin() {
+    const { count: items } = await sb.from('items').select('*', { count: 'exact', head: true });
+    const { count: comandas } = await sb.from('comandas').select('*', { count: 'exact', head: true }).neq('status', 'cobrada');
+    const { count: camareros } = await sb.from('camareros').select('*', { count: 'exact', head: true });
+    document.getElementById('stGrupos').textContent = config.grupos.length;
+    document.getElementById('stItems').textContent = items || 0;
+    document.getElementById('stCamareros').textContent = camareros || 0;
+    document.getElementById('stComandas').textContent = comandas || 0;
+}
+
+async function renderComandasAdmin() {
+    const { data } = await sb.from('comandas').select('*').neq('status', 'cobrada').order('created_at', { ascending: false });
+    let html = '';
+    (data || []).forEach(o => {
+        const statusClass = `status-${o.status === 'en-preparacion' ? 'preparando' : o.status}`;
+        html += `<div class="orden-card">
+            <div class="orden-header">
+                <span>🪑 Mesa ${o.mesa} (${o.zona})</span>
+                <span>👤 ${o.camarero}</span>
+                <span class="orden-status ${statusClass}">${o.status.toUpperCase()}</span>
+            </div>
+            <div style="margin:10px 0;">${(o.items || []).map(i => `<div style="font-size:13px;padding:4px 0;">▪ <strong>${i.nombre}</strong> x${i.cantidad} → Comensal ${i.comensal || '-'}</div>`).join('')}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                <strong style="color:#8B6914;">Total: €${Number(o.total).toFixed(2)}</strong>
+                <button class="btn btn-red btn-small" onclick="eliminarComandaAdmin(${o.id})">🗑️ Eliminar</button>
+            </div>
+        </div>`;
+    });
+    document.getElementById('comandasAdmin').innerHTML = html || '<p style="color:#999;text-align:center;padding:20px;">No hay comandas activas</p>';
+}
+
+async function eliminarComandaAdmin(id) {
+    if (confirm('¿Eliminar esta comanda? El camarero deberá recrearla.')) {
+        await sb.from('comandas').delete().eq('id', id);
+        await renderComandasAdmin();
+        await renderStatsAdmin();
+    }
+}
+
+// =========== CAMARERO ===========
+async function cargarComandas() {
+    const { data } = await sb.from('comandas').select('*').neq('status', 'cobrada');
+    comandasPorMesa = {};
+    (data || []).forEach(o => {
+        const key = `${o.zona}-${o.mesa}`;
+        if (!comandasPorMesa[key]) comandasPorMesa[key] = [];
+        comandasPorMesa[key].push(o);
+    });
+}
+
+function renderMesas() {
+    let html = '';
+    ['comedor', 'terraza'].forEach(zona => {
+        html += `<div style="margin-bottom:25px;"><h3 style="color:#8B6914;margin-bottom:15px;">${zona === 'comedor' ? '🏠' : '☀️'} ${zona.toUpperCase()}</h3><div class="mesas-grid">`;
+        for (let i = 1; i <= config.mesas[zona]; i++) {
+            const key = `${zona}-${i}`;
+            const comandas = comandasPorMesa[key] || [];
+            let estado = 'libre', icon = '✅';
+            if (comandas.length) {
+                if (comandas.some(c => c.status === 'pago')) { estado = 'pago'; icon = '💳'; }
+                else if (comandas.every(c => c.status === 'lista')) { estado = 'lista'; icon = '🔔'; }
+                else { estado = 'ocupada'; icon = '⏳'; }
+            }
+            html += `<button class="mesa-btn ${estado}" onclick="abrirMesa('${key}')"><span style="font-size:24px;">${i}</span><span style="font-size:11px;margin-top:5px;">${icon} ${estado.toUpperCase()}</span></button>`;
+        }
+        html += '</div></div>';
+    });
+    document.getElementById('mesasGrid').innerHTML = html;
+}
+
+function abrirMesa(key) {
+    mesaSeleccionada = key;
+    const comandas = comandasPorMesa[key] || [];
+    if (comandas.length) {
+        verMesa(key);
+    } else {
+        iniciarNuevaComanda(key);
+    }
+}
+
+function iniciarNuevaComanda(key) {
+    mesaSeleccionada = key;
+    const [zona, mesa] = key.split('-');
+    document.getElementById('mesaNumero').textContent = `${mesa} (${zona})`;
+    numComensales = 0;
+    carritoComanda = [];
+    renderSelectorNumComensales();
+    document.getElementById('productosGrid').innerHTML = '<p style="color:#999;grid-column:1/-1;text-align:center;">Selecciona el número de comensales primero</p>';
+    actualizarCarrito();
+    document.getElementById('modalNuevaComanda').classList.add('show');
+}
+
+function renderSelectorNumComensales() {
+    let html = '';
+    for (let i = 1; i <= 10; i++) {
+        html += `<button class="btn-comensal ${numComensales === i ? 'selected' : ''}" onclick="seleccionarNumComensales(${i})">${i}</button>`;
+    }
+    document.getElementById('selectorNumComensales').innerHTML = html;
+}
+
+async function seleccionarNumComensales(num) {
+    numComensales = num;
+    renderSelectorNumComensales();
+    await cargarProductosModal();
+}
+
+async function cargarProductosModal() {
+    const { data } = await sb.from('items').select('*').order('grupo');
+    let html = '';
+    const grupos = {};
+    (data || []).forEach(i => {
+        if (!grupos[i.grupo]) grupos[i.grupo] = [];
+        grupos[i.grupo].push(i);
+    });
+    Object.entries(grupos).forEach(([grupo, items]) => {
+        html += `<div style="grid-column:1/-1;font-weight:bold;color:#8B6914;margin:10px 0 5px;border-bottom:2px solid #D4AF37;padding-bottom:5px;">${grupo}</div>`;
+        items.forEach(i => {
+            html += `<div class="producto-card" onclick='abrirSelectorComensal(${JSON.stringify(i).replace(/'/g, "&apos;")})'>
+                ${i.imagen ? '<img src="' + i.imagen + '">' : '<span style="font-size:40px;">🍽️</span>'}
+                <span class="producto-card-nome">${i.nombre}</span>
+                <span class="producto-card-precio">€${i.precio.toFixed(2)}</span>
+            </div>`;
+        });
+    });
+    document.getElementById('productosGrid').innerHTML = html;
+}
+
+function abrirSelectorComensal(producto) {
+    if (!numComensales) return alert('Primero selecciona el número de comensales');
+    productoPendienteAsignacion = producto;
+    document.getElementById('productoSeleccionadoNombre').textContent = producto.nombre + ' - €' + producto.precio.toFixed(2);
+    let html = '';
+    for (let i = 1; i <= numComensales; i++) {
+        html += `<button class="btn btn-lg" style="aspect-ratio:1;font-size:24px;" onclick="asignarComensal(${i})">${i}</button>`;
+    }
+    document.getElementById('botonesComensales').innerHTML = html;
+    document.getElementById('modalComensal').classList.add('show');
+}
+
+function asignarComensal(num) {
+    const p = productoPendienteAsignacion;
+    carritoComanda.push({ id: p.id, nombre: p.nombre, precio: p.precio, imagen: p.imagen, comensal: num, cantidad: 1 });
+    actualizarCarrito();
+    cerrarModal('modalComensal');
+}
+
+function actualizarCarrito() {
+    let html = '';
+    let total = 0;
+    if (!carritoComanda.length) {
+        html = '<p style="color:#999;text-align:center;padding:20px;">Carrito vacío</p>';
+    } else {
+        carritoComanda.forEach((item, idx) => {
+            total += item.precio * item.cantidad;
+            html += `<div class="carrito-item">
+                ${item.imagen ? '<img src="' + item.imagen + '">' : '<span style="font-size:24px;">🍽️</span>'}
+                <div class="carrito-info"><strong>${item.nombre}</strong><br><small>Comensal ${item.comensal} - €${(item.precio * item.cantidad).toFixed(2)}</small></div>
+                <button class="btn-small" style="background:#eee;" onclick="cambiarCantidadCarrito(${idx}, -1)">-</button>
+                <span style="font-weight:bold;">${item.cantidad}</span>
+                <button class="btn-small" style="background:#eee;" onclick="cambiarCantidadCarrito(${idx}, 1)">+</button>
+            </div>`;
+        });
+    }
+    document.getElementById('carritoComanda').innerHTML = html;
+    document.getElementById('totalCarrito').textContent = `TOTAL: €${total.toFixed(2)}`;
+}
+
+function cambiarCantidadCarrito(idx, delta) {
+    carritoComanda[idx].cantidad += delta;
+    if (carritoComanda[idx].cantidad <= 0) carritoComanda.splice(idx, 1);
+    actualizarCarrito();
+}
+
+async function enviarComanda() {
+    if (!carritoComanda.length) return alert('Carrito vacío');
+    const [zona, mesa] = mesaSeleccionada.split('-');
+    const total = carritoComanda.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    
+    try {
+        const { error } = await sb.from('comandas').insert([{
+            zona, mesa: parseInt(mesa), camarero: currentUser,
+            items: carritoComanda.map(i => ({ nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, comensal: i.comensal, imaxe: i.imagen })),
+            total, status: 'pendente', numeroorden: Date.now() % 10000
+        }]);
+        if (error) throw error;
+        cerrarModal('modalNuevaComanda');
+        await cargarComandas();
+        renderMesas();
+        alert('✅ Pedido enviado a la barra');
+    } catch (err) { alert('Error: ' + err.message); }
+}
+
+function verMesa(key) {
+    mesaSeleccionada = key;
+    const [zona, mesa] = key.split('-');
+    document.getElementById('verMesaNumero').textContent = `${mesa} (${zona})`;
+    const comandas = comandasPorMesa[key] || [];
+    let html = '';
+    let total = 0;
+    comandas.forEach(o => {
+        total += Number(o.total);
+        const stClass = `status-${o.status === 'en-preparacion' ? 'preparando' : o.status}`;
+        html += `<div class="orden-card">
+            <div class="orden-header"><span>Comanda #${o.numeroorden}</span><span>${o.camarero}</span><span class="orden-status ${stClass}">${o.status.toUpperCase()}</span></div>
+            ${(o.items || []).map(i => `<div class="orden-item"><span>▪ <strong>${i.nombre}</strong> x${i.cantidad} (Comensal ${i.comensal || '-'})</span><span>€${(i.precio * i.cantidad).toFixed(2)}</span></div>`).join('')}
+            <div style="text-align:right;margin-top:10px;font-weight:bold;color:#8B6914;">Subtotal: €${Number(o.total).toFixed(2)}</div>
+        </div>`;
+    });
+    html += `<div style="text-align:right;font-size:20px;font-weight:bold;color:#8B6914;margin-top:15px;">TOTAL MESA: €${total.toFixed(2)}</div>`;
+    document.getElementById('comandasMesa').innerHTML = html;
+    document.getElementById('modalVerMesa').classList.add('show');
+}
+
+function agregarMasComanda() {
+    cerrarModal('modalVerMesa');
+    iniciarNuevaComanda(mesaSeleccionada);
+}
+
+async function pedirPago() {
+    const comandas = comandasPorMesa[mesaSeleccionada] || [];
+    for (const o of comandas) {
+        if (!['pago', 'cobrada'].includes(o.status)) {
+            await sb.from('comandas').update({ status: 'pago' }).eq('id', o.id);
+        }
+    }
+    await cargarComandas();
+    renderMesas();
+    cerrarModal('modalVerMesa');
+    alert('💳 Pago solicitado');
+}
+
+async function cobrarMesa() {
+    if (!confirm('¿Cobrar mesa y cerrar?')) return;
+    const comandas = comandasPorMesa[mesaSeleccionada] || [];
+    for (const o of comandas) {
+        await sb.from('comandas').update({ status: 'cobrada' }).eq('id', o.id);
+    }
+    await cargarComandas();
+    renderMesas();
+    cerrarModal('modalVerMesa');
+    alert('✅ Mesa cobrada y cerrada');
+}
+
+// =========== BARRA ===========
+async function renderBarra() {
+    const { data } = await sb.from('comandas').select('*').neq('status', 'pago').neq('status', 'cobrada').order('created_at', { ascending: true });
+    let html = '';
+    (data || []).forEach(o => {
+        const stClass = `status-${o.status === 'en-preparacion' ? 'preparando' : o.status}`;
+        html += `<div class="orden-card">
+            <div class="orden-header"><span>🪑 Mesa ${o.mesa}</span><span>👤 ${o.camarero}</span><span class="orden-status ${stClass}">${o.status.toUpperCase()}</span></div>
+            ${(o.items || []).map(i => `<div class="orden-item"><span>▪ <strong>${i.nombre}</strong> x${i.cantidad}</span><span style="color:#666;font-size:11px;">Comensal ${i.comensal || '-'}</span></div>`).join('')}
+            <div style="display:flex;gap:10px;margin-top:15px;">
+                ${o.status === 'pendente' ? `<button class="btn btn-orange btn-small" onclick="cambiarStatus(${o.id},'en-preparacion')">👨‍🍳 Preparando</button>` : ''}
+                <button class="btn btn-green btn-small" onclick="cambiarStatus(${o.id},'lista')">✅ ¡Lista!</button>
+            </div>
+        </div>`;
+    });
+    document.getElementById('ordenesContainer').innerHTML = html || '<p style="color:#999;text-align:center;padding:20px;">No hay pedidos pendentes</p>';
+}
+
+async function cambiarStatus(id, status) {
+    await sb.from('comandas').update({ status }).eq('id', id);
+    await cargarComandas();
+    renderBarra();
+}
+</script>
+
+</body>
+</html>
