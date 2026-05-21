@@ -711,7 +711,7 @@ async function enviarComanda() {
         const { error } = await sb.from('comandas').insert([{
             zona, mesa: parseInt(mesa), camarero: currentUser,
             items: carritoComanda.map(i => ({ nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, comensal: i.comensal, imaxe: i.imagen })),
-            total, status: 'pendente', numeroOrden: Date.now() % 10000
+            total, status: 'pendente', numeroorden: Date.now() % 10000
         }]);
         if (error) throw error;
         cerrarModal('modalNuevaComanda');
@@ -732,7 +732,7 @@ function verMesa(key) {
         total += Number(o.total);
         const stClass = `status-${o.status === 'en-preparacion' ? 'preparando' : o.status}`;
         html += `<div class="orden-card">
-            <div class="orden-header"><span>Comanda #${o.numeroOrden}</span><span>${o.camarero}</span><span class="orden-status ${stClass}">${o.status.toUpperCase()}</span></div>
+            <div class="orden-header"><span>Comanda #${o.numeroorden}</span><span>${o.camarero}</span><span class="orden-status ${stClass}">${o.status.toUpperCase()}</span></div>
             ${(o.items || []).map(i => `<div class="orden-item"><span>▪ <strong>${i.nombre}</strong> x${i.cantidad} (Comensal ${i.comensal || '-'})</span><span>€${(i.precio * i.cantidad).toFixed(2)}</span></div>`).join('')}
             <div style="text-align:right;margin-top:10px;font-weight:bold;color:#8B6914;">Subtotal: €${Number(o.total).toFixed(2)}</div>
         </div>`;
